@@ -1,0 +1,908 @@
+/* ==========================================================================
+   INTELLIGENCE STACK — Page Section Styles
+   Tactical Grid Design System | BEM: vg-istack__*
+   ========================================================================== */
+
+/* --- Animations --- */
+
+@keyframes vg-istack-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes vg-istack-glow-pulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(188, 255, 47, 0.25); }
+  50% { box-shadow: 0 0 16px rgba(188, 255, 47, 0.4); }
+}
+
+@keyframes vg-istack-radial-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.2; }
+}
+
+/* ==========================================================================
+   TITLE BLOCK
+   ========================================================================== */
+
+.vg-istack__title-block {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.vg-istack__title-tag {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.vg-istack__headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2.8rem, 5vw, 3.75rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 24px;
+  line-height: 1.15;
+}
+
+.vg-istack__description {
+  max-width: 640px;
+  margin: 0 auto;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   GROUP HEADERS
+   ========================================================================== */
+
+.vg-istack__group {
+  margin-bottom: 80px;
+}
+
+.vg-istack__group--last {
+  margin-bottom: 0;
+}
+
+.vg-istack__group-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-left: 2px solid var(--accent);
+  padding-left: 16px;
+  margin-bottom: 32px;
+}
+
+.vg-istack__group-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 1.875rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.vg-istack__group-subtitle {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  margin: 4px 0 0;
+}
+
+/* ==========================================================================
+   SHARED MODULE HEADER (Crisis Map / News Hub / Council)
+   ========================================================================== */
+
+.vg-istack__module-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--panel-border);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.vg-istack__module-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vg-istack__module-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+.vg-istack__module-label {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.vg-istack__module-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   GROUP A: THE EYES — Layout
+   ========================================================================== */
+
+.vg-istack__eyes-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+/* --- Crisis Map --- */
+
+.vg-istack__crisis-map {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 450px;
+}
+
+.vg-istack__live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.vg-istack__live-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #ef4444;
+  animation: vg-istack-pulse 2s ease-in-out infinite;
+}
+
+.vg-istack__coord {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.vg-istack__map-area {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Dark placeholder map with grid lines */
+.vg-istack__map-placeholder {
+  position: absolute;
+  inset: 0;
+  background-color: #0a0e14;
+  background-image:
+    linear-gradient(rgba(188, 255, 47, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(188, 255, 47, 0.04) 1px, transparent 1px),
+    linear-gradient(rgba(188, 255, 47, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(188, 255, 47, 0.02) 1px, transparent 1px);
+  background-size: 80px 80px, 80px 80px, 20px 20px, 20px 20px;
+}
+
+/* Heatmap overlay gradient */
+.vg-istack__map-heatmap {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(188, 255, 47, 0.15) 0%, transparent 40%, transparent 60%, rgba(239, 68, 68, 0.08) 100%);
+  pointer-events: none;
+}
+
+/* Alerts panel overlay */
+.vg-istack__alerts-panel {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 14px 16px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  backdrop-filter: blur(12px);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  z-index: 2;
+}
+
+.vg-istack__alerts-title {
+  color: var(--accent);
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.vg-istack__alerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vg-istack__alert-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  color: var(--text-primary);
+  font-size: 12px;
+}
+
+.vg-istack__alert-high {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.vg-istack__alert-med {
+  color: #eab308;
+  font-weight: 600;
+}
+
+/* --- News Hub --- */
+
+.vg-istack__news-hub {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 450px;
+}
+
+.vg-istack__feed {
+  flex: 1;
+  overflow: hidden;
+  padding: 16px;
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.vg-istack__feed-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 80px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.vg-istack__feed-items {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.vg-istack__feed-item {
+  border-left: 2px solid var(--border);
+  padding-left: 12px;
+}
+
+.vg-istack__feed-item--highlight {
+  border-left-color: rgba(188, 255, 47, 0.35);
+}
+
+.vg-istack__feed-meta {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+  letter-spacing: 0.02em;
+}
+
+.vg-istack__feed-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.vg-istack__feed-text--bright {
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   GROUP B: THE BRAIN — Layout
+   ========================================================================== */
+
+.vg-istack__brain-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* --- Shared Card --- */
+
+.vg-istack__card {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vg-istack__card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--glow-sm);
+}
+
+.vg-istack__card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.vg-istack__card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+.vg-istack__card-label {
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.vg-istack__card-desc {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin-top: 16px;
+}
+
+/* --- Digital Twin Visual --- */
+
+.vg-istack__twin-visual {
+  flex: 1;
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: rgba(10, 14, 20, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+}
+
+.vg-istack__twin-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(188, 255, 47, 0.1) 0%, transparent 60%);
+  opacity: 0.4;
+  animation: vg-istack-radial-pulse 4s ease-in-out infinite;
+}
+
+.vg-istack__twin-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(188, 255, 47, 0.3);
+  animation: vg-istack-pulse 3s ease-in-out infinite;
+}
+
+.vg-istack__twin-counter {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+/* --- BIAS Control Meters --- */
+
+.vg-istack__bias-meters {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.vg-istack__meter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vg-istack__meter-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+}
+
+.vg-istack__meter-value {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.vg-istack__meter-value--muted {
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.vg-istack__meter-track {
+  height: 6px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+}
+
+.vg-istack__meter-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+/* Credibility bar: 92% */
+.vg-istack__meter-fill[data-width="92"] {
+  width: 92%;
+}
+
+/* Political stance segments */
+.vg-istack__meter-fill--blue {
+  background: rgba(59, 130, 246, 0.4);
+  border-radius: 3px 0 0 3px;
+}
+
+.vg-istack__meter-fill--blue[data-width="45"] {
+  width: 45%;
+}
+
+.vg-istack__meter-fill--accent {
+  background: var(--accent);
+  border-radius: 0;
+}
+
+.vg-istack__meter-fill--accent[data-width="10"] {
+  width: 10%;
+}
+
+.vg-istack__meter-fill--red {
+  background: rgba(239, 68, 68, 0.4);
+  border-radius: 0 3px 3px 0;
+}
+
+.vg-istack__meter-fill--red[data-width="45"] {
+  width: 45%;
+}
+
+/* --- OSINT Atlas Grid --- */
+
+.vg-istack__atlas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  flex: 1;
+}
+
+.vg-istack__atlas-cell {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.vg-istack__atlas-cell:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ==========================================================================
+   GROUP C: THE VOICE — Layout
+   ========================================================================== */
+
+.vg-istack__voice-grid {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 24px;
+}
+
+/* --- AI Strategic Council --- */
+
+.vg-istack__council {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  box-shadow: 0 0 15px rgba(188, 255, 47, 0.12);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+}
+
+.vg-istack__council-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--panel-border);
+  background: rgba(188, 255, 47, 0.03);
+}
+
+.vg-istack__debate-badge {
+  padding: 4px 10px;
+  background: rgba(188, 255, 47, 0.12);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+
+.vg-istack__council-chat {
+  flex: 1;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+}
+
+/* --- Chat Messages --- */
+
+.vg-istack__message {
+  display: flex;
+  gap: 16px;
+}
+
+.vg-istack__avatar {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.vg-istack__avatar--strategist {
+  background: rgba(188, 255, 47, 0.12);
+  border: 1px solid rgba(188, 255, 47, 0.25);
+  color: var(--accent);
+}
+
+.vg-istack__avatar--cynic {
+  background: rgba(255, 68, 68, 0.12);
+  border: 1px solid rgba(255, 68, 68, 0.25);
+  color: #FF6B6B;
+}
+
+.vg-istack__avatar--optimist {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #10B981;
+}
+
+.vg-istack__message-body {
+  flex: 1;
+}
+
+.vg-istack__message-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.vg-istack__message-name {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+}
+
+.vg-istack__message-time {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-dim);
+}
+
+.vg-istack__bubble {
+  padding: 16px;
+  border-radius: 12px;
+  border-top-left-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+
+.vg-istack__bubble--strategist {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.vg-istack__bubble--cynic {
+  background: rgba(255, 68, 68, 0.03);
+  border: 1px solid rgba(255, 68, 68, 0.08);
+}
+
+.vg-istack__bubble--optimist {
+  background: rgba(16, 185, 129, 0.03);
+  border: 1px solid rgba(16, 185, 129, 0.08);
+}
+
+/* --- Intel Report Synthesis --- */
+
+.vg-istack__report {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 500px;
+}
+
+.vg-istack__report-icon-wrap {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.vg-istack__report-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.vg-istack__report-icon-wrap:hover .vg-istack__report-icon {
+  color: var(--accent);
+}
+
+.vg-istack__report-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--black);
+}
+
+.vg-istack__report-title {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin: 0 0 12px;
+}
+
+.vg-istack__report-id {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0 0 32px;
+}
+
+.vg-istack__report-desc {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin: 0 0 32px;
+  padding: 0 8px;
+}
+
+.vg-istack__report-btn {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.vg-istack__report-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--accent);
+}
+
+/* ==========================================================================
+   RESPONSIVE — Tablet (max-width: 1024px)
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .vg-istack__title-block {
+    margin-bottom: 56px;
+  }
+
+  .vg-istack__group {
+    margin-bottom: 56px;
+  }
+
+  .vg-istack__eyes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vg-istack__crisis-map {
+    height: 380px;
+  }
+
+  .vg-istack__news-hub {
+    height: 360px;
+  }
+
+  .vg-istack__brain-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vg-istack__voice-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vg-istack__council {
+    height: auto;
+    min-height: 400px;
+  }
+
+  .vg-istack__report {
+    height: auto;
+    min-height: 380px;
+    padding: 40px 24px;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE — Mobile (max-width: 768px)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .vg-istack__title-block {
+    margin-bottom: 40px;
+  }
+
+  .vg-istack__headline {
+    font-size: clamp(1.8rem, 7vw, 2.6rem);
+  }
+
+  .vg-istack__description {
+    font-size: 0.9rem;
+  }
+
+  .vg-istack__group {
+    margin-bottom: 48px;
+  }
+
+  .vg-istack__group-title {
+    font-size: 1.25rem;
+  }
+
+  .vg-istack__eyes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vg-istack__crisis-map {
+    height: 320px;
+  }
+
+  .vg-istack__news-hub {
+    height: 320px;
+  }
+
+  .vg-istack__module-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .vg-istack__module-header-right {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .vg-istack__brain-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vg-istack__voice-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vg-istack__council {
+    height: auto;
+    min-height: 350px;
+  }
+
+  .vg-istack__council-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .vg-istack__council-chat {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .vg-istack__message {
+    gap: 10px;
+  }
+
+  .vg-istack__avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .vg-istack__bubble {
+    padding: 12px;
+    font-size: 12px;
+  }
+
+  .vg-istack__report {
+    height: auto;
+    min-height: 320px;
+    padding: 32px 16px;
+  }
+
+  .vg-istack__atlas-grid {
+    gap: 8px;
+  }
+}

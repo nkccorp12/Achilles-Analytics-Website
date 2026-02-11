@@ -1,0 +1,53 @@
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --accent: #BCFF2F;
+  --accent-dim: rgba(188, 255, 47, 0.15);
+  --accent-glow: rgba(188, 255, 47, 0.4);
+  --black: #000000;
+  --dark: #0A0A0A;
+  --darker: #050505;
+  --surface: #111111;
+  --surface-light: #1A1A1A;
+  --border: #222222;
+  --text-primary: #F0F0F0;
+  --text-secondary: #888888;
+  --text-dim: #555555;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--black);
+  color: var(--text-primary);
+  min-width: 320px;
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--black);
+}

@@ -1,0 +1,689 @@
+/* ==========================================================================
+   AI COUNCIL PAGE — "Tactical Grid" Design System
+   Standalone page component for the AI Council debate simulation
+   ========================================================================== */
+
+/* --- CSS Custom Properties (component-scoped) --- */
+.vg-council {
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --font-label: 'IBM Plex Mono', 'Courier New', monospace;
+  --panel-bg: rgba(10, 10, 10, 0.85);
+  --panel-border: rgba(188, 255, 47, 0.18);
+  --glow-sm: 0 0 6px rgba(188, 255, 47, 0.25);
+  --glow-md: 0 0 16px rgba(188, 255, 47, 0.2);
+
+  /* Persona colors */
+  --cynic: #FF6B6B;
+  --cynic-dim: rgba(255, 68, 68, 0.05);
+  --cynic-tint: rgba(255, 68, 68, 0.1);
+  --cynic-border: rgba(255, 68, 68, 0.3);
+  --cynic-glow: 0 0 15px rgba(255, 68, 68, 0.5);
+
+  --strategist: #44BBFF;
+  --strategist-dim: rgba(68, 187, 255, 0.05);
+  --strategist-tint: rgba(68, 187, 255, 0.1);
+  --strategist-border: rgba(68, 187, 255, 0.3);
+  --strategist-glow: 0 0 15px rgba(68, 187, 255, 0.5);
+
+  --optimist: #10B981;
+  --optimist-dim: rgba(16, 185, 129, 0.05);
+  --optimist-tint: rgba(16, 185, 129, 0.1);
+  --optimist-border: rgba(16, 185, 129, 0.3);
+  --optimist-glow: 0 0 15px rgba(16, 185, 129, 0.5);
+}
+
+/* ==========================================================================
+   ANIMATIONS
+   ========================================================================== */
+
+@keyframes vg-council-dash {
+  to {
+    stroke-dashoffset: 1000;
+  }
+}
+
+@keyframes vg-council-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ==========================================================================
+   SECTION WRAPPER
+   ========================================================================== */
+
+.vg-council {
+  position: relative;
+  z-index: 2;
+  padding: 96px 32px;
+  max-width: 1320px;
+  margin: 0 auto;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   HEADER AREA
+   ========================================================================== */
+
+.vg-council__header {
+  text-align: center;
+  margin-bottom: 64px;
+  max-width: 768px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.vg-council__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background: var(--accent-dim);
+  border-radius: 9999px;
+  border: 1px solid var(--panel-border);
+  margin-bottom: 24px;
+}
+
+.vg-council__badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  animation: vg-council-pulse 2s ease-in-out infinite;
+}
+
+.vg-council__badge-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.vg-council__headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  line-height: 1.1;
+}
+
+.vg-council__description {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   MAIN PANEL (glass container)
+   ========================================================================== */
+
+.vg-council__panel {
+  position: relative;
+  width: 100%;
+  background: rgba(16, 24, 34, 0.6);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  border: 1px solid var(--panel-border);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  margin-bottom: 48px;
+  padding: 4px;
+}
+
+.vg-council__panel-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(188, 255, 47, 0.03), transparent, transparent);
+  pointer-events: none;
+  border-radius: 16px;
+}
+
+/* ==========================================================================
+   12-COLUMN GRID LAYOUT
+   ========================================================================== */
+
+.vg-council__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  padding: 32px;
+  position: relative;
+  z-index: 10;
+}
+
+@media (min-width: 1024px) {
+  .vg-council__grid {
+    grid-template-columns: 3fr 6fr 3fr;
+  }
+}
+
+/* ==========================================================================
+   LEFT COLUMN — THE CYNIC
+   ========================================================================== */
+
+.vg-council__left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .vg-council__left {
+    align-items: flex-end;
+    text-align: right;
+  }
+}
+
+/* ==========================================================================
+   PERSONA CARDS
+   ========================================================================== */
+
+.vg-council__card {
+  background: rgba(16, 24, 34, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--panel-border);
+  padding: 16px;
+  border-radius: 12px;
+  width: 100%;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+/* -- Cynic card -- */
+.vg-council__card--cynic {
+  border-color: var(--cynic-border);
+}
+
+.vg-council__card--cynic:hover {
+  background-color: rgba(255, 68, 68, 0.06);
+}
+
+.vg-council__card-connector--cynic {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .vg-council__card-connector--cynic {
+    display: block;
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 16px;
+    height: 16px;
+    background-color: #ef4444;
+    box-shadow: var(--cynic-glow);
+  }
+}
+
+.vg-council__card-title--cynic {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--cynic);
+  margin-bottom: 4px;
+}
+
+.vg-council__card-model {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  margin-bottom: 12px;
+}
+
+.vg-council__card-quote {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.vg-council__card-footer {
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.vg-council__card-footer--cynic {
+  border-top: 1px solid rgba(255, 68, 68, 0.2);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.vg-council__card-footer--strategist {
+  border-top: 1px solid rgba(68, 187, 255, 0.2);
+  display: flex;
+  justify-content: flex-start;
+}
+
+.vg-council__card-footer--optimist {
+  border-top: 1px solid rgba(16, 185, 129, 0.2);
+  display: flex;
+  justify-content: flex-start;
+}
+
+.vg-council__tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.vg-council__tag--cynic {
+  color: var(--cynic);
+  background: var(--cynic-tint);
+}
+
+.vg-council__tag--strategist {
+  color: var(--strategist);
+  background: var(--strategist-tint);
+}
+
+.vg-council__tag--optimist {
+  color: var(--optimist);
+  background: var(--optimist-tint);
+}
+
+/* -- Strategist card -- */
+.vg-council__card--strategist {
+  border-color: var(--strategist-border);
+}
+
+.vg-council__card--strategist:hover {
+  background-color: rgba(68, 187, 255, 0.06);
+}
+
+.vg-council__card-connector--strategist {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .vg-council__card-connector--strategist {
+    display: block;
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 12px;
+    height: 12px;
+    background-color: #3b82f6;
+    box-shadow: var(--strategist-glow);
+  }
+}
+
+.vg-council__card-title--strategist {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--strategist);
+  margin-bottom: 4px;
+}
+
+/* -- Optimist card -- */
+.vg-council__card--optimist {
+  border-color: var(--optimist-border);
+  margin-top: auto;
+}
+
+.vg-council__card--optimist:hover {
+  background-color: rgba(16, 185, 129, 0.06);
+}
+
+.vg-council__card-connector--optimist {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .vg-council__card-connector--optimist {
+    display: block;
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    background-color: var(--optimist);
+    border-radius: 50%;
+    box-shadow: var(--optimist-glow);
+  }
+}
+
+.vg-council__card-title--optimist {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--optimist);
+  margin-bottom: 4px;
+}
+
+/* ==========================================================================
+   CENTER COLUMN — SVG VISUALIZATION
+   ========================================================================== */
+
+.vg-council__center {
+  position: relative;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vg-council__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.vg-council__node-line {
+  stroke-dasharray: 4;
+  animation: vg-council-dash 30s linear infinite;
+}
+
+/* Synthesis result overlay */
+.vg-council__synthesis {
+  position: absolute;
+  z-index: 20;
+  background: rgba(16, 24, 34, 0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 16px;
+  border-radius: 4px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.vg-council__synthesis-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.vg-council__synthesis-value {
+  display: block;
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--text-primary);
+}
+
+.vg-council__synthesis-confidence {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent);
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   RIGHT COLUMN — STRATEGIST + OPTIMIST
+   ========================================================================== */
+
+.vg-council__right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 16px 0;
+  gap: 32px;
+}
+
+/* ==========================================================================
+   BOTTOM STATS BAR
+   ========================================================================== */
+
+.vg-council__stats {
+  border-top: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vg-council__stats-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.vg-council__stats-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.vg-council__stats-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.vg-council__stats-value {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.vg-council__stats-divider {
+  width: 1px;
+  height: 32px;
+  background: var(--border);
+}
+
+.vg-council__stats-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.vg-council__btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 10px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vg-council__btn--outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.vg-council__btn--outline:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.vg-council__btn--filled {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: var(--black);
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(188, 255, 47, 0.2);
+}
+
+.vg-council__btn--filled:hover {
+  background: rgba(188, 255, 47, 0.85);
+  box-shadow: 0 4px 20px rgba(188, 255, 47, 0.35);
+}
+
+.vg-council__btn-icon {
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   STATUS TICKER
+   ========================================================================== */
+
+.vg-council__ticker {
+  width: 100%;
+  background: rgba(16, 24, 34, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.vg-council__ticker:hover {
+  opacity: 1;
+}
+
+.vg-council__ticker-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.vg-council__ticker-item--cynic {
+  color: var(--cynic);
+}
+
+.vg-council__ticker-item--strategist {
+  color: var(--strategist);
+}
+
+.vg-council__ticker-item--optimist {
+  color: var(--optimist);
+}
+
+.vg-council__ticker-icon {
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   RESPONSIVE — Tablet
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .vg-council {
+    padding: 64px 24px;
+  }
+
+  .vg-council__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vg-council__left {
+    align-items: center;
+    text-align: center;
+  }
+
+  .vg-council__center {
+    min-height: 320px;
+  }
+
+  .vg-council__right {
+    gap: 24px;
+    padding: 0;
+  }
+
+  .vg-council__stats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .vg-council__stats-actions {
+    width: 100%;
+  }
+
+  .vg-council__btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE — Mobile
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .vg-council {
+    padding: 48px 16px;
+  }
+
+  .vg-council__header {
+    margin-bottom: 40px;
+  }
+
+  .vg-council__headline {
+    font-size: clamp(1.8rem, 7vw, 2.8rem);
+  }
+
+  .vg-council__grid {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .vg-council__center {
+    min-height: 260px;
+  }
+
+  .vg-council__stats {
+    padding: 16px;
+  }
+
+  .vg-council__stats-actions {
+    flex-direction: column;
+  }
+
+  .vg-council__ticker {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .vg-council__ticker-item--strategist,
+  .vg-council__ticker-item--optimist {
+    display: flex;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY: Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .vg-council__badge-dot,
+  .vg-council__node-line {
+    animation: none;
+  }
+}

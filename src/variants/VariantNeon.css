@@ -1,0 +1,1535 @@
+/* ============================================================
+   VARIANT NEON — "Neon Wire" Cyberpunk Wireframe
+   Achilles Analytics Landing Page
+   ============================================================ */
+
+/* --- Google Fonts Import --- */
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap');
+
+/* --- Custom Properties --- */
+:root {
+  --accent: #BCFF2F;
+  --accent-dim: rgba(188, 255, 47, 0.4);
+  --accent-glow: rgba(188, 255, 47, 0.3);
+  --accent-ultra-dim: rgba(188, 255, 47, 0.08);
+  --black: #000000;
+  --darker: #050505;
+  --surface: #0a0a0a;
+  --surface-elevated: #0f0f0f;
+  --border: rgba(188, 255, 47, 0.15);
+  --border-bright: rgba(188, 255, 47, 0.35);
+  --text-primary: #f0f0f0;
+  --text-secondary: #a0a0a0;
+  --text-dim: #555555;
+  --font-headline: 'Barlow Condensed', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+/* --- Base Reset & Container --- */
+.neon-landing {
+  background: var(--darker);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.neon-landing *,
+.neon-landing *::before,
+.neon-landing *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- Utility Classes --- */
+.neon-section {
+  position: relative;
+  padding: 120px 60px;
+  overflow: hidden;
+}
+
+.neon-section-marker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 60px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.neon-section-marker::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-bright), transparent);
+  max-width: 300px;
+}
+
+.neon-headline-condensed {
+  font-family: var(--font-headline);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  color: var(--text-primary);
+}
+
+.neon-text-glow {
+  text-shadow: 0 0 10px var(--accent), 0 0 40px var(--accent-glow);
+  color: var(--accent);
+}
+
+.neon-box-glow {
+  box-shadow: 0 0 15px rgba(188, 255, 47, 0.2), inset 0 0 15px rgba(188, 255, 47, 0.05);
+}
+
+/* --- Corner Brackets Decorator --- */
+.neon-corner-brackets {
+  position: relative;
+}
+
+.neon-corner-brackets::before,
+.neon-corner-brackets::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: var(--accent-dim);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.neon-corner-brackets::before {
+  top: -1px;
+  left: -1px;
+  border-width: 1px 0 0 1px;
+}
+
+.neon-corner-brackets::after {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 1px 1px 0;
+}
+
+/* --- Glitch Effect --- */
+@keyframes glitch {
+  0%, 100% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+  10% {
+    clip-path: inset(20% 0 60% 0);
+    transform: translate(-3px, 1px);
+  }
+  20% {
+    clip-path: inset(60% 0 10% 0);
+    transform: translate(3px, -1px);
+  }
+  30% {
+    clip-path: inset(40% 0 40% 0);
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    clip-path: inset(80% 0 5% 0);
+    transform: translate(2px, -2px);
+  }
+  50% {
+    clip-path: inset(10% 0 70% 0);
+    transform: translate(-1px, 1px);
+  }
+}
+
+.neon-glitch-hover:hover {
+  animation: glitch 0.3s ease-in-out;
+}
+
+/* --- Stroke-dash animation for SVGs --- */
+@keyframes strokeDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes strokeLoop {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes strokePulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* --- Pulse Glow --- */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px var(--accent-glow), 0 0 30px rgba(188, 255, 47, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--accent), 0 0 60px var(--accent-glow), 0 0 100px rgba(188, 255, 47, 0.1);
+  }
+}
+
+@keyframes textPulse {
+  0%, 100% {
+    text-shadow: 0 0 10px var(--accent), 0 0 40px var(--accent-glow);
+  }
+  50% {
+    text-shadow: 0 0 20px var(--accent), 0 0 60px var(--accent-glow), 0 0 100px rgba(188, 255, 47, 0.15);
+  }
+}
+
+/* --- Blink animation --- */
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* --- Rotate animation for wireframe --- */
+@keyframes rotateWire {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes rotateWireReverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* --- Node graph background dots --- */
+.neon-dot-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(circle, rgba(188, 255, 47, 0.07) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================================
+   SECTION 1: HERO — "THE MISSION"
+   ============================================================ */
+.neon-hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  padding: 80px 60px 120px;
+}
+
+/* Decorative lines extending to edges */
+.neon-hero__deco-h {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.neon-hero__deco-v {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 33%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--border), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Wordmark */
+.neon-hero__wordmark {
+  font-family: var(--font-headline);
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: 20px;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-shadow: 0 0 10px var(--accent), 0 0 40px var(--accent-glow);
+  margin-bottom: 80px;
+  position: relative;
+  z-index: 2;
+}
+
+.neon-hero__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 80px;
+  align-items: center;
+}
+
+.neon-hero__text {
+  flex: 1;
+  max-width: 700px;
+}
+
+.neon-hero__headline {
+  font-family: var(--font-headline);
+  font-weight: 900;
+  font-size: clamp(48px, 6vw, 88px);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.92;
+  color: var(--text-primary);
+  text-shadow: 0 0 10px var(--accent), 0 0 40px var(--accent-glow);
+  margin-bottom: 32px;
+}
+
+.neon-hero__headline span {
+  color: var(--accent);
+}
+
+.neon-hero__sub {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  max-width: 540px;
+  margin-bottom: 48px;
+}
+
+.neon-hero__ctas {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.neon-cta-filled {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: var(--accent);
+  color: var(--darker);
+  border: none;
+  padding: 16px 32px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.neon-cta-filled:hover {
+  box-shadow: 0 0 20px var(--accent), 0 0 60px var(--accent-glow);
+  transform: translateY(-2px);
+}
+
+.neon-cta-wire {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 16px 32px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.neon-cta-wire:hover {
+  box-shadow: 0 0 15px var(--accent-glow), inset 0 0 15px rgba(188, 255, 47, 0.05);
+  background: rgba(188, 255, 47, 0.05);
+}
+
+/* Wireframe Sphere */
+.neon-hero__sphere-wrap {
+  flex-shrink: 0;
+  position: relative;
+  width: 320px;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.neon-wireframe-sphere {
+  position: relative;
+  width: 240px;
+  height: 240px;
+}
+
+.neon-wireframe-sphere__ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px solid var(--accent-dim);
+  border-radius: 50%;
+  transform-origin: center center;
+}
+
+.neon-wireframe-sphere__ring--1 {
+  width: 240px;
+  height: 240px;
+  margin-top: -120px;
+  margin-left: -120px;
+  animation: rotateWire 20s linear infinite;
+  border-color: var(--accent-dim);
+}
+
+.neon-wireframe-sphere__ring--2 {
+  width: 240px;
+  height: 160px;
+  margin-top: -80px;
+  margin-left: -120px;
+  animation: rotateWire 15s linear infinite;
+  transform: rotateX(60deg);
+  border-color: rgba(188, 255, 47, 0.25);
+}
+
+.neon-wireframe-sphere__ring--3 {
+  width: 200px;
+  height: 200px;
+  margin-top: -100px;
+  margin-left: -100px;
+  animation: rotateWireReverse 25s linear infinite;
+  border-color: rgba(188, 255, 47, 0.18);
+}
+
+.neon-wireframe-sphere__ring--4 {
+  width: 160px;
+  height: 240px;
+  margin-top: -120px;
+  margin-left: -80px;
+  animation: rotateWire 18s linear infinite;
+  transform: rotateY(60deg);
+  border-color: rgba(188, 255, 47, 0.2);
+}
+
+.neon-wireframe-sphere__ring--5 {
+  width: 120px;
+  height: 120px;
+  margin-top: -60px;
+  margin-left: -60px;
+  animation: rotateWireReverse 12s linear infinite;
+  border-color: var(--accent);
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.neon-wireframe-sphere__core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  margin-left: -4px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Nav dots on right edge */
+.neon-hero__nav-dots {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 100;
+}
+
+.neon-hero__nav-dot {
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--accent-dim);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.neon-hero__nav-dot--active {
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.neon-hero__nav-dot:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* ============================================================
+   SECTION 2: PHILOSOPHY — "THE BLIND SPOT"
+   ============================================================ */
+.neon-philosophy {
+  background: var(--darker);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.neon-philosophy__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.neon-philosophy__quote {
+  font-family: var(--font-headline);
+  font-weight: 700;
+  font-size: clamp(28px, 3.5vw, 48px);
+  text-transform: uppercase;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.neon-philosophy__quote-line {
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.neon-philosophy__quote-line--bright {
+  color: var(--text-primary);
+  text-shadow: 0 0 8px rgba(188, 255, 47, 0.15);
+}
+
+.neon-philosophy__quote-line--dim {
+  color: var(--text-dim);
+}
+
+.neon-philosophy__block {
+  margin-top: 40px;
+  padding: 24px;
+  border-left: 2px solid var(--accent);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  background: rgba(188, 255, 47, 0.02);
+}
+
+/* Nested rotating rectangles visualization */
+.neon-philosophy__viz {
+  position: relative;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.neon-philosophy__rect {
+  position: absolute;
+  border: 1px solid var(--border);
+  transition: border-color 0.3s ease;
+}
+
+.neon-philosophy__rect--1 {
+  width: 300px;
+  height: 300px;
+  animation: rotateWire 30s linear infinite;
+  border-color: var(--accent-dim);
+}
+
+.neon-philosophy__rect--2 {
+  width: 220px;
+  height: 220px;
+  animation: rotateWireReverse 22s linear infinite;
+  border-color: rgba(188, 255, 47, 0.2);
+}
+
+.neon-philosophy__rect--3 {
+  width: 150px;
+  height: 150px;
+  animation: rotateWire 16s linear infinite;
+  border-color: rgba(188, 255, 47, 0.3);
+}
+
+.neon-philosophy__rect--4 {
+  width: 80px;
+  height: 80px;
+  animation: rotateWireReverse 10s linear infinite;
+  border-color: var(--accent);
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.neon-philosophy__rect-center {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+/* ============================================================
+   SECTION 3: CORE ENGINE — Impact vs. Vulnerability
+   ============================================================ */
+.neon-engine {
+  background: var(--darker);
+}
+
+.neon-engine__split {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
+  min-height: 500px;
+  position: relative;
+  z-index: 1;
+}
+
+.neon-engine__panel {
+  padding: 48px;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  position: relative;
+}
+
+.neon-engine__panel--dimmed {
+  opacity: 0.25;
+  filter: grayscale(0.5);
+}
+
+.neon-engine__panel-title {
+  font-family: var(--font-headline);
+  font-weight: 800;
+  font-size: 32px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-shadow: 0 0 10px var(--accent-glow);
+  margin-bottom: 24px;
+}
+
+.neon-engine__panel-question {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+  line-height: 1.8;
+}
+
+/* Divider */
+.neon-engine__divider {
+  width: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 15px var(--accent-glow), 0 0 40px rgba(188, 255, 47, 0.1);
+  position: relative;
+}
+
+.neon-engine__divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--accent);
+  background: var(--darker);
+  transform-origin: center;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+/* Data readout */
+.neon-engine__readout {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent);
+  background: rgba(188, 255, 47, 0.03);
+  border: 1px solid var(--border);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.neon-engine__readout-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.neon-engine__readout-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  text-shadow: 0 0 10px var(--accent-glow);
+}
+
+.neon-engine__readout-value--blink {
+  animation: blink 1s step-end infinite;
+  display: inline-block;
+  margin-left: 4px;
+}
+
+.neon-engine__delta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  background: rgba(188, 255, 47, 0.02);
+}
+
+.neon-engine__delta-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.neon-engine__delta-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(188, 255, 47, 0.05);
+}
+
+.neon-engine__delta-key {
+  color: var(--text-secondary);
+}
+
+.neon-engine__delta-val {
+  color: var(--accent);
+}
+
+/* Leverage points - node dots */
+.neon-engine__nodes {
+  position: relative;
+  height: 220px;
+}
+
+.neon-engine__node {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.neon-engine__node-dot {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  background: rgba(188, 255, 47, 0.1);
+  transition: all 0.3s ease;
+}
+
+.neon-engine__node:hover .neon-engine__node-dot {
+  background: var(--accent);
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.neon-engine__node-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   SECTION 4: INTELLIGENCE STACK — Node Network
+   ============================================================ */
+.neon-stack {
+  background: var(--darker);
+  border-top: 1px solid var(--border);
+}
+
+.neon-stack__network {
+  position: relative;
+  min-height: 600px;
+  z-index: 1;
+}
+
+.neon-stack__svg-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.neon-stack__svg-line {
+  stroke: var(--border);
+  stroke-width: 1;
+  fill: none;
+  transition: stroke 0.3s ease, stroke-width 0.3s ease;
+}
+
+.neon-stack__svg-line--inter {
+  stroke: rgba(188, 255, 47, 0.08);
+  stroke-dasharray: 6 6;
+}
+
+.neon-stack__svg-line--bright {
+  stroke: var(--accent-dim);
+  stroke-width: 1.5;
+}
+
+.neon-stack__clusters {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.neon-stack__cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.neon-stack__cluster-label {
+  font-family: var(--font-headline);
+  font-weight: 800;
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--accent);
+  text-shadow: 0 0 8px var(--accent-glow);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.neon-stack__cluster-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.neon-stack__cluster-nodes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 32px;
+  position: relative;
+}
+
+.neon-stack__node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.neon-stack__node:hover {
+  transform: translateY(-4px);
+}
+
+.neon-stack__node-hex {
+  width: 64px;
+  height: 64px;
+  border: 1.5px solid var(--border-bright);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: rgba(188, 255, 47, 0.03);
+}
+
+.neon-stack__node:hover .neon-stack__node-hex {
+  background: rgba(188, 255, 47, 0.1);
+  border-color: var(--accent);
+}
+
+.neon-stack__node-hex-inner {
+  width: 60px;
+  height: 60px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--darker);
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.neon-stack__node:hover .neon-stack__node-hex-inner {
+  border-color: var(--accent);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.neon-stack__node-icon {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--accent);
+}
+
+.neon-stack__node-name {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+.neon-stack__node:hover .neon-stack__node-name {
+  color: var(--accent);
+  text-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* Connection lines between nodes in clusters */
+.neon-stack__cluster-line {
+  width: 60px;
+  height: 1px;
+  background: var(--border);
+  align-self: center;
+  position: relative;
+}
+
+.neon-stack__cluster-line::before,
+.neon-stack__cluster-line::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-dim);
+}
+
+.neon-stack__cluster-line::before {
+  left: -2px;
+}
+
+.neon-stack__cluster-line::after {
+  right: -2px;
+}
+
+/* Inter-cluster connection indicators */
+.neon-stack__inter-line {
+  position: absolute;
+  background: linear-gradient(90deg, var(--border), rgba(188, 255, 47, 0.15), var(--border));
+  z-index: 0;
+}
+
+/* ============================================================
+   SECTION 5: AI COUNCIL SPOTLIGHT
+   ============================================================ */
+.neon-council {
+  background: var(--darker);
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.neon-council__headline {
+  font-family: var(--font-headline);
+  font-weight: 900;
+  font-size: clamp(48px, 6vw, 96px);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  color: var(--accent);
+  text-shadow: 0 0 20px var(--accent), 0 0 60px var(--accent-glow), 0 0 120px rgba(188, 255, 47, 0.1);
+  margin-bottom: 80px;
+  position: relative;
+  z-index: 1;
+  cursor: default;
+}
+
+.neon-council__headline:hover {
+  animation: glitch 0.4s ease-in-out;
+}
+
+.neon-council__arena {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  height: 500px;
+  z-index: 1;
+}
+
+.neon-council__heads {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.neon-council__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 160px;
+}
+
+.neon-council__head-svg {
+  width: 100px;
+  height: 120px;
+}
+
+.neon-council__head-svg line,
+.neon-council__head-svg circle,
+.neon-council__head-svg path,
+.neon-council__head-svg ellipse {
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.neon-council__head-label {
+  font-family: var(--font-headline);
+  font-weight: 700;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--accent);
+  text-shadow: 0 0 8px var(--accent-glow);
+}
+
+.neon-council__head-role {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Decision point */
+.neon-council__decision {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulseGlow 2s ease-in-out infinite;
+  z-index: 3;
+}
+
+.neon-council__decision::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  border: 1px solid var(--accent-dim);
+  border-radius: 50%;
+  animation: pulseGlow 2s ease-in-out infinite 0.5s;
+}
+
+/* Argument lines SVG */
+.neon-council__lines-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.neon-council__arg-line {
+  stroke: var(--accent);
+  stroke-width: 1;
+  fill: none;
+  stroke-dasharray: 8 4;
+  animation: strokeLoop 3s linear infinite;
+  opacity: 0.5;
+}
+
+.neon-council__arg-line--1 { animation-duration: 2.5s; }
+.neon-council__arg-line--2 { animation-duration: 3.5s; animation-delay: 0.5s; }
+.neon-council__arg-line--3 { animation-duration: 2.8s; animation-delay: 1s; }
+
+.neon-council__desc {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   SECTION 6: ARCHITECTURE & SECURITY
+   ============================================================ */
+.neon-architecture {
+  background: var(--darker);
+  border-top: 1px solid var(--border);
+}
+
+.neon-architecture__pillars {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.neon-architecture__pillar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 48px 40px;
+  position: relative;
+}
+
+.neon-architecture__pillar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(180deg, var(--accent-dim), transparent);
+}
+
+.neon-architecture__pillar-icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 32px;
+}
+
+.neon-architecture__pillar-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.neon-architecture__pillar-icon line,
+.neon-architecture__pillar-icon circle,
+.neon-architecture__pillar-icon rect,
+.neon-architecture__pillar-icon polygon,
+.neon-architecture__pillar-icon path {
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 1;
+}
+
+.neon-architecture__pillar-title {
+  font-family: var(--font-headline);
+  font-weight: 800;
+  font-size: 22px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.neon-architecture__pillar-desc {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--text-dim);
+  max-width: 280px;
+}
+
+.neon-architecture__base-line {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-dim), var(--accent), var(--accent-dim), transparent);
+  margin-top: 60px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   SECTION 7: FOOTER
+   ============================================================ */
+.neon-footer {
+  padding: 60px;
+  position: relative;
+  text-align: center;
+}
+
+.neon-footer__border-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  background-size: 200% 100%;
+  animation: borderSlide 4s linear infinite;
+}
+
+@keyframes borderSlide {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.neon-footer__links {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.neon-footer__link {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.neon-footer__link:hover {
+  color: var(--accent);
+  text-shadow: 0 0 8px var(--accent-glow);
+}
+
+.neon-footer__link-sep {
+  color: var(--text-dim);
+  font-size: 11px;
+  user-select: none;
+}
+
+.neon-footer__tagline {
+  font-family: var(--font-headline);
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  color: var(--text-secondary);
+  text-shadow: 0 0 6px rgba(188, 255, 47, 0.1);
+  margin-bottom: 24px;
+}
+
+.neon-footer__wordmark {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* ============================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================ */
+@media (max-width: 1100px) {
+  .neon-section {
+    padding: 80px 32px;
+  }
+
+  .neon-hero {
+    padding: 60px 32px 80px;
+  }
+
+  .neon-hero__content {
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .neon-hero__sphere-wrap {
+    width: 220px;
+    height: 220px;
+  }
+
+  .neon-wireframe-sphere {
+    width: 160px;
+    height: 160px;
+  }
+
+  .neon-wireframe-sphere__ring--1 {
+    width: 160px;
+    height: 160px;
+    margin-top: -80px;
+    margin-left: -80px;
+  }
+
+  .neon-wireframe-sphere__ring--2 {
+    width: 160px;
+    height: 110px;
+    margin-top: -55px;
+    margin-left: -80px;
+  }
+
+  .neon-wireframe-sphere__ring--3 {
+    width: 130px;
+    height: 130px;
+    margin-top: -65px;
+    margin-left: -65px;
+  }
+
+  .neon-wireframe-sphere__ring--4 {
+    width: 110px;
+    height: 160px;
+    margin-top: -80px;
+    margin-left: -55px;
+  }
+
+  .neon-wireframe-sphere__ring--5 {
+    width: 80px;
+    height: 80px;
+    margin-top: -40px;
+    margin-left: -40px;
+  }
+
+  .neon-philosophy__grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .neon-engine__split {
+    grid-template-columns: 1fr;
+  }
+
+  .neon-engine__divider {
+    width: 100%;
+    height: 2px;
+  }
+
+  .neon-engine__divider::before {
+    top: 50%;
+    left: 50%;
+  }
+
+  .neon-stack__clusters {
+    grid-template-columns: 1fr;
+    gap: 64px;
+  }
+
+  .neon-architecture__pillars {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .neon-council__arena {
+    height: auto;
+    min-height: 500px;
+  }
+}
+
+@media (max-width: 768px) {
+  .neon-section {
+    padding: 60px 20px;
+  }
+
+  .neon-hero {
+    padding: 40px 20px 60px;
+  }
+
+  .neon-hero__wordmark {
+    font-size: 12px;
+    letter-spacing: 12px;
+    margin-bottom: 48px;
+  }
+
+  .neon-hero__headline {
+    font-size: clamp(36px, 10vw, 56px);
+  }
+
+  .neon-hero__ctas {
+    flex-direction: column;
+  }
+
+  .neon-cta-filled,
+  .neon-cta-wire {
+    text-align: center;
+    width: 100%;
+  }
+
+  .neon-hero__nav-dots {
+    display: none;
+  }
+
+  .neon-hero__deco-v {
+    display: none;
+  }
+
+  .neon-philosophy__viz {
+    height: 260px;
+  }
+
+  .neon-philosophy__rect--1 {
+    width: 200px;
+    height: 200px;
+  }
+
+  .neon-philosophy__rect--2 {
+    width: 150px;
+    height: 150px;
+  }
+
+  .neon-philosophy__rect--3 {
+    width: 100px;
+    height: 100px;
+  }
+
+  .neon-philosophy__rect--4 {
+    width: 56px;
+    height: 56px;
+  }
+
+  .neon-council__heads {
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+    padding: 0;
+  }
+
+  .neon-council__arena {
+    height: auto;
+    min-height: auto;
+  }
+
+  .neon-council__decision {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    margin: 32px auto;
+  }
+
+  .neon-council__decision::before {
+    display: none;
+  }
+
+  .neon-council__lines-svg {
+    display: none;
+  }
+
+  .neon-council__desc {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    margin-top: 40px;
+    white-space: normal;
+  }
+
+  .neon-footer {
+    padding: 40px 20px;
+  }
+
+  .neon-footer__links {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .neon-footer__link-sep {
+    display: none;
+  }
+
+  .neon-engine__nodes {
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+  }
+
+  .neon-engine__node {
+    position: static;
+  }
+
+  .neon-stack__cluster-nodes {
+    gap: 20px;
+  }
+}
+
+/* ============================================================
+   ANIMATED LINE-DRAW BORDERS (used on sections)
+   ============================================================ */
+@keyframes lineDraw {
+  from {
+    stroke-dashoffset: 1600;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.neon-line-draw-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.neon-line-draw-border rect {
+  stroke: var(--border);
+  stroke-width: 1;
+  fill: none;
+  stroke-dasharray: 1600;
+  stroke-dashoffset: 1600;
+  animation: lineDraw 4s ease-out forwards;
+}
+
+/* ============================================================
+   SCROLLBAR STYLING
+   ============================================================ */
+.neon-landing::-webkit-scrollbar {
+  width: 6px;
+}
+
+.neon-landing::-webkit-scrollbar-track {
+  background: var(--darker);
+}
+
+.neon-landing::-webkit-scrollbar-thumb {
+  background: var(--border-bright);
+  border-radius: 3px;
+}
+
+.neon-landing::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}

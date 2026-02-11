@@ -1,0 +1,698 @@
+/* ==========================================================================
+   CORE ENGINE PAGE — Impact vs. Vulnerability
+   Achilles Analytics — "Tactical Grid" Design System
+   ========================================================================== */
+
+/* --- CSS Custom Properties (component-scoped) --- */
+.vg-engine-page {
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --font-label: 'IBM Plex Mono', 'Courier New', monospace;
+  --panel-bg: rgba(10, 10, 10, 0.85);
+  --panel-border: rgba(188, 255, 47, 0.18);
+  --glow-sm: 0 0 6px rgba(188, 255, 47, 0.25);
+  --glow-md: 0 0 16px rgba(188, 255, 47, 0.2);
+  --grid-line: rgba(188, 255, 47, 0.08);
+  --transition-fast: 0.15s ease;
+  --transition-med: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* ==========================================================================
+   SECTION WRAPPER
+   ========================================================================== */
+
+.vg-engine-page {
+  position: relative;
+  z-index: 2;
+  padding: 96px 32px 64px;
+  max-width: 1320px;
+  margin: 0 auto;
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   SECTION LABEL  // CORE ENGINE
+   ========================================================================== */
+
+.vg-engine-page .vg__section-label {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.vg-engine-page .vg__section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--panel-border), transparent);
+}
+
+/* ==========================================================================
+   SECTION HEADER
+   ========================================================================== */
+
+.vg-engine__header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.vg-engine__headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 5vw, 3.75rem);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  line-height: 1.15;
+}
+
+.vg-engine__subtitle {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 32px;
+}
+
+/* ==========================================================================
+   3-WAY TOGGLE
+   ========================================================================== */
+
+.vg-engine__toggle-wrap {
+  display: inline-flex;
+  padding: 4px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  backdrop-filter: blur(12px);
+}
+
+.vg-engine__toggle-btn {
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: none;
+  padding: 10px 24px;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color var(--transition-med), background var(--transition-med), box-shadow var(--transition-med);
+}
+
+.vg-engine__toggle-btn:hover:not(.vg-engine__toggle-btn--active) {
+  color: var(--text-primary);
+}
+
+.vg-engine__toggle-btn--active {
+  background: var(--accent);
+  color: var(--black);
+  box-shadow: 0 0 12px rgba(188, 255, 47, 0.35);
+}
+
+/* ==========================================================================
+   SPLIT-SCREEN GRID
+   ========================================================================== */
+
+.vg-engine__split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  width: 100%;
+  align-items: stretch;
+}
+
+/* ==========================================================================
+   PANEL (shared between Impact & Vulnerability)
+   ========================================================================== */
+
+.vg-engine__panel {
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--panel-border);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: border-color var(--transition-slow), box-shadow var(--transition-slow);
+}
+
+.vg-engine__panel:hover {
+  border-color: var(--accent);
+  box-shadow: var(--glow-sm);
+}
+
+/* Corner tag (top-right) */
+.vg-engine__panel-tag {
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(188, 255, 47, 0.4);
+}
+
+/* Panel header row */
+.vg-engine__panel-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.vg-engine__panel-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--accent);
+}
+
+.vg-engine__panel-icon--impact {
+  background: rgba(188, 255, 47, 0.12);
+  color: var(--accent);
+}
+
+.vg-engine__panel-icon--vuln {
+  background: var(--accent);
+  color: var(--black);
+  box-shadow: 0 0 15px rgba(188, 255, 47, 0.5);
+}
+
+.vg-engine__panel-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.vg-engine__panel-title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.vg-engine__panel-desc {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ==========================================================================
+   KEY METRIC BLOCK
+   ========================================================================== */
+
+.vg-engine__metric {
+  margin-bottom: 32px;
+  padding-left: 24px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  position: relative;
+}
+
+.vg-engine__metric--impact {
+  border-left: 2px solid rgba(188, 255, 47, 0.3);
+  background: linear-gradient(to right, rgba(188, 255, 47, 0.04), transparent);
+}
+
+.vg-engine__metric--vuln {
+  border-left: 2px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.03), transparent);
+}
+
+.vg-engine__metric-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.vg-engine__metric-label--accent {
+  color: rgba(188, 255, 47, 0.6);
+}
+
+.vg-engine__metric-label--dim {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.vg-engine__metric-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.vg-engine__metric-name {
+  font-family: var(--font-mono);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.vg-engine__metric-value {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+/* ==========================================================================
+   VISUALIZATION AREA
+   ========================================================================== */
+
+.vg-engine__viz {
+  flex: 1;
+  min-height: 240px;
+  position: relative;
+  border: 1px solid rgba(188, 255, 47, 0.1);
+  overflow: hidden;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vg-engine__viz--impact {
+  background: rgba(188, 255, 47, 0.03);
+}
+
+.vg-engine__viz--vuln {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Grid background inside viz */
+.vg-engine__viz-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.3;
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* ==========================================================================
+   IMPACT RIPPLE VISUALIZATION
+   ========================================================================== */
+
+.vg-engine__ripple-container {
+  position: relative;
+  width: 192px;
+  height: 192px;
+}
+
+/* Center node */
+.vg-engine__ripple-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(188, 255, 47, 0.5);
+}
+
+/* Ripple rings */
+.vg-engine__ripple-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+.vg-engine__ripple-ring--sm {
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(188, 255, 47, 0.4);
+}
+
+.vg-engine__ripple-ring--md {
+  width: 96px;
+  height: 96px;
+  border: 1px dashed rgba(188, 255, 47, 0.2);
+}
+
+.vg-engine__ripple-ring--lg {
+  width: 160px;
+  height: 160px;
+  border: 1px solid rgba(188, 255, 47, 0.1);
+}
+
+/* Peripheral nodes */
+.vg-engine__ripple-node {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.vg-engine__ripple-node--top {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.vg-engine__ripple-node--bottom {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(188, 255, 47, 0.6);
+}
+
+.vg-engine__ripple-node--left {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.vg-engine__ripple-node--right {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(188, 255, 47, 0.6);
+}
+
+/* Viz legend (bottom-left) */
+.vg-engine__viz-legend {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  display: flex;
+  gap: 16px;
+}
+
+.vg-engine__viz-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vg-engine__viz-legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.vg-engine__viz-legend-dot--accent {
+  background: var(--accent);
+}
+
+.vg-engine__viz-legend-dot--white {
+  background: #ffffff;
+}
+
+.vg-engine__viz-legend-text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: -0.2px;
+  text-transform: uppercase;
+  opacity: 0.6;
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   VULNERABILITY SVG MAP
+   ========================================================================== */
+
+.vg-engine__svg-map {
+  overflow: visible;
+}
+
+/* Bottleneck badge (top-left inside viz) */
+.vg-engine__viz-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  padding: 4px 8px;
+  background: rgba(188, 255, 47, 0.12);
+  border: 1px solid rgba(188, 255, 47, 0.3);
+}
+
+.vg-engine__viz-badge-text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   DATA READOUT ROWS
+   ========================================================================== */
+
+.vg-engine__data-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.vg-engine__data-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(188, 255, 47, 0.1);
+}
+
+.vg-engine__data-key {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.vg-engine__data-val {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.vg-engine__data-val--accent {
+  color: var(--accent);
+}
+
+.vg-engine__data-val--white {
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   FOOTER LEGEND BAR
+   ========================================================================== */
+
+.vg-engine__footer {
+  margin-top: 48px;
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  padding: 16px 32px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.vg-engine__footer-left {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.vg-engine__footer-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.vg-engine__footer-icon {
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+}
+
+.vg-engine__footer-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.vg-engine__footer-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.vg-engine__footer-status--operational {
+  color: #22C55E;
+}
+
+.vg-engine__footer-status--encrypted {
+  color: var(--accent);
+}
+
+.vg-engine__footer-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.vg-engine__footer-version {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.vg-engine__export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  color: var(--black);
+  border: none;
+  padding: 6px 16px;
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--transition-med), box-shadow var(--transition-med);
+}
+
+.vg-engine__export-btn:hover {
+  background: rgba(188, 255, 47, 0.8);
+  box-shadow: var(--glow-sm);
+}
+
+.vg-engine__export-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ==========================================================================
+   RESPONSIVE — Tablet
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .vg-engine-page {
+    padding: 64px 24px 48px;
+  }
+
+  .vg-engine__split {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .vg-engine__footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .vg-engine__footer-right {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE — Mobile
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .vg-engine-page {
+    padding: 48px 16px 32px;
+  }
+
+  .vg-engine-page .vg__section-label {
+    font-size: 10px;
+    margin-bottom: 32px;
+  }
+
+  .vg-engine__headline {
+    font-size: clamp(1.6rem, 7vw, 2.4rem);
+  }
+
+  .vg-engine__subtitle {
+    font-size: 11px;
+    letter-spacing: 2px;
+  }
+
+  .vg-engine__toggle-wrap {
+    flex-direction: column;
+  }
+
+  .vg-engine__toggle-btn {
+    padding: 8px 16px;
+    font-size: 11px;
+    text-align: center;
+  }
+
+  .vg-engine__panel {
+    padding: 20px;
+  }
+
+  .vg-engine__panel-tag {
+    display: none;
+  }
+
+  .vg-engine__metric-name {
+    font-size: 1.2rem;
+  }
+
+  .vg-engine__metric-value {
+    font-size: 1rem;
+  }
+
+  .vg-engine__viz {
+    min-height: 200px;
+  }
+
+  .vg-engine__footer {
+    padding: 12px 16px;
+  }
+
+  .vg-engine__footer-left {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY: Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .vg-engine__panel,
+  .vg-engine__toggle-btn,
+  .vg-engine__export-btn {
+    transition: none;
+  }
+}

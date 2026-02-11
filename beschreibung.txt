@@ -1,0 +1,96 @@
+Landing Page Structure: Achilles Analytics
+
+Design Theme: High-Contrast Dark Mode, fine grid lines, monospace fonts for data points, serif fonts for headlines (authority).
+
+Hero Section: The Mission
+Goal: Immediate authority and problem statement. No marketing fluff — operational reality.
+
+Headline: Make the consequences visible — before they occur.
+
+Sub-Headline: Operational decisions are rarely made in clarity. Achilles shifts the moment of insight forward in time, making consequences visible before you commit.
+
+Visual: An abstract, slowly rotating 3D wireframe (derived from the Digital Twin module) that gradually transforms from a chaotic tangle into an ordered structure.
+
+Primary CTA: Request Platform Access
+
+Secondary CTA: Explore the Architecture
+
+The Philosophy: The Blind Spot
+Goal: Meet the user where it hurts. Data is not the problem — the missing causality is.
+
+Layout: Two-column. Strong text on the left, subtle animation on the right.
+
+Text Block: "Data exists in abundance, yet it is fragmented. The core blind spot is not a lack of analytics, but the absence of an explicit operational picture."
+
+Key Message: We do not replace intuition with AI — we make decision logic explicit and auditable.
+
+Design Note: This is where the "Glass Effect" should be applied to symbolize transparency.
+
+Core Engine: Impact vs. Vulnerability
+Goal: Explain the core technical differentiator — the separation of event reaction and system hardening.
+
+Format: Interactive toggle or split-screen.
+
+State A — Impact Analysis (Reactive)
+
+Question: "How is my system affected by a specific event?"
+
+Output: Calculates the ΔSystem State and displays remaining options.
+
+State B — Vulnerability Analysis (Proactive)
+
+Question: "Where are my structural weaknesses?"
+
+Output: Identifies "Leverage Points" — where small shocks cause large damage.
+
+Table / Graphic: A stylized version of the comparison table from the Primer, reduced to the essentials.
+
+The Intelligence Stack (Module Showcase)
+Goal: Show the concrete tools (based on the Fact Sheets). This is where it becomes tangible.
+
+Modules are grouped into logical clusters rather than a flat list:
+
+A. Global Situational Awareness — The Eyes
+
+Crisis Map: Real-time geospatial tracking of conflict zones and heatmaps.
+
+News Hub: AI-curated open-source intelligence stream, filtered for relevance.
+
+Visual: Screenshot of the Mapbox map with a news ticker overlay.
+
+B. Analytical Deep Dive — The Brain
+
+Digital Twin: 3D visualization of complex network relationships and entities.
+
+BIAS Control: Automated detection of political stance and source credibility.
+
+OSINT Atlas: Orchestrated execution of active intelligence gathering tools.
+
+C. Decision Support — The Voice
+
+AI Council (Highlight Feature): Simulated debate between AI personas (Cynic, Optimist, Strategist) to reduce bias.
+
+Intel Report: Automated synthesis of raw data into actionable PDF products.
+
+Spotlight: The AI Council
+Goal: This is the signature "cyberpunk" feature. It deserves its own section.
+
+Headline: Escape the Echo Chamber.
+
+Content: "A simulated council of AI agents with distinct personas challenges your assumptions. It does not decide for you — it forces you to see the blind spots."
+
+Visual: A stylized representation of three "heads" or nodes projecting arguments onto a central decision line.
+
+Architecture & Security
+Goal: Build trust for enterprise and government clients.
+
+Not a Black Box: Logic is documented and traceable.
+
+Human in the Loop: The system does not decide. It enables informed reassessment.
+
+Admin Oversight: Centralized "Achilles Command" dashboard for total system health monitoring.
+
+Footer
+Links: Documentation · API Reference · System Status (links to Admin Dashboard Login)
+
+Tagline: "Manage Uncertainty Systematically.
