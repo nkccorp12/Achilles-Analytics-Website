@@ -638,6 +638,10 @@
     gap: 24px;
   }
 
+  .vg-engine__panel-header {
+    margin-bottom: 32px;
+  }
+
 }
 
 /* ==========================================================================
@@ -663,12 +667,25 @@
     letter-spacing: 2px;
   }
 
+  .vg-engine__header {
+    margin-bottom: 32px;
+  }
+
   .vg-engine__panel {
     padding: 20px;
   }
 
   .vg-engine__panel-tag {
     display: none;
+  }
+
+  .vg-engine__panel-header {
+    margin-bottom: 24px;
+    gap: 12px;
+  }
+
+  .vg-engine__panel-title {
+    font-size: 1.4rem;
   }
 
   .vg-engine__metric-name {
@@ -681,6 +698,11 @@
 
   .vg-engine__viz {
     min-height: 200px;
+  }
+
+  .vg-engine__viz-badge-text {
+    font-size: 10px;
+    letter-spacing: 0.5px;
   }
 
 }

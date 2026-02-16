@@ -1,5 +1,6 @@
 import './VariantGrid.css';
 import CardSwap, { Card } from '../components/CardSwap';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 
 /* ═══════════════════════════════════════════════════════════════════════════
    VARIANT GRID — "Tactical Grid" Command Center Aesthetic
@@ -97,6 +98,16 @@ const INTEL_PRODUCTS = [
 ];
 
 function PhilosophySection() {
+  // Responsive breakpoint detection
+  const isMobile = useMediaQuery('(max-width: 640px)');
+  const isTablet = useMediaQuery('(max-width: 1024px)');
+
+  // Compute responsive dimensions based on viewport
+  const cardWidth = isMobile ? 280 : isTablet ? 320 : 380;
+  const cardHeight = isMobile ? 240 : isTablet ? 280 : 320;
+  const cardDist = isMobile ? 25 : isTablet ? 32 : 40;
+  const vertDist = isMobile ? 30 : isTablet ? 40 : 50;
+
   return (
     <section className="vg__section" id="philosophy">
       <div className="vg__section-label">// Philosophy</div>
@@ -118,10 +129,10 @@ function PhilosophySection() {
         {/* Right: Card Swap */}
         <div className="vg-philosophy__panel">
           <CardSwap
-            width={380}
-            height={320}
-            cardDistance={40}
-            verticalDistance={50}
+            width={cardWidth}
+            height={cardHeight}
+            cardDistance={cardDist}
+            verticalDistance={vertDist}
             delay={3000}
             pauseOnHover={false}
             skewAmount={4}
