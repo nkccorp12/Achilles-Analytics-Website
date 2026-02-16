@@ -753,6 +753,8 @@
   text-align: center;
   height: 500px;
   overflow: hidden;
+  cursor: pointer;
+  user-select: none;
 }
 
 .vg-istack__report-icon-wrap {
@@ -851,13 +853,15 @@
   transition: opacity 0.3s ease;
 }
 
-.vg-istack__report:hover .vg-istack__report-default {
+.vg-istack__report:hover .vg-istack__report-default,
+.vg-istack__report--active .vg-istack__report-default {
   opacity: 0;
   transform: translateY(-20px);
   pointer-events: none;
 }
 
-.vg-istack__report:hover .vg-istack__report-preview {
+.vg-istack__report:hover .vg-istack__report-preview,
+.vg-istack__report--active .vg-istack__report-preview {
   opacity: 1;
   pointer-events: auto;
 }
@@ -875,11 +879,16 @@
   transition: opacity 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
 }
 
-.vg-istack__report:hover .vg-istack__brief-item--1 { opacity: 1; transform: translateY(0); transition-delay: 0.05s; }
-.vg-istack__report:hover .vg-istack__brief-item--2 { opacity: 1; transform: translateY(0); transition-delay: 0.1s; }
-.vg-istack__report:hover .vg-istack__brief-item--3 { opacity: 1; transform: translateY(0); transition-delay: 0.15s; }
-.vg-istack__report:hover .vg-istack__brief-item--4 { opacity: 1; transform: translateY(0); transition-delay: 0.2s; }
-.vg-istack__report:hover .vg-istack__brief-item--5 { opacity: 1; transform: translateY(0); transition-delay: 0.25s; }
+.vg-istack__report:hover .vg-istack__brief-item--1,
+.vg-istack__report--active .vg-istack__brief-item--1 { opacity: 1; transform: translateY(0); transition-delay: 0.05s; }
+.vg-istack__report:hover .vg-istack__brief-item--2,
+.vg-istack__report--active .vg-istack__brief-item--2 { opacity: 1; transform: translateY(0); transition-delay: 0.1s; }
+.vg-istack__report:hover .vg-istack__brief-item--3,
+.vg-istack__report--active .vg-istack__brief-item--3 { opacity: 1; transform: translateY(0); transition-delay: 0.15s; }
+.vg-istack__report:hover .vg-istack__brief-item--4,
+.vg-istack__report--active .vg-istack__brief-item--4 { opacity: 1; transform: translateY(0); transition-delay: 0.2s; }
+.vg-istack__report:hover .vg-istack__brief-item--5,
+.vg-istack__report--active .vg-istack__brief-item--5 { opacity: 1; transform: translateY(0); transition-delay: 0.25s; }
 
 .vg-istack__brief-item:hover {
   border-color: rgba(188, 255, 47, 0.25);
@@ -923,10 +932,14 @@
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.vg-istack__report:hover .vg-istack__brief-item--1 .vg-istack__brief-bar > span { transform: scaleX(1); transition-delay: 0.2s; }
-.vg-istack__report:hover .vg-istack__brief-item--2 .vg-istack__brief-bar > span { transform: scaleX(1); transition-delay: 0.25s; }
-.vg-istack__report:hover .vg-istack__brief-item--3 .vg-istack__brief-bar > span { transform: scaleX(1); transition-delay: 0.3s; }
-.vg-istack__report:hover .vg-istack__brief-item--4 .vg-istack__brief-bar > span { transform: scaleX(1); transition-delay: 0.35s; }
+.vg-istack__report:hover .vg-istack__brief-item--1 .vg-istack__brief-bar > span,
+.vg-istack__report--active .vg-istack__brief-item--1 .vg-istack__brief-bar > span { transform: scaleX(1); transition-delay: 0.2s; }
+.vg-istack__report:hover .vg-istack__brief-item--2 .vg-istack__brief-bar > span,
+.vg-istack__report--active .vg-istack__brief-item--2 .vg-istack__brief-bar > span { transform: scaleX(1); transition-delay: 0.25s; }
+.vg-istack__report:hover .vg-istack__brief-item--3 .vg-istack__brief-bar > span,
+.vg-istack__report--active .vg-istack__brief-item--3 .vg-istack__brief-bar > span { transform: scaleX(1); transition-delay: 0.3s; }
+.vg-istack__report:hover .vg-istack__brief-item--4 .vg-istack__brief-bar > span,
+.vg-istack__report--active .vg-istack__brief-item--4 .vg-istack__brief-bar > span { transform: scaleX(1); transition-delay: 0.35s; }
 
 .vg-istack__brief-val {
   font-family: var(--font-mono);
@@ -1002,10 +1015,10 @@
 }
 
 /* ==========================================================================
-   RESPONSIVE — Mobile (max-width: 768px)
+   RESPONSIVE — Mobile (max-width: 640px)
    ========================================================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .vg-istack__title-block {
     margin-bottom: 40px;
   }
@@ -1036,6 +1049,22 @@
 
   .vg-istack__news-hub {
     height: 320px;
+  }
+
+  .vg-istack__alerts-panel {
+    top: 12px;
+    right: 12px;
+    padding: 10px 12px;
+    max-width: calc(100% - 24px);
+  }
+
+  .vg-istack__alerts-title {
+    font-size: 11px;
+  }
+
+  .vg-istack__alert-row {
+    font-size: 11px;
+    gap: 12px;
   }
 
   .vg-istack__module-header {
