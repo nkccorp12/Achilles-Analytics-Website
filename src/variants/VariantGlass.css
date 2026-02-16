@@ -830,8 +830,8 @@
    RESPONSIVE BREAKPOINTS
    ============================================================ */
 
-/* Tablet: <= 900px */
-@media (max-width: 900px) {
+/* Tablet: <= 1024px */
+@media (max-width: 1024px) {
   .ach-philosophy__grid {
     grid-template-columns: 1fr;
     gap: 48px;
@@ -878,8 +878,8 @@
   }
 }
 
-/* Mobile: <= 600px */
-@media (max-width: 600px) {
+/* Mobile: <= 640px */
+@media (max-width: 640px) {
   .ach-hero {
     padding: 100px 20px 80px;
   }
