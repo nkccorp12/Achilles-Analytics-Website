@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import './CoreEngine.css';
 
 /* =========================================================================
@@ -22,6 +23,27 @@ const IconAnalytics = () => (
 // --- Main Component ---
 
 export default function CoreEngine() {
+  const splitRef = useRef(null);
+
+  useEffect(() => {
+    const el = splitRef.current;
+    if (!el) return;
+    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+    if (!isMobile) return;
+
+    const panels = el.querySelectorAll('.vg-engine__panel');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle('vg-engine__panel--active', entry.isIntersecting);
+        });
+      },
+      { threshold: 0.5, rootMargin: '-20% 0px -20% 0px' }
+    );
+    panels.forEach((p) => observer.observe(p));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section className="vg-engine-page">
       {/* Section Label */}
@@ -38,7 +60,7 @@ export default function CoreEngine() {
       </div>
 
       {/* Split-Screen Container */}
-      <div className="vg-engine__split">
+      <div className="vg-engine__split" ref={splitRef}>
         {/* ============================================================
             LEFT PANEL: Impact Analysis
             ============================================================ */}

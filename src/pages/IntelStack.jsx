@@ -228,6 +228,20 @@ export default function IntelStack() {
   const [biasIdx, setBiasIdx] = useState(0);
   const [biasAnim, setBiasAnim] = useState(false);
   const [reportPreviewActive, setReportPreviewActive] = useState(false);
+  const [brainVpActive, setBrainVpActive] = useState(false);
+
+  useEffect(() => {
+    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+    if (!isMobile) return;
+    const el = brainRef.current;
+    if (!el) return;
+    const vpObs = new IntersectionObserver(
+      ([entry]) => setBrainVpActive(entry.isIntersecting),
+      { threshold: 0.4, rootMargin: '-15% 0px -15% 0px' }
+    );
+    vpObs.observe(el);
+    return () => vpObs.disconnect();
+  }, []);
 
   useEffect(() => {
     const el = brainRef.current;
@@ -235,6 +249,9 @@ export default function IntelStack() {
     let timeout;
     let idx = 0;
     let started = false;
+    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+    const INTERVAL = isMobile ? 2500 : 4000;
+    const LAST_HOLD = isMobile ? 8000 : 14000;
 
     const tick = () => {
       const next = (idx + 1) % BIAS_ITEMS.length;
@@ -244,15 +261,14 @@ export default function IntelStack() {
         setBiasIdx(next);
         setBiasAnim(false);
       }, 300);
-      // Hold 10s on the last item before wrapping to 0
       const isLast = next === BIAS_ITEMS.length - 1;
-      timeout = setTimeout(tick, isLast ? 14000 : 4000);
+      timeout = setTimeout(tick, isLast ? LAST_HOLD : INTERVAL);
     };
 
     const io = new IntersectionObserver(([e]) => {
       if (e.isIntersecting && !started) {
         started = true;
-        timeout = setTimeout(tick, 4000);
+        timeout = setTimeout(tick, INTERVAL);
         io.disconnect();
       }
     }, { threshold: 0.4 });
@@ -467,7 +483,7 @@ export default function IntelStack() {
           </div>
         </div>
 
-        <div className="vg-istack__brain-grid" ref={brainRef}>
+        <div className={`vg-istack__brain-grid${brainVpActive ? ' vg-istack__brain-grid--active' : ''}`} ref={brainRef}>
           {/* Digital Twin */}
           <div className="vg-istack__card">
             <div className="vg-istack__card-header">
@@ -578,7 +594,6 @@ export default function IntelStack() {
           {/* Intel Report Synthesis */}
           <div
             className={`vg-istack__report${reportPreviewActive ? ' vg-istack__report--active' : ''}`}
-            onClick={() => setReportPreviewActive(!reportPreviewActive)}
           >
             {/* Default content — hides on hover */}
             <div className="vg-istack__report-default">
@@ -622,9 +637,7 @@ export default function IntelStack() {
             </div>
             <button
               className="vg-istack__report-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
+              onClick={() => setReportPreviewActive(!reportPreviewActive)}
             >
               Generate Latest Brief
             </button>

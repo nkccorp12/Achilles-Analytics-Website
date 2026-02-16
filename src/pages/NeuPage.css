@@ -71,10 +71,10 @@
 }
 
 .neu-header__wordmark-sub {
-  font-weight: 400;
-  letter-spacing: 3px;
-  color: var(--text-dim);
-  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 6px;
+  color: var(--text-primary);
+  font-size: inherit;
 }
 
 .neu-header__nav {
@@ -849,14 +849,33 @@
    ========================================================================== */
 
 @media (max-width: 640px) {
+  /* Shrink beam section on mobile */
+  .neu__laser {
+    height: 45vh;
+    height: 45dvh;
+  }
+
+  .neu__reveal-img {
+    -webkit-mask-image: none;
+    mask-image: none;
+    opacity: 0.2;
+    height: 60%;
+  }
+
+  .neu__impact {
+    top: 60%;
+  }
+
   .neu-hero {
     padding: 16px;
-    margin-top: -30vh;
-    margin-top: -30dvh;
+    margin-top: -18vh;
+    margin-top: -18dvh;
+    min-height: 75vh;
+    min-height: 75dvh;
   }
 
   .neu-hero__content {
-    padding: 32px 0;
+    padding: 24px 0 48px;
   }
 
   .neu-hero__headline {
@@ -877,6 +896,15 @@
     width: 100%;
   }
 
+  /* Fix 2: Shrink hero logo on mobile */
+  .neu-hero__logo-wrap {
+    width: 250px;
+    height: 250px;
+    right: -40px;
+    bottom: -20px;
+    opacity: 0.11;
+  }
+
   .neu-header {
     padding: 12px 16px;
   }
@@ -887,7 +915,7 @@
   }
 
   .neu-header__wordmark-sub {
-    display: none;
+    letter-spacing: 3px;
   }
 
   .neu-header__hamburger {
@@ -907,7 +935,7 @@
     -webkit-backdrop-filter: blur(20px);
     border-left: 1px solid var(--border);
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     padding: 80px 32px 32px;
     gap: 32px;
     transform: translateX(100%);
@@ -919,12 +947,14 @@
     transform: translateX(0);
   }
 
+  /* Fix 8: Centered links + stronger border */
   .neu-header__link {
     display: block;
     width: 100%;
     font-size: 13px;
     padding: 8px 0;
-    border-bottom: 1px solid var(--border);
+    text-align: center;
+    border-bottom: 1px solid rgba(188, 255, 47, 0.3);
   }
 
   .neu-reach {

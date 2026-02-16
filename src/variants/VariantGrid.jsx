@@ -92,9 +92,9 @@ function HeroSection() {
 
 const INTEL_PRODUCTS = [
   { group: 'THE EYES',  name: 'Crisis Map',          desc: 'Real-time global crisis monitoring & geospatial threat visualization.', img: '/map.webp' },
-  { group: 'THE BRAIN', name: 'Digital Twin',         desc: '3D network relationship mapping of adversary connections.', img: '/twin.png' },
-  { group: 'THE BRAIN', name: 'OSINT Atlas',          desc: 'Active tool orchestration for targeted intelligence gathering.', img: '/twin2.png' },
-  { group: 'THE VOICE', name: 'AI Strategic Council', desc: 'Multi-persona AI debate engine for adversarial stress-testing.', img: '/report.png' },
+  { group: 'THE BRAIN', name: 'Digital Twin',         desc: '3D network relationship mapping of adversary connections.', img: '/twin.webp' },
+  { group: 'THE BRAIN', name: 'OSINT Atlas',          desc: 'Active tool orchestration for targeted intelligence gathering.', img: '/twin2.webp' },
+  { group: 'THE VOICE', name: 'AI Strategic Council', desc: 'Multi-persona AI debate engine for adversarial stress-testing.', img: '/report.webp' },
 ];
 
 function PhilosophySection() {
@@ -104,9 +104,9 @@ function PhilosophySection() {
 
   // Compute responsive dimensions based on viewport
   const cardWidth = isMobile ? 280 : isTablet ? 320 : 380;
-  const cardHeight = isMobile ? 240 : isTablet ? 280 : 320;
+  const cardHeight = isMobile ? 220 : isTablet ? 280 : 320;
   const cardDist = isMobile ? 25 : isTablet ? 32 : 40;
-  const vertDist = isMobile ? 30 : isTablet ? 40 : 50;
+  const vertDist = isMobile ? 20 : isTablet ? 40 : 50;
 
   return (
     <section className="vg__section" id="philosophy">

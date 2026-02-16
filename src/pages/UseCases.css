@@ -325,11 +325,11 @@
 }
 
 .vg-usecase__card--maritime::after {
-  background-image: url('/maritime.jpg');
+  background-image: url('/maritime.webp');
 }
 
 .vg-usecase__card--infra::after {
-  background-image: url('/infra.jpg');
+  background-image: url('/infra.webp');
 }
 
 .vg-usecase__card--maritime:hover::after,

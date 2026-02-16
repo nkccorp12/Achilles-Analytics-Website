@@ -568,9 +568,16 @@
     justify-content: center;
   }
 
+  /* Fix 3: More space above cards + prevent clipping */
   .vg-philosophy__panel {
-    min-height: 250px;
+    min-height: 340px;
     overflow: hidden;
+    margin-top: 20px;
+    padding-top: 24px;
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+    padding-bottom: 0;
+    margin-bottom: 0;
   }
 
   .vg-philosophy__card-img {

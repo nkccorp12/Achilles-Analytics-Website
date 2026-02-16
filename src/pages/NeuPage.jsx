@@ -1,11 +1,12 @@
-import { useRef, useEffect, useState, useCallback } from 'react';
-import LaserFlow from '../components/LaserFlow';
+import { useRef, useEffect, useState, useCallback, lazy, Suspense } from 'react';
 import CoreEngine from './CoreEngine';
 import UseCases from './UseCases';
-import IntelStack from './IntelStack';
 import AICouncil from './AICouncil';
 import { ArchitectureSection, PhilosophySection } from '../variants/VariantGrid';
 import './NeuPage.css';
+
+const LaserFlow = lazy(() => import('../components/LaserFlow'));
+const IntelStack = lazy(() => import('./IntelStack'));
 
 /* ─── Blinking Cursor (cloned from VariantGrid) ─── */
 const Cursor = () => <span className="neu__cursor" aria-hidden="true" />;
@@ -161,6 +162,7 @@ export default function NeuPage() {
       <section
         className="neu__laser"
         onPointerMove={(e) => {
+          if (e.pointerType === 'touch') return;
           const rect = e.currentTarget.getBoundingClientRect();
           const x = e.clientX - rect.left;
           const y = e.clientY - rect.top;
@@ -170,7 +172,8 @@ export default function NeuPage() {
             el.style.setProperty('--my', `${y}px`);
           }
         }}
-        onPointerLeave={() => {
+        onPointerLeave={(e) => {
+          if (e.pointerType === 'touch') return;
           const el = revealImgRef.current;
           if (el) {
             el.style.setProperty('--mx', '-9999px');
@@ -178,33 +181,38 @@ export default function NeuPage() {
           }
         }}
       >
-        <LaserFlow
-          horizontalBeamOffset={0.1}
-          verticalBeamOffset={-0.1}
-          color="#BCFF2F"
-          horizontalSizing={0.5}
-          verticalSizing={2}
-          wispDensity={1}
-          wispSpeed={15}
-          wispIntensity={5}
-          flowSpeed={0.35}
-          flowStrength={0.25}
-          fogIntensity={0.45}
-          fogScale={0.3}
-          fogFallSpeed={0.6}
-          decay={1.1}
-          falloffStart={1.2}
-          mouseTiltStrength={0.15}
-          mouseSmoothTime={0.08}
-          dpr={1}
-        />
+        <Suspense fallback={null}>
+          <LaserFlow
+            horizontalBeamOffset={0.1}
+            verticalBeamOffset={-0.1}
+            color="#BCFF2F"
+            horizontalSizing={0.5}
+            verticalSizing={2}
+            wispDensity={1}
+            wispSpeed={15}
+            wispIntensity={5}
+            flowSpeed={0.35}
+            flowStrength={0.25}
+            fogIntensity={0.45}
+            fogScale={0.3}
+            fogFallSpeed={0.6}
+            decay={1.1}
+            falloffStart={1.2}
+            mouseTiltStrength={0.15}
+            mouseSmoothTime={0.08}
+            dpr={1}
+          />
+        </Suspense>
 
-        <img
-          ref={revealImgRef}
-          src="/background.png"
-          alt=""
-          className="neu__reveal-img"
-        />
+        <picture>
+          <source media="(max-width: 640px)" srcSet="/beammobile.webp" />
+          <img
+            ref={revealImgRef}
+            src="/background.webp"
+            alt=""
+            className="neu__reveal-img"
+          />
+        </picture>
 
         {/* Impact line — pinned to bottom of laser section */}
         <div className="neu__impact" ref={impactRef}>
@@ -245,7 +253,7 @@ export default function NeuPage() {
         <PhilosophySection />
         <CoreEngine />
         <UseCases />
-        <IntelStack />
+        <Suspense fallback={null}><IntelStack /></Suspense>
         <AICouncil />
         <ArchitectureSection />
       </div>

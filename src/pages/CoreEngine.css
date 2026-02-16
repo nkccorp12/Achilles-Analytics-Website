@@ -700,9 +700,85 @@
     min-height: 200px;
   }
 
+  /* Fix 5: Move badge to bottom-left to avoid SVG overlap */
+  .vg-engine__viz-badge {
+    top: auto;
+    bottom: 12px;
+    left: 12px;
+  }
+
   .vg-engine__viz-badge-text {
     font-size: 10px;
     letter-spacing: 0.5px;
+  }
+
+  /* Fix 4: Viewport-activated animations on mobile */
+  /* Impact panel — ripple rings */
+  .vg-engine__panel--active .vg-engine__ripple-ring--sm {
+    animation: vg-engine-ripple-pulse 1.8s ease-in-out infinite;
+  }
+  .vg-engine__panel--active .vg-engine__ripple-ring--md {
+    animation: vg-engine-ripple-pulse 1.8s ease-in-out infinite 0.3s;
+    border-color: rgba(188, 255, 47, 0.35);
+  }
+  .vg-engine__panel--active .vg-engine__ripple-ring--lg {
+    animation: vg-engine-ripple-pulse 1.8s ease-in-out infinite 0.6s;
+    border-color: rgba(188, 255, 47, 0.2);
+  }
+  .vg-engine__panel--active .vg-engine__ripple-core {
+    animation: vg-engine-core-glow 2s ease-in-out infinite;
+  }
+  .vg-engine__panel--active .vg-engine__ripple-node--top {
+    animation: vg-engine-node-drift-top 2.5s ease-in-out infinite;
+    background: rgba(188, 255, 47, 0.7);
+  }
+  .vg-engine__panel--active .vg-engine__ripple-node--bottom {
+    animation: vg-engine-node-drift-bottom 2.5s ease-in-out infinite 0.3s;
+    background: var(--accent);
+  }
+  .vg-engine__panel--active .vg-engine__ripple-node--left {
+    animation: vg-engine-node-drift-left 2.5s ease-in-out infinite 0.6s;
+    background: rgba(188, 255, 47, 0.7);
+  }
+  .vg-engine__panel--active .vg-engine__ripple-node--right {
+    animation: vg-engine-node-drift-right 2.5s ease-in-out infinite 0.9s;
+    background: var(--accent);
+  }
+  .vg-engine__panel--active .vg-engine__viz--impact {
+    background: rgba(188, 255, 47, 0.06);
+    border-color: rgba(188, 255, 47, 0.25);
+  }
+
+  /* Vulnerability panel — SVG animations */
+  .vg-engine__panel--active .vg-engine__svg-map line {
+    stroke-dasharray: 6 4;
+    animation: vg-engine-vuln-dash 1.5s linear infinite;
+    stroke: rgba(188, 255, 47, 0.6);
+  }
+  .vg-engine__panel--active .vg-engine__svg-map circle:nth-child(7) {
+    animation: vg-engine-vuln-glow 2s ease-in-out infinite;
+  }
+  .vg-engine__panel--active .vg-engine__svg-map circle:nth-child(8) {
+    fill: rgba(188, 255, 47, 1);
+    r: 6;
+  }
+  .vg-engine__panel--active .vg-engine__svg-map circle:nth-child(9),
+  .vg-engine__panel--active .vg-engine__svg-map circle:nth-child(10),
+  .vg-engine__panel--active .vg-engine__svg-map circle:nth-child(11) {
+    fill: rgba(255, 255, 255, 0.6);
+  }
+  .vg-engine__panel--active .vg-engine__viz-badge {
+    background: rgba(188, 255, 47, 0.2);
+    border-color: rgba(188, 255, 47, 0.5);
+    box-shadow: 0 0 12px rgba(188, 255, 47, 0.2);
+  }
+  .vg-engine__panel--active .vg-engine__viz--vuln {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(188, 255, 47, 0.15);
+  }
+  .vg-engine__panel--active {
+    border-color: var(--accent);
+    box-shadow: var(--glow-sm);
   }
 
 }

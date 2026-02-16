@@ -196,7 +196,7 @@
   inset: -30%;
   width: 160%;
   height: 160%;
-  background: url('/maphd.png') center / cover no-repeat;
+  background: url('/maphd.webp') center / cover no-repeat;
   transform: scale(0.65);
 }
 
@@ -1043,28 +1043,44 @@
     grid-template-columns: 1fr;
   }
 
+  /* Fix 7: Crisis map taller, alerts as bottom bar, news hub compact */
   .vg-istack__crisis-map {
-    min-height: 260px;
+    min-height: 280px;
   }
 
   .vg-istack__news-hub {
-    height: 320px;
+    height: 260px;
   }
 
+  /* Alerts: horizontal bottom bar instead of floating box */
   .vg-istack__alerts-panel {
-    top: 12px;
-    right: 12px;
-    padding: 10px 12px;
-    max-width: calc(100% - 24px);
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: none;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    border: none;
+    border-top: 1px solid var(--panel-border);
   }
 
   .vg-istack__alerts-title {
-    font-size: 11px;
+    display: none;
+  }
+
+  .vg-istack__alerts-list {
+    flex-direction: row;
+    gap: 12px;
+    overflow-x: auto;
   }
 
   .vg-istack__alert-row {
-    font-size: 11px;
-    gap: 12px;
+    font-size: 9px;
+    gap: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .vg-istack__module-header {
@@ -1080,6 +1096,16 @@
 
   .vg-istack__brain-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* Viewport-activated hover for Group B cards on mobile */
+  .vg-istack__card {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .vg-istack__brain-grid--active .vg-istack__card {
+    border-color: var(--accent);
+    box-shadow: var(--glow-sm);
   }
 
   .vg-istack__voice-grid {

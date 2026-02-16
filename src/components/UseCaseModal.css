@@ -1,0 +1,744 @@
+/* ==========================================================================
+   USE CASE MODAL — 3 Layout Variants
+   Near-fullscreen with hero images
+   Prefix: ucm-*
+   ========================================================================== */
+
+/* ─── Overlay ─── */
+.ucm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.4s ease;
+}
+
+.ucm-overlay--opening {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.ucm-overlay--closing {
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.5s ease 0.1s;
+}
+
+/* ─── Modal Container ─── */
+.ucm-modal {
+  position: relative;
+  max-width: 100%;
+  max-height: 90vh;
+  background: #0a0a0a;
+  border: 1px solid var(--panel-border);
+  overflow: hidden;
+  overflow-y: auto;
+  transform-origin: center center;
+}
+
+/* Near-fullscreen sizes */
+.ucm-modal--a { width: 95vw; max-width: 1100px; }
+.ucm-modal--b { width: 95vw; max-width: 900px; }
+.ucm-modal--c { width: 95vw; max-width: 700px; }
+
+/* Scrollbar */
+.ucm-modal::-webkit-scrollbar { width: 4px; }
+.ucm-modal::-webkit-scrollbar-track { background: transparent; }
+.ucm-modal::-webkit-scrollbar-thumb { background: rgba(188, 255, 47, 0.2); }
+
+/* ─── Hatch Open/Close Animation ─── */
+.ucm-modal--opening {
+  animation: ucm-hatch-open 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.ucm-modal--closing {
+  animation: ucm-hatch-close 0.5s cubic-bezier(0.7, 0, 0.84, 0) forwards;
+}
+
+@keyframes ucm-hatch-open {
+  0%   { clip-path: inset(50% 40% 50% 40%); opacity: 0; }
+  30%  { clip-path: inset(50% 0% 50% 0%);  opacity: 1; }
+  100% { clip-path: inset(0% 0% 0% 0%);    opacity: 1; }
+}
+
+@keyframes ucm-hatch-close {
+  0%   { clip-path: inset(0% 0% 0% 0%);    opacity: 1; }
+  60%  { clip-path: inset(50% 0% 50% 0%);  opacity: 1; }
+  100% { clip-path: inset(50% 40% 50% 40%); opacity: 0; }
+}
+
+/* ─── Scan Line ─── */
+.ucm-scan {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  box-shadow: 0 0 12px rgba(188, 255, 47, 0.6), 0 0 30px rgba(188, 255, 47, 0.2);
+  opacity: 0;
+  z-index: 5;
+}
+
+.ucm-modal--opening .ucm-scan {
+  animation: ucm-scan-sweep 0.8s ease 0.3s forwards;
+}
+
+@keyframes ucm-scan-sweep {
+  0%   { top: 0;    opacity: 1; }
+  90%  {           opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* ─── Corner Accents ─── */
+.ucm-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  z-index: 3;
+}
+
+.ucm-corner--tl { top: 0; left: 0;  border-top: 2px solid var(--accent); border-left: 2px solid var(--accent); }
+.ucm-corner--tr { top: 0; right: 0; border-top: 2px solid var(--accent); border-right: 2px solid var(--accent); }
+.ucm-corner--bl { bottom: 0; left: 0;  border-bottom: 2px solid var(--accent); border-left: 2px solid var(--accent); }
+.ucm-corner--br { bottom: 0; right: 0; border-bottom: 2px solid var(--accent); border-right: 2px solid var(--accent); }
+
+/* ─── Close Button ─── */
+.ucm-close {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.ucm-close:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* ─── Hero Image (shared) ─── */
+.ucm-hero-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(1) brightness(0.25);
+  z-index: 0;
+}
+
+/* ─── Shared Typography ─── */
+.ucm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.ucm-header__label {
+  font-family: var(--font-label);
+  font-size: 12px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.8;
+}
+
+.ucm-title {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text-primary);
+  margin: 0 0 14px 0;
+  line-height: 1.2;
+}
+
+.ucm-desc {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  margin: 0 0 20px 0;
+}
+
+/* ─── Details List ─── */
+.ucm-details {
+  list-style: none;
+  margin: 0 0 24px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ucm-details__item {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  padding-left: 16px;
+  position: relative;
+}
+
+.ucm-details__item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--accent);
+  background: rgba(188, 255, 47, 0.15);
+}
+
+/* ─── Module Tags (shared) ─── */
+.ucm-modules {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ucm-module {
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 5px 12px;
+  border: 1px solid rgba(188, 255, 47, 0.2);
+  background: rgba(188, 255, 47, 0.05);
+}
+
+/* ─── Content Fade In ─── */
+.ucm-body {
+  opacity: 0;
+}
+
+.ucm-modal--opening .ucm-body {
+  animation: ucm-content-in 0.4s ease 0.5s forwards;
+}
+
+.ucm-modal--closing .ucm-body {
+  opacity: 0;
+}
+
+@keyframes ucm-content-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── SVG Visualization Shared Styles ─── */
+.ucm-viz-svg {
+  width: 100%;
+  height: auto;
+  max-height: 240px;
+  position: relative;
+  z-index: 2;
+}
+
+.ucm-viz-line {
+  stroke: rgba(188, 255, 47, 0.25);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.ucm-viz-node {
+  fill: rgba(255, 255, 255, 0.06);
+  stroke: rgba(255, 255, 255, 0.25);
+  stroke-width: 1;
+}
+
+.ucm-viz-node--active {
+  fill: rgba(188, 255, 47, 0.12);
+  stroke: rgba(188, 255, 47, 0.6);
+  stroke-width: 1.5;
+}
+
+.ucm-viz-label {
+  font-family: var(--font-label);
+  font-size: 9px;
+  letter-spacing: 2px;
+  fill: rgba(255, 255, 255, 0.4);
+}
+
+.ucm-viz-label--active {
+  font-family: var(--font-label);
+  font-size: 9px;
+  letter-spacing: 2px;
+  fill: var(--accent);
+}
+
+.ucm-viz-route {
+  stroke: rgba(188, 255, 47, 0.35);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 3;
+  fill: none;
+}
+
+.ucm-viz-port {
+  fill: rgba(255, 255, 255, 0.15);
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 1;
+}
+
+.ucm-viz-port--active {
+  fill: rgba(188, 255, 47, 0.3);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.ucm-viz-hex {
+  fill: rgba(255, 255, 255, 0.03);
+  stroke: rgba(255, 255, 255, 0.15);
+  stroke-width: 1;
+}
+
+.ucm-viz-hex--active {
+  fill: rgba(188, 255, 47, 0.1);
+  stroke: rgba(188, 255, 47, 0.5);
+  stroke-width: 1.5;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   VARIANT A — Split Panel (content left + image/viz right)
+   ═══════════════════════════════════════════════════════════════ */
+
+.ucm-body--a {
+  display: flex;
+  min-height: 480px;
+}
+
+.ucm-a-left {
+  flex: 1 1 55%;
+  padding: 36px 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ucm-a-right {
+  flex: 0 0 45%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid var(--panel-border);
+  padding: 40px;
+  overflow: hidden;
+  min-height: 400px;
+}
+
+.ucm-a-glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(188, 255, 47, 0.1) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ucm-a-metrics {
+  display: flex;
+  gap: 24px;
+  margin: auto 0 20px 0;
+  flex-wrap: wrap;
+}
+
+.ucm-a-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ucm-a-metric__value {
+  font-family: var(--font-data);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.ucm-a-metric__label {
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   VARIANT B — Full Bleed Hero (image hero top + content below)
+   ═══════════════════════════════════════════════════════════════ */
+
+.ucm-b-hero {
+  position: relative;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--panel-border);
+  opacity: 0;
+}
+
+.ucm-modal--opening .ucm-b-hero {
+  animation: ucm-content-in 0.4s ease 0.5s forwards;
+}
+
+.ucm-modal--closing .ucm-b-hero {
+  opacity: 0;
+}
+
+.ucm-b-hero .ucm-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+}
+
+.ucm-b-hero__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(188, 255, 47, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(188, 255, 47, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ucm-b-hero .ucm-viz-svg {
+  max-height: 220px;
+  position: relative;
+  z-index: 2;
+}
+
+.ucm-body--b {
+  padding: 36px 40px;
+}
+
+.ucm-b-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.ucm-b-metric {
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ucm-b-metric__value {
+  font-family: var(--font-data);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 1px;
+  display: block;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.ucm-b-metric__label {
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.ucm-b-footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 28px;
+  padding-top: 20px;
+}
+
+.ucm-b-footer__line {
+  flex: 1;
+  height: 1px;
+  background: var(--panel-border);
+}
+
+.ucm-b-footer__text {
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   VARIANT C — Intel Briefing Card (document-style with image header)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Image header strip */
+.ucm-c-hero {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--panel-border);
+  opacity: 0;
+}
+
+.ucm-modal--opening .ucm-c-hero {
+  animation: ucm-content-in 0.4s ease 0.5s forwards;
+}
+
+.ucm-modal--closing .ucm-c-hero {
+  opacity: 0;
+}
+
+.ucm-c-hero .ucm-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+}
+
+.ucm-c-hero__overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 24px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  z-index: 2;
+}
+
+.ucm-c-hero__label {
+  font-family: var(--font-label);
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.ucm-body--c {
+  padding: 32px 36px;
+}
+
+.ucm-c-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  padding: 5px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.ucm-c-badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(188, 255, 47, 0.4);
+  animation: ucm-pulse 2s ease-in-out infinite;
+}
+
+@keyframes ucm-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.ucm-c-divider {
+  height: 1px;
+  background: var(--panel-border);
+  margin: 20px 0;
+}
+
+.ucm-c-section {
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+}
+
+.ucm-c-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ucm-c-metric__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.ucm-c-metric__label {
+  font-family: var(--font-label);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.ucm-c-metric__value {
+  font-family: var(--font-data);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 1px;
+}
+
+.ucm-c-metric__track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.ucm-c-metric__fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent), rgba(188, 255, 47, 0.4));
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ucm-modal--opening .ucm-c-metric__fill {
+  width: var(--bar-pct);
+  transition-delay: 0.7s;
+}
+
+.ucm-c-viz-wrap {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.ucm-c-footer {
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--panel-border);
+  opacity: 0.5;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .ucm-overlay {
+    padding: 8px;
+    align-items: flex-start;
+    padding-top: 16px;
+  }
+
+  .ucm-modal--a,
+  .ucm-modal--b,
+  .ucm-modal--c {
+    width: 100%;
+    max-height: 92vh;
+  }
+
+  .ucm-title {
+    font-size: 22px;
+  }
+
+  .ucm-desc {
+    font-size: 13px;
+  }
+
+  .ucm-details__item {
+    font-size: 12px;
+  }
+
+  /* Variant A: stack vertically */
+  .ucm-body--a {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .ucm-a-left {
+    padding: 24px 20px;
+  }
+
+  .ucm-a-right {
+    border-left: none;
+    border-top: 1px solid var(--panel-border);
+    flex: 0 0 auto;
+    min-height: 200px;
+    padding: 24px;
+  }
+
+  .ucm-a-metrics {
+    gap: 16px;
+  }
+
+  .ucm-a-metric__value {
+    font-size: 20px;
+  }
+
+  /* Variant B: shorter hero */
+  .ucm-b-hero {
+    height: 180px;
+  }
+
+  .ucm-body--b {
+    padding: 24px 20px;
+  }
+
+  .ucm-b-metrics {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .ucm-b-metric {
+    padding: 10px 12px;
+  }
+
+  .ucm-b-metric__value {
+    font-size: 18px;
+  }
+
+  /* Variant C: shorter hero */
+  .ucm-c-hero {
+    height: 140px;
+  }
+
+  .ucm-body--c {
+    padding: 24px 20px;
+  }
+
+  .ucm-c-metric__value {
+    font-size: 14px;
+  }
+}

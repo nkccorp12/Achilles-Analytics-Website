@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './UseCases.css';
+import UseCaseModal from '../components/UseCaseModal';
 
 /* ==========================================================================
    USE CASES — Operational Intelligence in Action
@@ -105,6 +106,33 @@ export default function UseCases() {
   const [showcaseActive, setShowcaseActive] = useState(false);
   const [maritimeActive, setMaritimeActive] = useState(false);
   const [infraActive, setInfraActive] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalCase, setModalCase] = useState('warehouse');
+  const [modalVariant, setModalVariant] = useState('a');
+  const showcaseRef = useRef(null);
+  const maritimeRef = useRef(null);
+  const infraRef = useRef(null);
+
+  useEffect(() => {
+    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+    if (!isMobile) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const active = entry.isIntersecting;
+          if (entry.target === showcaseRef.current) setShowcaseActive(active);
+          if (entry.target === maritimeRef.current) setMaritimeActive(active);
+          if (entry.target === infraRef.current) setInfraActive(active);
+        });
+      },
+      { threshold: 0.5, rootMargin: '-20% 0px -20% 0px' }
+    );
+    [showcaseRef, maritimeRef, infraRef].forEach((ref) => {
+      if (ref.current) observer.observe(ref.current);
+    });
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section className="vg__section vg-usecase" id="use-cases">
@@ -127,9 +155,10 @@ export default function UseCases() {
           SHOWCASE: Warehouse Logistics
           ================================================================ */}
       <div
+        ref={showcaseRef}
         className={`vg-usecase__showcase${showcaseActive ? ' vg-usecase__showcase--active' : ''}`}
-        style={{ '--hover-bg': "url('/warehouse.png')" }}
-        onClick={() => setShowcaseActive(!showcaseActive)}
+        style={{ '--hover-bg': "url('/warehouse.webp')" }}
+        onClick={() => { setShowcaseActive(!showcaseActive); setModalCase('warehouse'); setModalVariant('a'); setModalOpen(true); }}
       >
         {/* Left: Content */}
         <div className="vg-usecase__showcase-content">
@@ -175,8 +204,9 @@ export default function UseCases() {
       <div className="vg-usecase__cards">
         {/* Maritime Supply Chain */}
         <div
+          ref={maritimeRef}
           className={`vg-usecase__card vg-usecase__card--maritime${maritimeActive ? ' vg-usecase__card--active' : ''}`}
-          onClick={() => setMaritimeActive(!maritimeActive)}
+          onClick={() => { setMaritimeActive(!maritimeActive); setModalCase('maritime'); setModalVariant('b'); setModalOpen(true); }}
         >
           <div className="vg-usecase__card-header">
             <div className="vg-usecase__card-icon">
@@ -202,8 +232,9 @@ export default function UseCases() {
 
         {/* Critical Infrastructure */}
         <div
+          ref={infraRef}
           className={`vg-usecase__card vg-usecase__card--infra${infraActive ? ' vg-usecase__card--active' : ''}`}
-          onClick={() => setInfraActive(!infraActive)}
+          onClick={() => { setInfraActive(!infraActive); setModalCase('infrastructure'); setModalVariant('c'); setModalOpen(true); }}
         >
           <div className="vg-usecase__card-header">
             <div className="vg-usecase__card-icon">
@@ -226,6 +257,13 @@ export default function UseCases() {
           </div>
         </div>
       </div>
+
+      <UseCaseModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        useCase={modalCase}
+        variant={modalVariant}
+      />
     </section>
   );
 }
