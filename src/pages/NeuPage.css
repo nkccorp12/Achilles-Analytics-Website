@@ -1,0 +1,874 @@
+/* ==========================================================================
+   NEU PAGE — LaserFlow + Impact Line + Hero
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap');
+
+.neu {
+  --accent: #BCFF2F;
+  --black: #000000;
+  --text-primary: #f0f0f0;
+  --text-secondary: rgba(240, 240, 240, 0.65);
+  --text-dim: rgba(240, 240, 240, 0.4);
+  --border: rgba(188, 255, 47, 0.1);
+  --panel-border: rgba(188, 255, 47, 0.18);
+  --glow-sm: 0 0 6px rgba(188, 255, 47, 0.25);
+  --glow-md: 0 0 16px rgba(188, 255, 47, 0.2);
+
+  --font-serif: 'IBM Plex Serif', Georgia, serif;
+  --font-mono: 'DM Sans', 'Helvetica Neue', sans-serif;
+  --font-label: 'IBM Plex Mono', 'Courier New', monospace;
+
+  width: 100%;
+  background-color: var(--black);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   FIXED HEADER — appears after impact line leaves viewport
+   ========================================================================== */
+
+.neu-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.neu-header--visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.neu-header__wordmark {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 6px;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.neu-header__wordmark span {
+  color: var(--accent);
+}
+
+.neu-header__wordmark-sub {
+  font-weight: 400;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.neu-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.neu-header__link {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.neu-header__link:hover {
+  color: var(--accent);
+}
+
+.neu-header__link--btn {
+  background: none;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+
+.neu-header__cta {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 0;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--black);
+  text-decoration: none;
+  transition: max-width 0.5s ease, padding 0.5s ease, opacity 0.4s ease;
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.neu-header__cta--visible {
+  max-width: 240px;
+  padding: 10px 24px;
+  opacity: 1;
+}
+
+.neu-header__cta:hover {
+  background: transparent;
+  color: var(--accent);
+  box-shadow: var(--glow-sm);
+}
+
+/* ==========================================================================
+   LASER SECTION
+   ========================================================================== */
+
+.neu__laser {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--black);
+}
+
+.neu__reveal-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60vh;
+  object-fit: cover;
+  z-index: 5;
+  mix-blend-mode: lighten;
+  opacity: 0.3;
+  pointer-events: none;
+  --mx: -9999px;
+  --my: -9999px;
+  -webkit-mask-image: radial-gradient(
+    circle at var(--mx) var(--my),
+    rgba(255,255,255,1) 0px,
+    rgba(255,255,255,0.95) 60px,
+    rgba(255,255,255,0.6) 120px,
+    rgba(255,255,255,0.25) 180px,
+    rgba(255,255,255,0) 240px
+  );
+  mask-image: radial-gradient(
+    circle at var(--mx) var(--my),
+    rgba(255,255,255,1) 0px,
+    rgba(255,255,255,0.95) 60px,
+    rgba(255,255,255,0.6) 120px,
+    rgba(255,255,255,0.25) 180px,
+    rgba(255,255,255,0) 240px
+  );
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* ==========================================================================
+   IMPACT LINE — Beam hits surface
+   ========================================================================== */
+
+.neu__impact {
+  position: absolute;
+  top: 60vh;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 10;
+}
+
+.neu__impact-line {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(188, 255, 47, 0.3) 10%,
+    var(--accent) 40%,
+    #fff 50%,
+    var(--accent) 60%,
+    rgba(188, 255, 47, 0.3) 90%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 8px rgba(188, 255, 47, 0.6),
+    0 0 20px rgba(188, 255, 47, 0.3),
+    0 0 40px rgba(188, 255, 47, 0.15);
+  animation: neu-impact-pulse 3s ease-in-out infinite;
+}
+
+.neu__impact-glow {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 80px;
+  background: radial-gradient(
+    ellipse at center top,
+    rgba(188, 255, 47, 0.2) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+@keyframes neu-impact-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 8px rgba(188, 255, 47, 0.6),
+      0 0 20px rgba(188, 255, 47, 0.3),
+      0 0 40px rgba(188, 255, 47, 0.15);
+  }
+  50% {
+    box-shadow:
+      0 0 12px rgba(188, 255, 47, 0.8),
+      0 0 30px rgba(188, 255, 47, 0.45),
+      0 0 60px rgba(188, 255, 47, 0.2);
+  }
+}
+
+/* ==========================================================================
+   HERO SECTION (cloned from VariantGrid)
+   ========================================================================== */
+
+.neu-hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 32px;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--black);
+  margin-top: -40vh;
+  z-index: 10;
+}
+
+/* Top bar */
+.neu-hero__topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.neu-hero__wordmark {
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 8px;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.neu-hero__wordmark span {
+  color: var(--accent);
+}
+
+/* Content */
+.neu-hero__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 960px;
+  padding: 96px 0;
+}
+
+.neu-hero__headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2.8rem, 5.5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.12;
+  color: var(--text-primary);
+  margin-bottom: 32px;
+  letter-spacing: -0.5px;
+}
+
+.neu-hero__headline em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.neu-hero__sub {
+  font-family: var(--font-mono);
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  line-height: 1.85;
+  color: var(--text-secondary);
+  max-width: 640px;
+  margin-bottom: 64px;
+}
+
+/* CTAs */
+.neu-hero__ctas {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.neu-hero__cta {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 16px 32px;
+  border: 1px solid var(--accent);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.neu-hero__cta--primary {
+  background-color: var(--accent);
+  color: var(--black);
+}
+
+.neu-hero__cta--primary:hover {
+  background-color: transparent;
+  color: var(--accent);
+  box-shadow: var(--glow-md);
+}
+
+.neu-hero__cta--secondary {
+  background-color: transparent;
+  color: var(--accent);
+}
+
+.neu-hero__cta--secondary:hover {
+  background-color: rgba(188, 255, 47, 0.06);
+  box-shadow: var(--glow-sm);
+}
+
+/* Logo watermark */
+.neu-hero__logo-wrap {
+  position: absolute;
+  right: -200px;
+  bottom: 50px;
+  width: 700px;
+  height: 700px;
+  pointer-events: none;
+  opacity: 0.12;
+}
+
+.neu-hero__logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  transform: scaleX(-1);
+}
+
+/* Cursor blink */
+.neu__cursor {
+  display: inline-block;
+  width: 2px;
+  height: 0.95em;
+  background-color: var(--accent);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: neu-cursor-blink 1s step-end infinite;
+}
+
+@keyframes neu-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Hide tactical grid overlay on /neu page */
+.neu .vg::before,
+.neu .vg::after {
+  display: none;
+}
+
+/* ==========================================================================
+   REACH OUT SECTION
+   ========================================================================== */
+
+.neu-reach {
+  position: relative;
+  padding: 120px 32px 80px;
+  background-color: var(--black);
+  border-top: 1px solid var(--border);
+}
+
+.neu-reach__inner {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.neu-reach__label {
+  font-family: var(--font-label);
+  font-size: 12px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 32px;
+  opacity: 0.7;
+}
+
+.neu-reach__headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.15;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+}
+
+.neu-reach__sub {
+  font-family: var(--font-mono);
+  font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+  line-height: 1.85;
+  color: var(--text-secondary);
+  margin-bottom: 48px;
+}
+
+.neu-reach__ctas {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 80px;
+}
+
+.neu-reach__cta {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 16px 32px;
+  border: 1px solid var(--accent);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.neu-reach__cta--primary {
+  background-color: var(--accent);
+  color: var(--black);
+}
+
+.neu-reach__cta--primary:hover {
+  background-color: transparent;
+  color: var(--accent);
+  box-shadow: var(--glow-md);
+}
+
+.neu-reach__cta--secondary {
+  background-color: transparent;
+  color: var(--accent);
+}
+
+.neu-reach__cta--secondary:hover {
+  background-color: rgba(188, 255, 47, 0.06);
+  box-shadow: var(--glow-sm);
+}
+
+.neu-reach__footer {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  padding-top: 48px;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
+   CONTACT MODAL — Spaceship Hatch Animation
+   ========================================================================== */
+
+.nm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.4s ease;
+}
+
+.nm-overlay--opening {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.nm-overlay--closing {
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.5s ease 0.1s;
+}
+
+/* ─── Modal Container ─── */
+.nm-modal {
+  position: relative;
+  width: 420px;
+  max-width: 100%;
+  background: #0a0a0a;
+  border: 1px solid var(--panel-border);
+  overflow: hidden;
+  transform-origin: center center;
+}
+
+/* Opening: horizontal line → expand height */
+.nm-modal--opening {
+  animation: nm-hatch-open 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.nm-modal--closing {
+  animation: nm-hatch-close 0.5s cubic-bezier(0.7, 0, 0.84, 0) forwards;
+}
+
+@keyframes nm-hatch-open {
+  0% {
+    clip-path: inset(50% 40% 50% 40%);
+    opacity: 0;
+  }
+  30% {
+    clip-path: inset(50% 0% 50% 0%);
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0% 0% 0% 0%);
+    opacity: 1;
+  }
+}
+
+@keyframes nm-hatch-close {
+  0% {
+    clip-path: inset(0% 0% 0% 0%);
+    opacity: 1;
+  }
+  60% {
+    clip-path: inset(50% 0% 50% 0%);
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(50% 40% 50% 40%);
+    opacity: 0;
+  }
+}
+
+/* ─── Scan Line ─── */
+.nm-scan {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  box-shadow: 0 0 12px rgba(188, 255, 47, 0.6), 0 0 30px rgba(188, 255, 47, 0.2);
+  opacity: 0;
+  z-index: 5;
+}
+
+.nm-modal--opening .nm-scan {
+  animation: nm-scan-sweep 0.8s ease 0.3s forwards;
+}
+
+@keyframes nm-scan-sweep {
+  0% {
+    top: 0;
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+/* ─── Corner Accents ─── */
+.nm-corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  z-index: 3;
+}
+
+.nm-corner--tl {
+  top: 0; left: 0;
+  border-top: 2px solid var(--accent);
+  border-left: 2px solid var(--accent);
+}
+
+.nm-corner--tr {
+  top: 0; right: 0;
+  border-top: 2px solid var(--accent);
+  border-right: 2px solid var(--accent);
+}
+
+.nm-corner--bl {
+  bottom: 0; left: 0;
+  border-bottom: 2px solid var(--accent);
+  border-left: 2px solid var(--accent);
+}
+
+.nm-corner--br {
+  bottom: 0; right: 0;
+  border-bottom: 2px solid var(--accent);
+  border-right: 2px solid var(--accent);
+}
+
+/* ─── Content ─── */
+.nm-content {
+  padding: 24px;
+  opacity: 0;
+}
+
+.nm-modal--opening .nm-content {
+  animation: nm-content-in 0.4s ease 0.5s forwards;
+}
+
+.nm-modal--closing .nm-content {
+  opacity: 0;
+}
+
+@keyframes nm-content-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.nm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.nm-header__label {
+  font-family: var(--font-label);
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.8;
+}
+
+.nm-close {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--text-secondary);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nm-close:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ─── Form ─── */
+.nm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.nm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nm-label {
+  font-family: var(--font-label);
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.nm-input,
+.nm-textarea {
+  font-family: var(--font-label);
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(188, 255, 47, 0.12);
+  color: var(--text-primary);
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nm-input:focus,
+.nm-textarea:focus {
+  border-color: rgba(188, 255, 47, 0.4);
+  box-shadow: 0 0 8px rgba(188, 255, 47, 0.1);
+}
+
+.nm-input::placeholder,
+.nm-textarea::placeholder {
+  color: var(--text-dim);
+}
+
+.nm-textarea {
+  resize: none;
+  line-height: 1.6;
+}
+
+.nm-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 4px;
+  padding: 12px 24px;
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  background: var(--accent);
+  color: var(--black);
+  border: 1px solid var(--accent);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nm-submit:hover {
+  background: transparent;
+  color: var(--accent);
+  box-shadow: var(--glow-md);
+}
+
+.nm-submit__arrow {
+  font-size: 16px;
+  transition: transform 0.3s ease;
+}
+
+.nm-submit:hover .nm-submit__arrow {
+  transform: translateX(4px);
+}
+
+/* ─── Sent State ─── */
+.nm-sent {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.nm-sent__icon {
+  margin-bottom: 16px;
+  animation: nm-check-pop 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes nm-check-pop {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.nm-sent__text {
+  font-family: var(--font-label);
+  font-size: 13px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.nm-sent__sub {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .neu-hero {
+    padding: 16px;
+  }
+
+  .neu-hero__content {
+    padding: 48px 0;
+  }
+
+  .neu-hero__headline {
+    font-size: clamp(1.8rem, 7vw, 2.6rem);
+  }
+
+  .neu-hero__ctas {
+    flex-direction: column;
+  }
+
+  .neu-hero__cta {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .neu-header__nav {
+    gap: 12px;
+  }
+
+  .neu-header__link {
+    display: none;
+  }
+
+  .neu-header__wordmark-sub {
+    display: none;
+  }
+
+  .neu-reach {
+    padding: 64px 16px 48px;
+  }
+
+  .neu-reach__ctas {
+    flex-direction: column;
+  }
+
+  .neu-reach__cta {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .neu-reach__footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neu__cursor,
+  .neu__impact-line {
+    animation: none;
+  }
+}

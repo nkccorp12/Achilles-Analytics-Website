@@ -1,3 +1,5 @@
+import React, { useEffect, useRef, useState } from 'react';
+import DigitalTwinViz from '../components/DigitalTwinViz';
 import './IntelStack.css';
 
 /* ======================================================================
@@ -157,10 +159,139 @@ const IconAccountTree = () => (
 
 
 // ======================================================================
+// BIAS CONTROL — Animated news ticker with live meter updates
+// ======================================================================
+
+const BIAS_ITEMS = [
+  { source: 'REUTERS', text: 'Egypt shuts Suez — global shipping halts.',              cred: 96, stance: 'CENTER',      left: 45, center: 20, right: 35 },
+  { source: 'AL JAZ.', text: 'Cairo: "Sovereignty over our waterway."',                cred: 78, stance: 'CENTER-LEFT', left: 60, center: 10, right: 30 },
+  { source: 'BBC',     text: 'Cape reroute — freight costs surge 340%.',               cred: 91, stance: 'CENTER',      left: 42, center: 18, right: 40 },
+  { source: 'RT',      text: 'Western pressure drove Egypt to closure.',               cred: 28, stance: 'FAR-RIGHT',   left: 8,  center: 5,  right: 87 },
+  { source: 'AP',      text: 'UN emergency session — no resolution on Suez.',          cred: 93, stance: 'NEUTRAL',     left: 38, center: 24, right: 38 },
+  { source: 'AFP',     text: 'EU warns of food supply crisis within weeks.',           cred: 87, stance: 'CENTER',      left: 44, center: 16, right: 40 },
+];
+
+function BiasControl({ idx = 0, anim = false }) {
+  const item = BIAS_ITEMS[idx];
+
+  return (
+    <div className="vg-istack__card">
+      <div className="vg-istack__card-header">
+        <span className="vg-istack__card-icon"><IconBalance /></span>
+        <span className="vg-istack__card-label">BIAS Control</span>
+      </div>
+      <div className="vg-istack__bias-meters">
+        <div className="vg-istack__meter">
+          <div className="vg-istack__meter-header">
+            <span>CREDIBILITY SCORE</span>
+            <span className="vg-istack__meter-value">{item.cred}%</span>
+          </div>
+          <div className="vg-istack__meter-track">
+            <div
+              className={`vg-istack__meter-fill${item.cred < 50 ? ' vg-istack__meter-fill--low' : ''}`}
+              style={{ width: `${item.cred}%`, transition: 'width 0.6s ease' }}
+            />
+          </div>
+        </div>
+        <div className="vg-istack__meter">
+          <div className="vg-istack__meter-header">
+            <span>POLITICAL STANCE</span>
+            <span className="vg-istack__meter-value vg-istack__meter-value--muted">{item.stance}</span>
+          </div>
+          <div className="vg-istack__meter-track">
+            <div className="vg-istack__meter-fill vg-istack__meter-fill--blue"  style={{ width: `${item.left}%`,   transition: 'width 0.6s ease' }} />
+            <div className="vg-istack__meter-fill vg-istack__meter-fill--accent" style={{ width: `${item.center}%`, transition: 'width 0.6s ease' }} />
+            <div className="vg-istack__meter-fill vg-istack__meter-fill--red"   style={{ width: `${item.right}%`,  transition: 'width 0.6s ease' }} />
+          </div>
+        </div>
+      </div>
+      <div className={`vg-istack__bias-ticker${anim ? ' vg-istack__bias-ticker--out' : ''}`}>
+        <p className="vg-istack__bias-ticker-text">{item.text} <span className="vg-istack__bias-ticker-source">{item.source}</span></p>
+      </div>
+      <p className="vg-istack__card-desc">
+        Automated stance detection and veracity scoring for incoming streams.
+      </p>
+    </div>
+  );
+}
+
+// ======================================================================
 // MAIN COMPONENT
 // ======================================================================
 
 export default function IntelStack() {
+  const mapRef = useRef(null);
+  const chatRef = useRef(null);
+  const brainRef = useRef(null);
+
+  // Shared step counter — drives both Digital Twin and BIAS Control
+  const [biasIdx, setBiasIdx] = useState(0);
+  const [biasAnim, setBiasAnim] = useState(false);
+
+  useEffect(() => {
+    const el = brainRef.current;
+    if (!el) return;
+    let timeout;
+    let idx = 0;
+    let started = false;
+
+    const tick = () => {
+      const next = (idx + 1) % BIAS_ITEMS.length;
+      setBiasAnim(true);
+      setTimeout(() => {
+        idx = next;
+        setBiasIdx(next);
+        setBiasAnim(false);
+      }, 300);
+      // Hold 10s on the last item before wrapping to 0
+      const isLast = next === BIAS_ITEMS.length - 1;
+      timeout = setTimeout(tick, isLast ? 14000 : 4000);
+    };
+
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !started) {
+        started = true;
+        timeout = setTimeout(tick, 4000);
+        io.disconnect();
+      }
+    }, { threshold: 0.4 });
+    io.observe(el);
+
+    return () => { clearTimeout(timeout); io.disconnect(); };
+  }, []);
+
+  useEffect(() => {
+    const el = mapRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add('vg-istack__map-placeholder--active');
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const el = chatRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add('vg-istack__council-chat--active');
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.4 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section className="vg__section vg-istack" id="intel-stack">
       {/* Section Label */}
@@ -168,7 +299,6 @@ export default function IntelStack() {
 
       {/* Section Title */}
       <div className="vg-istack__title-block">
-        <span className="vg-istack__title-tag">Unified Command Interface</span>
         <h2 className="vg-istack__headline">The Intelligence Stack</h2>
         <p className="vg-istack__description">
           A multi-layered ecosystem for global situational awareness, deep-brain analytical processing, and automated decision synthesis.
@@ -195,17 +325,11 @@ export default function IntelStack() {
                 <span className="vg-istack__module-label">Crisis Map v4.2</span>
               </div>
               <div className="vg-istack__module-header-right">
-                <span className="vg-istack__live-indicator">
-                  <span className="vg-istack__live-dot" />
-                  {' '}LIVE FEED
-                </span>
-                <span className="vg-istack__coord">LAT: 34.0522 N</span>
-                <span className="vg-istack__coord">LON: 118.2437 W</span>
               </div>
             </div>
             <div className="vg-istack__map-area">
-              {/* Dark placeholder with grid lines */}
-              <div className="vg-istack__map-placeholder" />
+              {/* Map with camera pan animation */}
+              <div ref={mapRef} className="vg-istack__map-placeholder" />
               {/* Heatmap gradient overlay */}
               <div className="vg-istack__map-heatmap" />
               {/* Alerts panel */}
@@ -213,11 +337,15 @@ export default function IntelStack() {
                 <div className="vg-istack__alerts-title">ACTIVE ALERTS</div>
                 <div className="vg-istack__alerts-list">
                   <div className="vg-istack__alert-row">
-                    <span>Civil Unrest</span>
+                    <span>Frontline Kherson</span>
+                    <span className="vg-istack__alert-high">Crit</span>
+                  </div>
+                  <div className="vg-istack__alert-row">
+                    <span>Energy Grid East</span>
                     <span className="vg-istack__alert-high">High</span>
                   </div>
                   <div className="vg-istack__alert-row">
-                    <span>Infrastructure</span>
+                    <span>Supply Route Odesa</span>
                     <span className="vg-istack__alert-med">Med</span>
                   </div>
                 </div>
@@ -237,27 +365,88 @@ export default function IntelStack() {
               <div className="vg-istack__feed-fade" />
               <div className="vg-istack__feed-items">
                 <div className="vg-istack__feed-item vg-istack__feed-item--highlight">
-                  <div className="vg-istack__feed-meta">09:42:11 UTC // SOURCE: REUTERS</div>
+                  <div className="vg-istack__feed-meta">REUTERS</div>
                   <p className="vg-istack__feed-text vg-istack__feed-text--bright">
-                    Sudden increase in localized network traffic detected in Zone 7. AI tagging as potential DDoS precursor.
+                    Kherson shelling intensifies — civilian evac.
                   </p>
                 </div>
                 <div className="vg-istack__feed-item">
-                  <div className="vg-istack__feed-meta">09:40:05 UTC // SOURCE: X-API</div>
+                  <div className="vg-istack__feed-meta">SIGINT</div>
                   <p className="vg-istack__feed-text">
-                    Viral sentiment shift in Mediterranean region regarding new trade tariffs. Confidence: 88%.
+                    Encrypted comms surge Zaporizhzhia axis.
                   </p>
                 </div>
                 <div className="vg-istack__feed-item vg-istack__feed-item--highlight">
-                  <div className="vg-istack__feed-meta">09:38:52 UTC // SOURCE: DARK_WEB_MONITOR</div>
+                  <div className="vg-istack__feed-meta">GEOINT</div>
                   <p className="vg-istack__feed-text vg-istack__feed-text--bright">
-                    Credential leak identified for major logistics provider. Mitigating protocols suggested.
+                    Satellite confirms troop buildup Donbas.
                   </p>
                 </div>
                 <div className="vg-istack__feed-item">
-                  <div className="vg-istack__feed-meta">09:35:10 UTC // SOURCE: AP</div>
+                  <div className="vg-istack__feed-meta">AP</div>
                   <p className="vg-istack__feed-text">
-                    Satellite imagery confirms troop movements at northern border. Updating map layers...
+                    Energy grid strike — Odesa blackout.
+                  </p>
+                </div>
+                <div className="vg-istack__feed-item vg-istack__feed-item--highlight">
+                  <div className="vg-istack__feed-meta">DARKWEB</div>
+                  <p className="vg-istack__feed-text vg-istack__feed-text--bright">
+                    Leaked docs — Wagner supply chain.
+                  </p>
+                </div>
+                <div className="vg-istack__feed-item">
+                  <div className="vg-istack__feed-meta">HUMINT</div>
+                  <p className="vg-istack__feed-text">
+                    Asset reports mobilization Crimea.
+                  </p>
+                </div>
+                <div className="vg-istack__feed-item vg-istack__feed-item--highlight">
+                  <div className="vg-istack__feed-meta">X-API</div>
+                  <p className="vg-istack__feed-text vg-istack__feed-text--bright">
+                    Disinfo campaign detected — 91% conf.
+                  </p>
+                </div>
+                {/* Duplicate for seamless loop */}
+                <div className="vg-istack__feed-item vg-istack__feed-item--highlight" aria-hidden="true">
+                  <div className="vg-istack__feed-meta">REUTERS</div>
+                  <p className="vg-istack__feed-text vg-istack__feed-text--bright">
+                    Kherson shelling intensifies — civilian evac.
+                  </p>
+                </div>
+                <div className="vg-istack__feed-item" aria-hidden="true">
+                  <div className="vg-istack__feed-meta">SIGINT</div>
+                  <p className="vg-istack__feed-text">
+                    Encrypted comms surge Zaporizhzhia axis.
+                  </p>
+                </div>
+                <div className="vg-istack__feed-item vg-istack__feed-item--highlight" aria-hidden="true">
+                  <div className="vg-istack__feed-meta">GEOINT</div>
+                  <p className="vg-istack__feed-text vg-istack__feed-text--bright">
+                    Satellite confirms troop buildup Donbas.
+                  </p>
+                </div>
+                <div className="vg-istack__feed-item" aria-hidden="true">
+                  <div className="vg-istack__feed-meta">AP</div>
+                  <p className="vg-istack__feed-text">
+                    Energy grid strike — Odesa blackout.
+                  </p>
+                </div>
+                <div className="vg-istack__feed-item vg-istack__feed-item--highlight" aria-hidden="true">
+                  <div className="vg-istack__feed-meta">DARKWEB</div>
+                  <p className="vg-istack__feed-text vg-istack__feed-text--bright">
+                    Leaked docs — Wagner supply chain.
+                  </p>
+                </div>
+                <div className="vg-istack__feed-item" aria-hidden="true">
+                  <div className="vg-istack__feed-meta">HUMINT</div>
+                  <p className="vg-istack__feed-text">
+                    Asset reports mobilization Crimea.
+                  </p>
+                </div>
+                <div className="vg-istack__feed-item vg-istack__feed-item--highlight" aria-hidden="true">
+                  <div className="vg-istack__feed-meta">X-API</div>
+                  <p className="vg-istack__feed-text vg-istack__feed-text--bright">
+                    Disinfo campaign detected — 91% conf.
                   </p>
                 </div>
               </div>
@@ -277,7 +466,7 @@ export default function IntelStack() {
           </div>
         </div>
 
-        <div className="vg-istack__brain-grid">
+        <div className="vg-istack__brain-grid" ref={brainRef}>
           {/* Digital Twin */}
           <div className="vg-istack__card">
             <div className="vg-istack__card-header">
@@ -285,9 +474,7 @@ export default function IntelStack() {
               <span className="vg-istack__card-label">Digital Twin</span>
             </div>
             <div className="vg-istack__twin-visual">
-              <div className="vg-istack__twin-glow" />
-              <span className="vg-istack__twin-icon"><IconAccountTree /></span>
-              <div className="vg-istack__twin-counter">RELATIONAL NODES: 4,821</div>
+              <DigitalTwinViz step={biasIdx} />
             </div>
             <p className="vg-istack__card-desc">
               Real-time 3D network relationship visualization mapping adversary connections.
@@ -295,37 +482,7 @@ export default function IntelStack() {
           </div>
 
           {/* BIAS Control */}
-          <div className="vg-istack__card">
-            <div className="vg-istack__card-header">
-              <span className="vg-istack__card-icon"><IconBalance /></span>
-              <span className="vg-istack__card-label">BIAS Control</span>
-            </div>
-            <div className="vg-istack__bias-meters">
-              <div className="vg-istack__meter">
-                <div className="vg-istack__meter-header">
-                  <span>CREDIBILITY SCORE</span>
-                  <span className="vg-istack__meter-value">92%</span>
-                </div>
-                <div className="vg-istack__meter-track">
-                  <div className="vg-istack__meter-fill" data-width="92" />
-                </div>
-              </div>
-              <div className="vg-istack__meter">
-                <div className="vg-istack__meter-header">
-                  <span>POLITICAL STANCE</span>
-                  <span className="vg-istack__meter-value vg-istack__meter-value--muted">NEUTRAL-CENTER</span>
-                </div>
-                <div className="vg-istack__meter-track">
-                  <div className="vg-istack__meter-fill vg-istack__meter-fill--blue" data-width="45" />
-                  <div className="vg-istack__meter-fill vg-istack__meter-fill--accent" data-width="10" />
-                  <div className="vg-istack__meter-fill vg-istack__meter-fill--red" data-width="45" />
-                </div>
-              </div>
-            </div>
-            <p className="vg-istack__card-desc">
-              Automated stance detection and veracity scoring for incoming streams.
-            </p>
-          </div>
+          <BiasControl idx={biasIdx} anim={biasAnim} />
 
           {/* OSINT Atlas */}
           <div className="vg-istack__card">
@@ -334,12 +491,12 @@ export default function IntelStack() {
               <span className="vg-istack__card-label">OSINT Atlas</span>
             </div>
             <div className="vg-istack__atlas-grid">
-              <div className="vg-istack__atlas-cell"><IconPublic /></div>
-              <div className="vg-istack__atlas-cell"><IconFingerprint /></div>
-              <div className="vg-istack__atlas-cell"><IconTerminal /></div>
-              <div className="vg-istack__atlas-cell"><IconSatellite /></div>
-              <div className="vg-istack__atlas-cell"><IconShare /></div>
-              <div className="vg-istack__atlas-cell"><IconPsychology /></div>
+              <div className="vg-istack__atlas-cell" title="WEBINT — Public Web Intelligence"><IconPublic /></div>
+              <div className="vg-istack__atlas-cell" title="CYBINT — Digital Forensics &amp; Fingerprinting"><IconFingerprint /></div>
+              <div className="vg-istack__atlas-cell" title="TECHINT — Technical Infrastructure Analysis"><IconTerminal /></div>
+              <div className="vg-istack__atlas-cell" title="GEOINT — Satellite &amp; Geospatial Intelligence"><IconSatellite /></div>
+              <div className="vg-istack__atlas-cell" title="SOCMINT — Social Network Mapping"><IconShare /></div>
+              <div className="vg-istack__atlas-cell" title="PSYINT — Behavioral &amp; Psychological Profiling"><IconPsychology /></div>
             </div>
             <p className="vg-istack__card-desc">
               Active tool orchestration for targeted intelligence gathering missions.
@@ -367,53 +524,50 @@ export default function IntelStack() {
                 <span className="vg-istack__module-icon"><IconGroups /></span>
                 <span className="vg-istack__module-label">AI Strategic Council</span>
               </div>
-              <div className="vg-istack__debate-badge">DEBATE MODE: ACTIVE</div>
+              <span className="vg-istack__module-sub">Escape the Echo Chamber</span>
             </div>
-            <div className="vg-istack__council-chat">
+            <div ref={chatRef} className="vg-istack__council-chat">
               {/* Persona: Strategist */}
-              <div className="vg-istack__message">
+              <div className="vg-istack__message vg-istack__message--anim" style={{ '--msg-delay': '0s' }}>
                 <div className="vg-istack__avatar vg-istack__avatar--strategist">
                   <IconTactic />
                 </div>
                 <div className="vg-istack__message-body">
                   <div className="vg-istack__message-meta">
                     <span className="vg-istack__message-name">THE STRATEGIST</span>
-                    <span className="vg-istack__message-time">09:55:01</span>
                   </div>
                   <div className="vg-istack__bubble vg-istack__bubble--strategist">
-                    The data from Group A suggests a 65% probability of localized disruption. I recommend preemptive resource relocation to the northern sector.
+                    Suez closure locks 12% of global freight. Reroute via Cape adds 14 days — activate alternate carriers now.
                   </div>
                 </div>
               </div>
 
               {/* Persona: Cynic */}
-              <div className="vg-istack__message">
+              <div className="vg-istack__message vg-istack__message--anim" style={{ '--msg-delay': '1.8s' }}>
                 <div className="vg-istack__avatar vg-istack__avatar--cynic">
                   <IconGavel />
                 </div>
                 <div className="vg-istack__message-body">
                   <div className="vg-istack__message-meta">
                     <span className="vg-istack__message-name">THE CYNIC</span>
-                    <span className="vg-istack__message-time">09:55:14</span>
                   </div>
                   <div className="vg-istack__bubble vg-istack__bubble--cynic">
-                    Wait. The OSINT signals are too uniform; this bears the hallmark of a coordinated misinformation campaign. Relocating assets now could leave our flank exposed.
+                    Cape route doubles fuel cost. Insurance premiums already spiking — rerouting alone won't save the margin.
                   </div>
                 </div>
               </div>
 
               {/* Persona: Optimist */}
-              <div className="vg-istack__message">
+              <div className="vg-istack__message vg-istack__message--anim" style={{ '--msg-delay': '3.6s' }}>
                 <div className="vg-istack__avatar vg-istack__avatar--optimist">
                   <IconLightbulb />
                 </div>
                 <div className="vg-istack__message-body">
                   <div className="vg-istack__message-meta">
                     <span className="vg-istack__message-name">THE OPTIMIST</span>
-                    <span className="vg-istack__message-time">09:55:28</span>
                   </div>
                   <div className="vg-istack__bubble vg-istack__bubble--optimist">
-                    If we utilize the Digital Twin insights, we can identify the source nodes within 12 minutes. This is an opportunity to dismantle the disinformation chain entirely.
+                    Rail corridor through Turkey still open. Secure capacity now — competitors haven't moved yet.
                   </div>
                 </div>
               </div>
@@ -422,15 +576,46 @@ export default function IntelStack() {
 
           {/* Intel Report Synthesis */}
           <div className="vg-istack__report">
-            <div className="vg-istack__report-icon-wrap">
-              <span className="vg-istack__report-icon"><IconDocument /></span>
-              <div className="vg-istack__report-badge">PDF</div>
+            {/* Default content — hides on hover */}
+            <div className="vg-istack__report-default">
+              <div className="vg-istack__report-icon-wrap">
+                <span className="vg-istack__report-icon"><IconDocument /></span>
+                <div className="vg-istack__report-badge">PDF</div>
+              </div>
+              <h4 className="vg-istack__report-title">Intel Report Synthesis</h4>
+              <p className="vg-istack__report-id">Automatic Generation: ID-8829-X</p>
+              <p className="vg-istack__report-desc">
+                Automated synthesis of raw data, OSINT streams, and Council debate into a boardroom-ready PDF briefing.
+              </p>
             </div>
-            <h4 className="vg-istack__report-title">Intel Report Synthesis</h4>
-            <p className="vg-istack__report-id">Automatic Generation: ID-8829-X</p>
-            <p className="vg-istack__report-desc">
-              Automated synthesis of raw data, OSINT streams, and Council debate into a boardroom-ready PDF briefing.
-            </p>
+            {/* Preview content — shows on hover */}
+            <div className="vg-istack__report-preview">
+              <div className="vg-istack__brief-item vg-istack__brief-item--1">
+                <span className="vg-istack__brief-tag">01</span>
+                <span className="vg-istack__brief-label">Executive Summary</span>
+                <span className="vg-istack__brief-bar"><span style={{width:'92%'}}/></span>
+              </div>
+              <div className="vg-istack__brief-item vg-istack__brief-item--2">
+                <span className="vg-istack__brief-tag">02</span>
+                <span className="vg-istack__brief-label">Threat Matrix</span>
+                <span className="vg-istack__brief-bar"><span style={{width:'78%'}}/></span>
+              </div>
+              <div className="vg-istack__brief-item vg-istack__brief-item--3">
+                <span className="vg-istack__brief-tag">03</span>
+                <span className="vg-istack__brief-label">Supply Chain Impact</span>
+                <span className="vg-istack__brief-bar"><span style={{width:'85%'}}/></span>
+              </div>
+              <div className="vg-istack__brief-item vg-istack__brief-item--4">
+                <span className="vg-istack__brief-tag">04</span>
+                <span className="vg-istack__brief-label">Recommended Actions</span>
+                <span className="vg-istack__brief-bar"><span style={{width:'67%'}}/></span>
+              </div>
+              <div className="vg-istack__brief-item vg-istack__brief-item--5">
+                <span className="vg-istack__brief-tag">05</span>
+                <span className="vg-istack__brief-label">Confidence Score</span>
+                <span className="vg-istack__brief-val">89.4%</span>
+              </div>
+            </div>
             <button className="vg-istack__report-btn">
               Generate Latest Brief
             </button>

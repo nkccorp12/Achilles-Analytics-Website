@@ -1,0 +1,19 @@
+.card-swap-container {
+  position: relative;
+  perspective: 900px;
+  overflow: visible;
+}
+
+.card-swap__card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 8px;
+  border: 1px solid rgba(188, 255, 47, 0.18);
+  background: rgba(10, 10, 10, 0.95);
+  transform-style: preserve-3d;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}

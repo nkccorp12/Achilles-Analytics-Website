@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Bash(unzip:*)",
+      "Bash(lsof:*)",
+      "Bash(npm run build:*)",
+      "Bash(ps:*)",
+      "Bash(dmesg:*)",
+      "Bash(journalctl:*)",
+      "Bash(du -sh:*)",
+      "Bash(ls:*)",
+      "Bash(ssh:*)",
+      "Bash(rsync:*)",
+      "Bash(cwebp:*)",
+      "WebFetch(domain:reactbits.dev)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(npm install:*)",
+      "Bash(identify:*)",
+      "Bash(python3:*)",
+      "WebFetch(domain:www.reactbits.dev)",
+      "WebSearch",
+      "Bash(scp:*)"
+    ]
+  }
+}

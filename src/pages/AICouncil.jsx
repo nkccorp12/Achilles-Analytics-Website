@@ -1,11 +1,12 @@
+import { useEffect, useRef, useState } from 'react';
 import './AICouncil.css';
 
 /* ==========================================================================
    AI COUNCIL PAGE — "Tactical Grid" Design System
-   Simulated council of AI agents with distinct personas
+   Suez Canal Scenario — Simulated council of AI agents
    ========================================================================== */
 
-// --- Inline SVG Icons (replacing Material Symbols) ---
+// --- Inline SVG Icons ---
 
 const IconTerminal = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
@@ -23,23 +24,80 @@ const IconRefresh = () => (
   </svg>
 );
 
-const IconWarning = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor">
-    <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
-  </svg>
-);
+// --- Synthesis Strategies (Suez Canal) ---
 
-const IconMediation = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor">
-    <path d="M18 13h-5v5c0 .55-.45 1-1 1s-1-.45-1-1v-5H6c-.55 0-1-.45-1-1s.45-1 1-1h5V6c0-.55.45-1 1-1s1 .45 1 1v5h5c.55 0 1 .45 1 1s-.45 1-1 1z" />
-  </svg>
-);
+const STRATEGIES = [
+  { name: 'Cape Reroute',           conf: 72.3, tag: 'COST_IMPACT: +340%' },
+  { name: 'Turkey Rail Corridor',   conf: 89.4, tag: 'TIME_DELTA: +3 DAYS' },
+  { name: 'Suez Negotiation',       conf: 34.1, tag: 'RISK: CRITICAL' },
+  { name: 'EU Pre-Stock Warehouse', conf: 91.7, tag: 'DELAY: 0 DAYS' },
+];
 
-const IconTrendUp = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor">
-    <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z" />
-  </svg>
-);
+// --- Animated Synthesis Overlay ---
+
+function SynthesisOverlay() {
+  const [idx, setIdx] = useState(0);
+  const [simulating, setSimulating] = useState(false);
+  const [displayConf, setDisplayConf] = useState(STRATEGIES[0].conf);
+  const ref = useRef(null);
+  const startedRef = useRef(false);
+  const idxRef = useRef(0);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let timeout;
+    let counterIv;
+
+    const runCycle = () => {
+      setSimulating(true);
+
+      const next = (idxRef.current + 1) % STRATEGIES.length;
+      const target = STRATEGIES[next].conf;
+      const steps = 20;
+      const stepTime = 1500 / steps;
+      let step = 0;
+
+      counterIv = setInterval(() => {
+        step++;
+        const eased = 1 - Math.pow(1 - step / steps, 2);
+        setDisplayConf(+(eased * target).toFixed(1));
+        if (step >= steps) {
+          clearInterval(counterIv);
+          setDisplayConf(target);
+          setSimulating(false);
+          idxRef.current = next;
+          setIdx(next);
+          timeout = setTimeout(runCycle, 5000);
+        }
+      }, stepTime);
+    };
+
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !startedRef.current) {
+        startedRef.current = true;
+        timeout = setTimeout(runCycle, 4000);
+      }
+    }, { threshold: 0.3 });
+    io.observe(el);
+
+    return () => { clearTimeout(timeout); clearInterval(counterIv); io.disconnect(); };
+  }, []);
+
+  const strat = STRATEGIES[idx];
+
+  return (
+    <div className="vg-council__synthesis" ref={ref}>
+      <span className="vg-council__synthesis-label">Synthesis Result</span>
+      <span className={`vg-council__synthesis-value${simulating ? ' vg-council__synthesis-value--sim' : ''}`}>
+        {simulating ? 'Re-simulating...' : strat.name}
+      </span>
+      <span className={`vg-council__synthesis-confidence${simulating ? ' vg-council__synthesis-confidence--active' : ''}`}>
+        CONFIDENCE: {displayConf}%
+      </span>
+    </div>
+  );
+}
 
 // ==========================================================================
 // AI COUNCIL COMPONENT
@@ -77,7 +135,7 @@ function AICouncil() {
               <h3 className="vg-council__card-title--cynic">THE CYNIC</h3>
               <p className="vg-council__card-model">MODEL: ADVERSARIAL_V4</p>
               <p className="vg-council__card-quote">
-                &ldquo;Your latency assumptions ignore the cascade failure probability of 68% in region EU-West.&rdquo;
+                &ldquo;+14 days, 2x fuel cost, insurance up 200%. Margin collapses.&rdquo;
               </p>
               <div className="vg-council__card-footer vg-council__card-footer--cynic">
                 <span className="vg-council__tag vg-council__tag--cynic">RISK_DETECTION: CRITICAL</span>
@@ -173,12 +231,8 @@ function AICouncil() {
               />
             </svg>
 
-            {/* Synthesis result overlay */}
-            <div className="vg-council__synthesis">
-              <span className="vg-council__synthesis-label">Synthesis Result</span>
-              <span className="vg-council__synthesis-value">Pivot Strategy</span>
-              <span className="vg-council__synthesis-confidence">CONFIDENCE: 89.4%</span>
-            </div>
+            {/* Animated Synthesis overlay */}
+            <SynthesisOverlay />
           </div>
 
           {/* RIGHT COLUMN (3/12) — STRATEGIST + OPTIMIST */}
@@ -189,7 +243,7 @@ function AICouncil() {
               <h3 className="vg-council__card-title--strategist">THE STRATEGIST</h3>
               <p className="vg-council__card-model">MODEL: LONG_TERM_V2</p>
               <p className="vg-council__card-quote">
-                &ldquo;Redundancy costs are offset by uptime guarantees. The leverage point is at Node 7.&rdquo;
+                &ldquo;Turkey rail bypasses Suez. Lock capacity now — 3 day lead.&rdquo;
               </p>
               <div className="vg-council__card-footer vg-council__card-footer--strategist">
                 <span className="vg-council__tag vg-council__tag--strategist">ROI_PROJECTION: +14%</span>
@@ -202,7 +256,7 @@ function AICouncil() {
               <h3 className="vg-council__card-title--optimist">THE OPTIMIST</h3>
               <p className="vg-council__card-model">MODEL: GROWTH_ENGINE_V1</p>
               <p className="vg-council__card-quote">
-                &ldquo;User adoption trends suggest 3x capacity needed by Q3. Expansion is mandatory.&rdquo;
+                &ldquo;Pre-stock EU now. Supply gap = 3x market share for first movers.&rdquo;
               </p>
               <div className="vg-council__card-footer vg-council__card-footer--optimist">
                 <span className="vg-council__tag vg-council__tag--optimist">GROWTH_FACTOR: HIGH</span>
@@ -216,13 +270,13 @@ function AICouncil() {
         <div className="vg-council__stats">
           <div className="vg-council__stats-left">
             <div className="vg-council__stats-group">
-              <span className="vg-council__stats-label">Simulation ID</span>
-              <span className="vg-council__stats-value">#SIM-992-ALPHA</span>
+              <span className="vg-council__stats-label">Scenario</span>
+              <span className="vg-council__stats-value">Suez Canal Closure</span>
             </div>
             <div className="vg-council__stats-divider" />
             <div className="vg-council__stats-group">
-              <span className="vg-council__stats-label">Iterations</span>
-              <span className="vg-council__stats-value">4,203 CYCLES</span>
+              <span className="vg-council__stats-label">Model</span>
+              <span className="vg-council__stats-value">ACHILLES_CORE_V4</span>
             </div>
           </div>
           <div className="vg-council__stats-actions">
@@ -232,37 +286,10 @@ function AICouncil() {
               </span>
               View Logic Trace
             </button>
-            <button className="vg-council__btn vg-council__btn--filled">
-              <span className="vg-council__btn-icon">
-                <IconRefresh />
-              </span>
-              Re-simulate Debate
-            </button>
           </div>
         </div>
       </div>
 
-      {/* Status ticker */}
-      <div className="vg-council__ticker">
-        <span className="vg-council__ticker-item vg-council__ticker-item--cynic">
-          <span className="vg-council__ticker-icon">
-            <IconWarning />
-          </span>
-          CYNIC_NODE: ACTIVE THREAT MODELING
-        </span>
-        <span className="vg-council__ticker-item vg-council__ticker-item--strategist">
-          <span className="vg-council__ticker-icon">
-            <IconMediation />
-          </span>
-          STRATEGIST_NODE: BALANCING WEIGHTS
-        </span>
-        <span className="vg-council__ticker-item vg-council__ticker-item--optimist">
-          <span className="vg-council__ticker-icon">
-            <IconTrendUp />
-          </span>
-          OPTIMIST_NODE: SCANNING OPPORTUNITIES
-        </span>
-      </div>
     </section>
   );
 }

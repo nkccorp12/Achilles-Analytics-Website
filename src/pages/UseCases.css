@@ -1,0 +1,490 @@
+/* ==========================================================================
+   USE CASES — Operational Intelligence in Action
+   Tactical Grid Design System | BEM: vg-usecase__*
+   ========================================================================== */
+
+/* --- Animations --- */
+
+@keyframes vg-usecase-node-pulse {
+  0%, 100% { r: 4; opacity: 1; }
+  50% { r: 6; opacity: 0.6; }
+}
+
+@keyframes vg-usecase-line-flow {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -24; }
+}
+
+@keyframes vg-usecase-glow-breathe {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.35; }
+}
+
+/* ==========================================================================
+   TITLE BLOCK
+   ========================================================================== */
+
+.vg-usecase__title-block {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.vg-usecase__headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 4.5vw, 3.5rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 20px;
+  line-height: 1.15;
+}
+
+.vg-usecase__description {
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: var(--font-mono);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   SHOWCASE — Large Featured Card (Warehouse Logistics)
+   ========================================================================== */
+
+.vg-usecase__showcase {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  overflow: hidden;
+  margin-bottom: 24px;
+  position: relative;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.vg-usecase__showcase:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 24px rgba(188, 255, 47, 0.1);
+}
+
+/* Hover background image overlay */
+.vg-usecase__showcase::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--hover-bg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: grayscale(1) brightness(0.25);
+  opacity: 0.001;
+  transition: opacity 1s ease;
+  z-index: 0;
+  pointer-events: none;
+  will-change: opacity;
+  transform: translateZ(0);
+}
+
+.vg-usecase__showcase:hover::after {
+  opacity: 1;
+}
+
+/* Inner grid overlay on showcase */
+.vg-usecase__showcase::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(188, 255, 47, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(188, 255, 47, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  z-index: 0;
+}
+
+/* --- Showcase Content (Left) --- */
+
+.vg-usecase__showcase-content {
+  position: relative;
+  z-index: 1;
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.vg-usecase__showcase-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--accent);
+  padding: 5px 12px;
+  margin-bottom: 24px;
+  align-self: flex-start;
+}
+
+.vg-usecase__showcase-tag-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--black);
+  opacity: 0.4;
+}
+
+.vg-usecase__showcase-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+.vg-usecase__showcase-text {
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  margin: 0 0 32px;
+  max-width: 480px;
+}
+
+/* Metrics row */
+.vg-usecase__metrics {
+  display: flex;
+  gap: 32px;
+}
+
+.vg-usecase__metric {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vg-usecase__metric-value {
+  font-family: var(--font-data);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.vg-usecase__metric-label {
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  line-height: 1.3;
+}
+
+/* --- Showcase Visual (Right) --- */
+
+.vg-usecase__showcase-visual {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 380px;
+  border-left: 1px solid var(--panel-border);
+  overflow: hidden;
+}
+
+/* Radial glow behind the SVG */
+.vg-usecase__showcase-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(188, 255, 47, 0.08) 0%,
+    transparent 65%
+  );
+  animation: vg-usecase-glow-breathe 5s ease-in-out infinite;
+}
+
+.vg-usecase__showcase-svg {
+  position: relative;
+  z-index: 1;
+  width: 85%;
+  max-width: 400px;
+  height: auto;
+}
+
+/* SVG styling */
+.vg-usecase__svg-connection {
+  stroke: rgba(188, 255, 47, 0.3);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 6;
+  animation: vg-usecase-line-flow 3s linear infinite;
+}
+
+.vg-usecase__svg-node {
+  fill: rgba(188, 255, 47, 0.15);
+  stroke: rgba(188, 255, 47, 0.6);
+  stroke-width: 1.5;
+}
+
+.vg-usecase__svg-node--active {
+  fill: rgba(188, 255, 47, 0.3);
+  stroke: var(--accent);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 8px rgba(188, 255, 47, 0.5));
+}
+
+.vg-usecase__svg-node-dot {
+  fill: var(--accent);
+}
+
+.vg-usecase__svg-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  fill: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.vg-usecase__svg-label--active {
+  fill: var(--accent);
+  font-weight: 600;
+}
+
+.vg-usecase__svg-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  fill: var(--accent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   SMALL CARDS — 2-column grid
+   ========================================================================== */
+
+.vg-usecase__cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.vg-usecase__card {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vg-usecase__card-header,
+.vg-usecase__card-title,
+.vg-usecase__card-text,
+.vg-usecase__card-modules {
+  position: relative;
+  z-index: 1;
+}
+
+.vg-usecase__card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--glow-sm);
+}
+
+/* Hover background image overlay */
+.vg-usecase__card--maritime::after,
+.vg-usecase__card--infra::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: grayscale(1) brightness(0.15);
+  opacity: 0.001;
+  transition: opacity 1s ease;
+  z-index: 0;
+  pointer-events: none;
+  will-change: opacity;
+  transform: translateZ(0);
+}
+
+.vg-usecase__card--maritime::after {
+  background-image: url('/maritime.jpg');
+}
+
+.vg-usecase__card--infra::after {
+  background-image: url('/infra.jpg');
+}
+
+.vg-usecase__card--maritime:hover::after,
+.vg-usecase__card--infra:hover::after {
+  opacity: 1;
+}
+
+/* Top accent line */
+.vg-usecase__card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 64px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.vg-usecase__card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.vg-usecase__card-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--panel-border);
+  background: rgba(188, 255, 47, 0.05);
+  color: var(--accent);
+}
+
+.vg-usecase__card-tag {
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 4px 10px;
+  border: 1px solid rgba(188, 255, 47, 0.2);
+  background: rgba(188, 255, 47, 0.05);
+}
+
+.vg-usecase__card-title {
+  font-family: var(--font-serif);
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 12px;
+  line-height: 1.25;
+}
+
+.vg-usecase__card-text {
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 0;
+  flex: 1;
+}
+
+.vg-usecase__card-modules {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.vg-usecase__card-module {
+  font-family: var(--font-data);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  padding: 4px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ==========================================================================
+   RESPONSIVE — Tablet
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .vg-usecase__showcase {
+    grid-template-columns: 1fr;
+  }
+
+  .vg-usecase__showcase-visual {
+    border-left: none;
+    border-top: 1px solid var(--panel-border);
+    min-height: 300px;
+  }
+
+  .vg-usecase__showcase-content {
+    padding: 36px 28px;
+  }
+
+  .vg-usecase__metrics {
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE — Mobile
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .vg-usecase__title-block {
+    margin-bottom: 40px;
+  }
+
+  .vg-usecase__headline {
+    font-size: clamp(1.8rem, 6vw, 2.4rem);
+  }
+
+  .vg-usecase__description {
+    font-size: 1rem;
+  }
+
+  .vg-usecase__showcase-content {
+    padding: 24px 20px;
+  }
+
+  .vg-usecase__showcase-title {
+    font-size: 1.5rem;
+  }
+
+  .vg-usecase__metrics {
+    gap: 20px;
+  }
+
+  .vg-usecase__metric-value {
+    font-size: 1.25rem;
+  }
+
+  .vg-usecase__showcase-visual {
+    min-height: 240px;
+  }
+
+  .vg-usecase__cards {
+    grid-template-columns: 1fr;
+  }
+
+  .vg-usecase__card {
+    padding: 24px;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY: Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .vg-usecase__showcase-glow,
+  .vg-usecase__svg-connection {
+    animation: none;
+  }
+}
