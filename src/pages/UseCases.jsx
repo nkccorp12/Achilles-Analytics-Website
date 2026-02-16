@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './UseCases.css';
 
 /* ==========================================================================
@@ -101,6 +102,10 @@ function WarehouseNetworkSVG() {
 // ==========================================================================
 
 export default function UseCases() {
+  const [showcaseActive, setShowcaseActive] = useState(false);
+  const [maritimeActive, setMaritimeActive] = useState(false);
+  const [infraActive, setInfraActive] = useState(false);
+
   return (
     <section className="vg__section vg-usecase" id="use-cases">
       {/* Section Label */}
@@ -121,7 +126,11 @@ export default function UseCases() {
       {/* ================================================================
           SHOWCASE: Warehouse Logistics
           ================================================================ */}
-      <div className="vg-usecase__showcase" style={{ '--hover-bg': "url('/warehouse.png')" }}>
+      <div
+        className={`vg-usecase__showcase${showcaseActive ? ' vg-usecase__showcase--active' : ''}`}
+        style={{ '--hover-bg': "url('/warehouse.png')" }}
+        onClick={() => setShowcaseActive(!showcaseActive)}
+      >
         {/* Left: Content */}
         <div className="vg-usecase__showcase-content">
           <div className="vg-usecase__showcase-tag">
@@ -165,7 +174,10 @@ export default function UseCases() {
           ================================================================ */}
       <div className="vg-usecase__cards">
         {/* Maritime Supply Chain */}
-        <div className="vg-usecase__card vg-usecase__card--maritime">
+        <div
+          className={`vg-usecase__card vg-usecase__card--maritime${maritimeActive ? ' vg-usecase__card--active' : ''}`}
+          onClick={() => setMaritimeActive(!maritimeActive)}
+        >
           <div className="vg-usecase__card-header">
             <div className="vg-usecase__card-icon">
               <IconShip />
@@ -189,7 +201,10 @@ export default function UseCases() {
         </div>
 
         {/* Critical Infrastructure */}
-        <div className="vg-usecase__card vg-usecase__card--infra">
+        <div
+          className={`vg-usecase__card vg-usecase__card--infra${infraActive ? ' vg-usecase__card--active' : ''}`}
+          onClick={() => setInfraActive(!infraActive)}
+        >
           <div className="vg-usecase__card-header">
             <div className="vg-usecase__card-icon">
               <IconInfrastructure />
