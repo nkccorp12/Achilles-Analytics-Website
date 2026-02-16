@@ -620,6 +620,31 @@
     min-height: 260px;
   }
 
+  .vg-council__synthesis {
+    max-width: calc(100% - 32px);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .vg-council__synthesis-label {
+    letter-spacing: 2px;
+    font-size: 11px;
+  }
+
+  .vg-council__card {
+    padding: 12px;
+  }
+
+  .vg-council__card-title--cynic,
+  .vg-council__card-title--strategist,
+  .vg-council__card-title--optimist {
+    font-size: 1.1rem;
+  }
+
+  .vg-council__card-quote {
+    font-size: 0.875rem;
+  }
+
   .vg-council__stats {
     padding: 16px;
   }
