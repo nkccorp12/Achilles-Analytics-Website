@@ -160,7 +160,7 @@ export default function NeuPage() {
       {/* ═══ LASER SECTION (100vh) ═══ */}
       <section
         className="neu__laser"
-        onMouseMove={(e) => {
+        onPointerMove={(e) => {
           const rect = e.currentTarget.getBoundingClientRect();
           const x = e.clientX - rect.left;
           const y = e.clientY - rect.top;
@@ -170,7 +170,7 @@ export default function NeuPage() {
             el.style.setProperty('--my', `${y}px`);
           }
         }}
-        onMouseLeave={() => {
+        onPointerLeave={() => {
           const el = revealImgRef.current;
           if (el) {
             el.style.setProperty('--mx', '-9999px');

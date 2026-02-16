@@ -177,6 +177,7 @@
 .neu__laser {
   position: relative;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   background-color: var(--black);
 }
@@ -850,14 +851,20 @@
 @media (max-width: 640px) {
   .neu-hero {
     padding: 16px;
+    margin-top: -30vh;
+    margin-top: -30dvh;
   }
 
   .neu-hero__content {
-    padding: 48px 0;
+    padding: 32px 0;
   }
 
   .neu-hero__headline {
     font-size: clamp(1.8rem, 7vw, 2.6rem);
+  }
+
+  .neu-hero__sub {
+    margin-bottom: 32px;
   }
 
   .neu-hero__ctas {
@@ -867,6 +874,7 @@
   .neu-hero__cta {
     text-align: center;
     justify-content: center;
+    width: 100%;
   }
 
   .neu-header {
