@@ -7,15 +7,15 @@
 
 ### Navigation & Header
 
-- [ ] **NAV-01**: Mobile hamburger menu with slide-out nav panel on NeuPage header
-- [ ] **NAV-02**: Header padding and spacing optimized for all mobile viewports
-- [ ] **NAV-03**: Wordmark letter-spacing reduced on narrow screens (<640px)
+- [x] **NAV-01**: Mobile hamburger menu with slide-out nav panel on NeuPage header
+- [x] **NAV-02**: Header padding and spacing optimized for all mobile viewports
+- [x] **NAV-03**: Wordmark letter-spacing reduced on narrow screens (<640px)
 
 ### Laser & Hero
 
-- [ ] **HERO-01**: Touch support for laser reveal image (onTouchMove/onTouchEnd handlers)
-- [ ] **HERO-02**: Hero section margin-top adjusted for short mobile screens
-- [ ] **HERO-03**: Hero CTAs stacked and centered on mobile
+- [x] **HERO-01**: Touch support for laser reveal image (onTouchMove/onTouchEnd handlers)
+- [x] **HERO-02**: Hero section margin-top adjusted for short mobile screens
+- [x] **HERO-03**: Hero CTAs stacked and centered on mobile
 
 ### Philosophy / CardSwap
 
@@ -74,12 +74,12 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NAV-01 | Phase 1 | Pending |
-| NAV-02 | Phase 1 | Pending |
-| NAV-03 | Phase 1 | Pending |
-| HERO-01 | Phase 1 | Pending |
-| HERO-02 | Phase 1 | Pending |
-| HERO-03 | Phase 1 | Pending |
+| NAV-01 | Phase 1 | Complete |
+| NAV-02 | Phase 1 | Complete |
+| NAV-03 | Phase 1 | Complete |
+| HERO-01 | Phase 1 | Complete |
+| HERO-02 | Phase 1 | Complete |
+| HERO-03 | Phase 1 | Complete |
 | CARD-01 | Phase 2 | Pending |
 | CARD-02 | Phase 2 | Pending |
 | CARD-03 | Phase 2 | Pending |
