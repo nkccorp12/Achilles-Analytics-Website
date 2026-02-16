@@ -227,6 +227,7 @@ export default function IntelStack() {
   // Shared step counter — drives both Digital Twin and BIAS Control
   const [biasIdx, setBiasIdx] = useState(0);
   const [biasAnim, setBiasAnim] = useState(false);
+  const [reportPreviewActive, setReportPreviewActive] = useState(false);
 
   useEffect(() => {
     const el = brainRef.current;
@@ -575,7 +576,10 @@ export default function IntelStack() {
           </div>
 
           {/* Intel Report Synthesis */}
-          <div className="vg-istack__report">
+          <div
+            className={`vg-istack__report${reportPreviewActive ? ' vg-istack__report--active' : ''}`}
+            onClick={() => setReportPreviewActive(!reportPreviewActive)}
+          >
             {/* Default content — hides on hover */}
             <div className="vg-istack__report-default">
               <div className="vg-istack__report-icon-wrap">
@@ -616,7 +620,12 @@ export default function IntelStack() {
                 <span className="vg-istack__brief-val">89.4%</span>
               </div>
             </div>
-            <button className="vg-istack__report-btn">
+            <button
+              className="vg-istack__report-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
               Generate Latest Brief
             </button>
           </div>
