@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: NeuPage Navigation & Hero** - Mobile header, touch laser reveal, hero layout
 - [x] **Phase 2: Philosophy & Core Engine** - CardSwap responsiveness, panel optimizations
-- [ ] **Phase 3: UseCases & IntelStack** - Touch interactions, report preview, responsive layouts
+- [x] **Phase 3: UseCases & IntelStack** - Touch interactions, report preview, responsive layouts
 - [ ] **Phase 4: Global Polish & Footer** - AI Council viz, global breakpoints, footer stacking
 
 ## Phase Details
@@ -63,8 +63,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — UseCases tap toggle for showcase and card background image reveals + mobile layout
-- [ ] 03-02-PLAN.md — IntelStack report preview toggle, alerts panel mobile fix, breakpoint normalization
+- [x] 03-01-PLAN.md — UseCases tap toggle for showcase and card background image reveals + mobile layout
+- [x] 03-02-PLAN.md — IntelStack report preview toggle, alerts panel mobile fix, breakpoint normalization
 
 ### Phase 4: Global Polish & Footer
 **Goal**: Final sections and global consistency across all viewports
@@ -90,7 +90,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. NeuPage Navigation & Hero | 2/2 | ✓ Complete | 2026-02-16 |
 | 2. Philosophy & Core Engine | 2/2 | ✓ Complete | 2026-02-16 |
-| 3. UseCases & IntelStack | 0/2 | In progress | - |
+| 3. UseCases & IntelStack | 2/2 | ✓ Complete | 2026-02-16 |
 | 4. Global Polish & Footer | 0/TBD | Not started | - |
 
 ---

@@ -29,14 +29,14 @@
 
 ### UseCases
 
-- [ ] **CASE-01**: Touch/tap alternatives for hover background image reveals on showcase and cards
-- [ ] **CASE-02**: Cards grid single-column on mobile, properly spaced
+- [x] **CASE-01**: Touch/tap alternatives for hover background image reveals on showcase and cards
+- [x] **CASE-02**: Cards grid single-column on mobile, properly spaced
 
 ### IntelStack
 
-- [ ] **INTEL-01**: Intel Report preview accessible via tap/click toggle (not hover-only)
-- [ ] **INTEL-02**: Alerts panel properly positioned and readable on narrow screens
-- [ ] **INTEL-03**: IntelStack breakpoints normalized from 768px to match 640px/768px/1024px system
+- [x] **INTEL-01**: Intel Report preview accessible via tap/click toggle (not hover-only)
+- [x] **INTEL-02**: Alerts panel properly positioned and readable on narrow screens
+- [x] **INTEL-03**: IntelStack breakpoints normalized from 768px to match 640px/768px/1024px system
 
 ### AI Council
 
@@ -84,11 +84,11 @@
 | CARD-02 | Phase 2 | Complete |
 | CARD-03 | Phase 2 | Complete |
 | CORE-01 | Phase 2 | Complete |
-| CASE-01 | Phase 3 | Pending |
-| CASE-02 | Phase 3 | Pending |
-| INTEL-01 | Phase 3 | Pending |
-| INTEL-02 | Phase 3 | Pending |
-| INTEL-03 | Phase 3 | Pending |
+| CASE-01 | Phase 3 | Complete |
+| CASE-02 | Phase 3 | Complete |
+| INTEL-01 | Phase 3 | Complete |
+| INTEL-02 | Phase 3 | Complete |
+| INTEL-03 | Phase 3 | Complete |
 | COUNCIL-01 | Phase 4 | Pending |
 | COUNCIL-02 | Phase 4 | Pending |
 | GLOBAL-01 | Phase 4 | Pending |
