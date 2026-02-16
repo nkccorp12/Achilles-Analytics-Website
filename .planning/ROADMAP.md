@@ -29,10 +29,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Hero section displays properly on all viewport heights without margin overlap
   4. Hero CTAs stack vertically and remain accessible on mobile
   5. Header wordmark and spacing look intentional on all mobile viewports
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD (pending plan-phase)
+- [ ] 01-01-PLAN.md — Hamburger menu with slide-out nav panel and responsive header spacing
+- [ ] 01-02-PLAN.md — Touch laser reveal, hero margin fix, CTA stacking, and visual verification
 
 ### Phase 2: Philosophy & Core Engine
 **Goal**: Philosophy and CoreEngine sections render without overflow on mobile
@@ -81,11 +82,11 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. NeuPage Navigation & Hero | 0/TBD | Not started | - |
+| 1. NeuPage Navigation & Hero | 0/2 | Planned | - |
 | 2. Philosophy & Core Engine | 0/TBD | Not started | - |
 | 3. UseCases & IntelStack | 0/TBD | Not started | - |
 | 4. Global Polish & Footer | 0/TBD | Not started | - |
