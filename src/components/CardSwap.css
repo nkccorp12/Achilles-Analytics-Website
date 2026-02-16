@@ -17,3 +17,17 @@
   -webkit-backface-visibility: hidden;
   overflow: hidden;
 }
+
+/* ==========================================================================
+   RESPONSIVE — Mobile
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .card-swap__card {
+    border-radius: 6px;
+  }
+
+  .card-swap-container {
+    margin: 0 auto;
+  }
+}

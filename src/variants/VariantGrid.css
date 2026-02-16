@@ -516,6 +516,7 @@
 
   .vg-philosophy__panel {
     min-height: 300px;
+    overflow: hidden;
   }
 
   .vg-arch__pillars {
@@ -565,6 +566,27 @@
   .vg-hero__cta {
     text-align: center;
     justify-content: center;
+  }
+
+  .vg-philosophy__panel {
+    min-height: 250px;
+    overflow: hidden;
+  }
+
+  .vg-philosophy__card-img {
+    height: 100px;
+  }
+
+  .vg-philosophy__card-body {
+    padding: 12px;
+  }
+
+  .vg-philosophy__card-title {
+    font-size: 1rem;
+  }
+
+  .vg-philosophy__card-desc {
+    font-size: 0.75rem;
   }
 
   .vg-arch__pillars {
