@@ -60,9 +60,12 @@
   margin-bottom: 24px;
   position: relative;
   transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  cursor: pointer;
+  user-select: none;
 }
 
-.vg-usecase__showcase:hover {
+.vg-usecase__showcase:hover,
+.vg-usecase__showcase--active {
   border-color: var(--accent);
   box-shadow: 0 0 24px rgba(188, 255, 47, 0.1);
 }
@@ -85,7 +88,8 @@
   transform: translateZ(0);
 }
 
-.vg-usecase__showcase:hover::after {
+.vg-usecase__showcase:hover::after,
+.vg-usecase__showcase--active::after {
   opacity: 1;
 }
 
@@ -284,6 +288,8 @@
   position: relative;
   overflow: hidden;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  user-select: none;
 }
 
 .vg-usecase__card-header,
@@ -294,7 +300,8 @@
   z-index: 1;
 }
 
-.vg-usecase__card:hover {
+.vg-usecase__card:hover,
+.vg-usecase__card--active {
   border-color: var(--accent);
   box-shadow: var(--glow-sm);
 }
@@ -326,7 +333,9 @@
 }
 
 .vg-usecase__card--maritime:hover::after,
-.vg-usecase__card--infra:hover::after {
+.vg-usecase__card--maritime.vg-usecase__card--active::after,
+.vg-usecase__card--infra:hover::after,
+.vg-usecase__card--infra.vg-usecase__card--active::after {
   opacity: 1;
 }
 
