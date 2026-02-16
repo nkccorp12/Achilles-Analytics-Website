@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-16)
 ## Current Position
 
 Phase: 1 of 4 (NeuPage Navigation & Hero)
-Plan: 1 of TBD in current phase
-Status: In progress
-Last activity: 2026-02-16 — Completed 01-01-PLAN.md (mobile hamburger menu)
+Plan: 2 of 2 in current phase
+Status: All plans executed, pending verification
+Last activity: 2026-02-16 — Completed 01-02-PLAN.md (touch laser + hero fixes), deployed to production
 
-Progress: [█░░░░░░░░░] ~10% (estimated based on 1 plan complete)
+Progress: [██░░░░░░░░] 25%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 2 min
-- Total execution time: 2 minutes
+- Total plans completed: 2
+- Average duration: 2.5 min
+- Total execution time: 5 minutes
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-neupage-navigation-hero | 1 | 2 min | 2 min |
+| 01-neupage-navigation-hero | 2 | 5 min | 2.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2min)
-- Trend: Starting momentum
+- Last 5 plans: 01-01 (2min), 01-02 (3min)
+- Trend: Consistent pace
 
 *Updated after each plan completion*
 
@@ -55,19 +55,25 @@ Recent decisions affecting current work:
 - Header padding: 12px 16px on mobile (reduced from 16px 32px)
 - Wordmark letter-spacing: 3px on mobile (reduced from 6px)
 
+**From 01-02 (Touch Laser + Hero):**
+- Pointer Events API for unified touch/mouse (replaces separate handlers)
+- Hero margin-top: -30vh/-30dvh on mobile (reduced from -40vh)
+- 100dvh with 100vh fallback for full-viewport sections
+- CTAs get width: 100% on mobile for full-width stacking
+
 ### Pending Todos
 
-None yet.
+None.
 
 ### Blockers/Concerns
 
 **Node.js version (pre-existing):**
-- System has Node.js 18.19.1, but Vite requires 20.19+ or 22.12+
-- Dev server works, but production builds fail
-- Not blocking development, but will need upgrade before production deployment
+- Local system has Node.js 18.19.1, but Vite requires 20.19+ or 22.12+
+- Dev server works locally, production builds done on server (Node 20)
+- Not blocking — deployment works via server-side build
 
 ## Session Continuity
 
-Last session: 2026-02-16T08:34:40Z
-Stopped at: Completed 01-01-PLAN.md (mobile hamburger menu with slide-out nav)
+Last session: 2026-02-16
+Stopped at: Both plans executed, human-verified on production, pending phase verification
 Resume file: None
