@@ -60,10 +60,11 @@ Plans:
   3. User can tap to toggle Intel Report preview (not hover-only)
   4. Alerts panel in IntelStack positions correctly on narrow screens
   5. IntelStack uses consistent 640/768/1024 breakpoints
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD (pending plan-phase)
+- [ ] 03-01-PLAN.md — UseCases tap toggle for showcase and card background image reveals + mobile layout
+- [ ] 03-02-PLAN.md — IntelStack report preview toggle, alerts panel mobile fix, breakpoint normalization
 
 ### Phase 4: Global Polish & Footer
 **Goal**: Final sections and global consistency across all viewports
@@ -89,7 +90,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. NeuPage Navigation & Hero | 2/2 | ✓ Complete | 2026-02-16 |
 | 2. Philosophy & Core Engine | 2/2 | ✓ Complete | 2026-02-16 |
-| 3. UseCases & IntelStack | 0/TBD | Not started | - |
+| 3. UseCases & IntelStack | 0/2 | In progress | - |
 | 4. Global Polish & Footer | 0/TBD | Not started | - |
 
 ---
