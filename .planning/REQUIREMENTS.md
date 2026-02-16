@@ -19,13 +19,13 @@
 
 ### Philosophy / CardSwap
 
-- [ ] **CARD-01**: CardSwap component responsive width — no horizontal overflow on 360px screens
-- [ ] **CARD-02**: CardSwap.css has responsive media queries for mobile/tablet
-- [ ] **CARD-03**: Philosophy panel has overflow:hidden and reduced min-height on mobile
+- [x] **CARD-01**: CardSwap component responsive width — no horizontal overflow on 360px screens
+- [x] **CARD-02**: CardSwap.css has responsive media queries for mobile/tablet
+- [x] **CARD-03**: Philosophy panel has overflow:hidden and reduced min-height on mobile
 
 ### CoreEngine
 
-- [ ] **CORE-01**: Panel spacing, margins, and header margins optimized for mobile viewports
+- [x] **CORE-01**: Panel spacing, margins, and header margins optimized for mobile viewports
 
 ### UseCases
 
@@ -80,10 +80,10 @@
 | HERO-01 | Phase 1 | Complete |
 | HERO-02 | Phase 1 | Complete |
 | HERO-03 | Phase 1 | Complete |
-| CARD-01 | Phase 2 | Pending |
-| CARD-02 | Phase 2 | Pending |
-| CARD-03 | Phase 2 | Pending |
-| CORE-01 | Phase 2 | Pending |
+| CARD-01 | Phase 2 | Complete |
+| CARD-02 | Phase 2 | Complete |
+| CARD-03 | Phase 2 | Complete |
+| CORE-01 | Phase 2 | Complete |
 | CASE-01 | Phase 3 | Pending |
 | CASE-02 | Phase 3 | Pending |
 | INTEL-01 | Phase 3 | Pending |

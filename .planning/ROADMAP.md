@@ -13,7 +13,7 @@ This roadmap transforms the Achilles Analytics marketing site from desktop-only 
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: NeuPage Navigation & Hero** - Mobile header, touch laser reveal, hero layout
-- [ ] **Phase 2: Philosophy & Core Engine** - CardSwap responsiveness, panel optimizations
+- [x] **Phase 2: Philosophy & Core Engine** - CardSwap responsiveness, panel optimizations
 - [ ] **Phase 3: UseCases & IntelStack** - Touch interactions, report preview, responsive layouts
 - [ ] **Phase 4: Global Polish & Footer** - AI Council viz, global breakpoints, footer stacking
 
@@ -47,8 +47,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — useMediaQuery hook + responsive CardSwap dimensions + Philosophy panel overflow fix
-- [ ] 02-02-PLAN.md — CoreEngine panel spacing and margin optimizations for mobile
+- [x] 02-01-PLAN.md — useMediaQuery hook + responsive CardSwap dimensions + Philosophy panel overflow fix
+- [x] 02-02-PLAN.md — CoreEngine panel spacing and margin optimizations for mobile
 
 ### Phase 3: UseCases & IntelStack
 **Goal**: Use cases and product showcase work on touch devices
@@ -88,7 +88,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. NeuPage Navigation & Hero | 2/2 | ✓ Complete | 2026-02-16 |
-| 2. Philosophy & Core Engine | 0/2 | In Progress | - |
+| 2. Philosophy & Core Engine | 2/2 | ✓ Complete | 2026-02-16 |
 | 3. UseCases & IntelStack | 0/TBD | Not started | - |
 | 4. Global Polish & Footer | 0/TBD | Not started | - |
 
