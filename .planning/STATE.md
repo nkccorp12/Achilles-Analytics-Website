@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-16)
 Phase: 2 of 4 (Philosophy & Core Engine)
 Plan: 1 of TBD in current phase
 Status: In progress
-Last activity: 2026-02-16 — Completed 02-02-PLAN.md
+Last activity: 2026-02-16 — Completed 02-01-PLAN.md
 
 Progress: [███░░░░░░░] 30%
 
@@ -20,19 +20,19 @@ Progress: [███░░░░░░░] 30%
 
 **Velocity:**
 - Total plans completed: 3
-- Average duration: 2 min
-- Total execution time: 6 minutes
+- Average duration: 2.3 min
+- Total execution time: 8 minutes
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-neupage-navigation-hero | 2 | 5 min | 2.5 min |
-| 02-philosophy-core-engine | 1 | 1 min | 1 min |
+| 02-philosophy-core-engine | 1 | 3 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2min), 01-02 (3min), 02-02 (1min)
-- Trend: Accelerating (fast CSS optimization)
+- Last 5 plans: 01-01 (2min), 01-02 (3min), 02-01 (3min)
+- Trend: Consistent pace
 
 *Updated after each plan completion*
 
@@ -62,6 +62,13 @@ Recent decisions affecting current work:
 - 100dvh with 100vh fallback for full-viewport sections
 - CTAs get width: 100% on mobile for full-width stacking
 
+**From 02-01 (Philosophy Section Responsive):**
+- useMediaQuery hook approach for CardSwap dimensions (CSS cannot override inline styles)
+- Three-tier breakpoint strategy: mobile (<=640px), tablet (<=1024px), desktop
+- Progressive scaling: CardSwap dimensions reduce on smaller screens (380x320 → 320x280 → 280x240)
+- overflow: hidden on panel containers to prevent mobile scroll issues
+- Custom hooks for viewport-dependent prop values when CSS media queries insufficient
+
 **From 02-02 (CoreEngine Mobile Spacing):**
 - Panel-header margin reduces progressively: 40px (desktop) → 32px (1024px) → 24px (640px)
 - Badge text reduces to 10px with tighter letter-spacing on mobile to prevent overflow
@@ -81,6 +88,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-16T09:31:37Z
-Stopped at: Completed 02-02-PLAN.md
+Last session: 2026-02-16T09:33:02Z
+Stopped at: Completed 02-01-PLAN.md
 Resume file: None
