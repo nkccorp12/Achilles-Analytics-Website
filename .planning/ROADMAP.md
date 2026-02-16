@@ -44,10 +44,11 @@ Plans:
   2. Philosophy section handles overflow correctly with reduced height on mobile
   3. CoreEngine panels stack or resize gracefully on mobile viewports
   4. All philosophy and engine content remains readable with proper spacing
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD (pending plan-phase)
+- [ ] 02-01-PLAN.md — useMediaQuery hook + responsive CardSwap dimensions + Philosophy panel overflow fix
+- [ ] 02-02-PLAN.md — CoreEngine panel spacing and margin optimizations for mobile
 
 ### Phase 3: UseCases & IntelStack
 **Goal**: Use cases and product showcase work on touch devices
@@ -87,7 +88,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. NeuPage Navigation & Hero | 2/2 | ✓ Complete | 2026-02-16 |
-| 2. Philosophy & Core Engine | 0/TBD | Not started | - |
+| 2. Philosophy & Core Engine | 0/2 | In Progress | - |
 | 3. UseCases & IntelStack | 0/TBD | Not started | - |
 | 4. Global Polish & Footer | 0/TBD | Not started | - |
 
