@@ -73,13 +73,14 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. AI Council SVG visualization scales and remains readable on mobile
   2. AI Council synthesis overlay centers properly on all viewports
-  3. All CSS files use standardized breakpoints (640px / 768px / 1024px)
+  3. All CSS files use standardized breakpoints (640px / 1024px)
   4. All sections center and space correctly from 360px to 1440px+
   5. Footer items and CTAs stack vertically and remain accessible on mobile
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD (pending plan-phase)
+- [ ] 04-01-PLAN.md — AICouncil SVG mobile scaling and synthesis overlay centering constraint
+- [ ] 04-02-PLAN.md — Legacy variant breakpoint normalization and footer verification
 
 ## Progress
 
@@ -91,7 +92,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. NeuPage Navigation & Hero | 2/2 | ✓ Complete | 2026-02-16 |
 | 2. Philosophy & Core Engine | 2/2 | ✓ Complete | 2026-02-16 |
 | 3. UseCases & IntelStack | 2/2 | ✓ Complete | 2026-02-16 |
-| 4. Global Polish & Footer | 0/TBD | Not started | - |
+| 4. Global Polish & Footer | 0/2 | Not started | - |
 
 ---
 *Roadmap created: 2026-02-16*
