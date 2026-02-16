@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: NeuPage Navigation & Hero** - Mobile header, touch laser reveal, hero layout
 - [x] **Phase 2: Philosophy & Core Engine** - CardSwap responsiveness, panel optimizations
 - [x] **Phase 3: UseCases & IntelStack** - Touch interactions, report preview, responsive layouts
-- [ ] **Phase 4: Global Polish & Footer** - AI Council viz, global breakpoints, footer stacking
+- [x] **Phase 4: Global Polish & Footer** - AI Council viz, global breakpoints, footer stacking
 
 ## Phase Details
 
@@ -79,8 +79,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — AICouncil SVG mobile scaling and synthesis overlay centering constraint
-- [ ] 04-02-PLAN.md — Legacy variant breakpoint normalization and footer verification
+- [x] 04-01-PLAN.md — AICouncil SVG mobile scaling and synthesis overlay centering constraint
+- [x] 04-02-PLAN.md — Legacy variant breakpoint normalization and footer verification
 
 ## Progress
 
@@ -92,7 +92,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. NeuPage Navigation & Hero | 2/2 | ✓ Complete | 2026-02-16 |
 | 2. Philosophy & Core Engine | 2/2 | ✓ Complete | 2026-02-16 |
 | 3. UseCases & IntelStack | 2/2 | ✓ Complete | 2026-02-16 |
-| 4. Global Polish & Footer | 0/2 | Not started | - |
+| 4. Global Polish & Footer | 2/2 | ✓ Complete | 2026-02-16 |
 
 ---
 *Roadmap created: 2026-02-16*
