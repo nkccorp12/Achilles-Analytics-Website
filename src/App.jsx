@@ -1,9 +1,9 @@
-import NeuPage from './pages/NeuPage'
-import './pages/NeuPage.css'
+import LandingPage from './pages/LandingPage'
+import './pages/LandingPage.css'
 import './App.css'
 
 function App() {
-  return <NeuPage />
+  return <LandingPage />
 }
 
 export default App

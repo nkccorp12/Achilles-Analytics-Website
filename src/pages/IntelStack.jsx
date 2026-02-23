@@ -249,11 +249,13 @@ export default function IntelStack() {
     let timeout;
     let idx = 0;
     let started = false;
+    let visible = false;
     const isMobile = window.matchMedia('(max-width: 640px)').matches;
     const INTERVAL = isMobile ? 2500 : 4000;
     const LAST_HOLD = isMobile ? 8000 : 14000;
 
     const tick = () => {
+      if (!visible) { timeout = setTimeout(tick, 500); return; }
       const next = (idx + 1) % BIAS_ITEMS.length;
       setBiasAnim(true);
       setTimeout(() => {
@@ -264,12 +266,11 @@ export default function IntelStack() {
       const isLast = next === BIAS_ITEMS.length - 1;
       timeout = setTimeout(tick, isLast ? LAST_HOLD : INTERVAL);
     };
-
     const io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
       if (e.isIntersecting && !started) {
         started = true;
         timeout = setTimeout(tick, INTERVAL);
-        io.disconnect();
       }
     }, { threshold: 0.4 });
     io.observe(el);

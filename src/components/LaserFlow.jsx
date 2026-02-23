@@ -1,5 +1,9 @@
 import { useEffect, useRef } from 'react';
-import * as THREE from 'three';
+import {
+  WebGLRenderer, SRGBColorSpace, Scene, OrthographicCamera,
+  BufferGeometry, BufferAttribute, RawShaderMaterial, Mesh,
+  Clock, Vector2, Vector3, Vector4,
+} from 'three';
 
 const VERT = `
 precision highp float;
@@ -259,7 +263,7 @@ export default function LaserFlow({
 
   useEffect(() => {
     const mount = mountRef.current;
-    const renderer = new THREE.WebGLRenderer({
+    const renderer = new WebGLRenderer({
       antialias: false, alpha: false, depth: false, stencil: false,
       powerPreference: 'high-performance', premultipliedAlpha: false,
       preserveDrawingBuffer: false, failIfMajorPerformanceCaveat: false
@@ -269,7 +273,7 @@ export default function LaserFlow({
     currentDprRef.current = baseDprRef.current;
     renderer.setPixelRatio(currentDprRef.current);
     renderer.shadowMap.enabled = false;
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.outputColorSpace = SRGBColorSpace;
     renderer.setClearColor(0x000000, 1);
     const canvas = renderer.domElement;
     canvas.style.width = '100%';
@@ -277,14 +281,14 @@ export default function LaserFlow({
     canvas.style.display = 'block';
     mount.appendChild(canvas);
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array([-1,-1,0,3,-1,0,-1,3,0]), 3));
+    const scene = new Scene();
+    const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const geometry = new BufferGeometry();
+    geometry.setAttribute('position', new BufferAttribute(new Float32Array([-1,-1,0,3,-1,0,-1,3,0]), 3));
 
     const uniforms = {
-      iTime: { value: 0 }, iResolution: { value: new THREE.Vector3(1,1,1) },
-      iMouse: { value: new THREE.Vector4(0,0,0,0) },
+      iTime: { value: 0 }, iResolution: { value: new Vector3(1,1,1) },
+      iMouse: { value: new Vector4(0,0,0,0) },
       uWispDensity: { value: wispDensity }, uTiltScale: { value: mouseTiltStrength },
       uFlowTime: { value: 0 }, uFogTime: { value: 0 },
       uBeamXFrac: { value: horizontalBeamOffset }, uBeamYFrac: { value: verticalBeamOffset },
@@ -294,22 +298,22 @@ export default function LaserFlow({
       uWIntensity: { value: wispIntensity }, uFlowStrength: { value: flowStrength },
       uDecay: { value: decay }, uFalloffStart: { value: falloffStart },
       uFogFallSpeed: { value: fogFallSpeed },
-      uColor: { value: new THREE.Vector3(1,1,1) }, uFade: { value: 0 }
+      uColor: { value: new Vector3(1,1,1) }, uFade: { value: 0 }
     };
     uniformsRef.current = uniforms;
 
-    const material = new THREE.RawShaderMaterial({
+    const material = new RawShaderMaterial({
       vertexShader: VERT, fragmentShader: FRAG, uniforms,
       transparent: false, depthTest: false, depthWrite: false
     });
-    const mesh = new THREE.Mesh(geometry, material);
+    const mesh = new Mesh(geometry, material);
     mesh.frustumCulled = false;
     scene.add(mesh);
 
-    const clock = new THREE.Clock();
+    const clock = new Clock();
     let prevTime = 0, fade = 0;
-    const mouseTarget = new THREE.Vector2(0, 0);
-    const mouseSmooth = new THREE.Vector2(0, 0);
+    const mouseTarget = new Vector2(0, 0);
+    const mouseSmooth = new Vector2(0, 0);
 
     const setSizeNow = () => {
       const w = mount.clientWidth || 1, h = mount.clientHeight || 1, pr = currentDprRef.current;
@@ -345,7 +349,7 @@ export default function LaserFlow({
 
     let raf = 0;
     let lastFrameTime = 0;
-    const FRAME_INTERVAL = 1000 / 30; // 30fps cap
+    const FRAME_INTERVAL = 1000 / 60;
     const animate = (now) => {
       raf = requestAnimationFrame(animate);
       if (pausedRef.current || !inViewRef.current) return;

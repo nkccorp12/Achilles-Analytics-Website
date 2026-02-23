@@ -1,12 +1,14 @@
 import { useRef, useEffect, useState, useCallback, lazy, Suspense } from 'react';
-import CoreEngine from './CoreEngine';
-import UseCases from './UseCases';
-import AICouncil from './AICouncil';
 import { ArchitectureSection, PhilosophySection } from '../variants/VariantGrid';
-import './NeuPage.css';
+
+const CoreEngine = lazy(() => import('./CoreEngine'));
+const UseCases = lazy(() => import('./UseCases'));
+const AICouncil = lazy(() => import('./AICouncil'));
+import './LandingPage.css';
 
 const LaserFlow = lazy(() => import('../components/LaserFlow'));
 const IntelStack = lazy(() => import('./IntelStack'));
+const RotatingEarth = lazy(() => import('../components/RotatingEarth'));
 
 /* ─── Blinking Cursor (cloned from VariantGrid) ─── */
 const Cursor = () => <span className="neu__cursor" aria-hidden="true" />;
@@ -106,10 +108,11 @@ function ContactModal({ open, onClose }) {
 }
 
 
-export default function NeuPage() {
+export default function LandingPage() {
   const revealImgRef = useRef(null);
   const impactRef = useRef(null);
   const heroRef = useRef(null);
+  const pointerRafRef = useRef(0);
   const [headerVisible, setHeaderVisible] = useState(false);
   const [ctaVisible, setCtaVisible] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
@@ -154,7 +157,7 @@ export default function NeuPage() {
           <a href="#use-cases" className="neu-header__link" onClick={() => setMenuOpen(false)}>Case Study</a>
           <a href="#intel-stack" className="neu-header__link" onClick={() => setMenuOpen(false)}>The Stack</a>
           <button onClick={() => { setContactOpen(true); setMenuOpen(false); }} className="neu-header__link neu-header__link--btn">Reach Out</button>
-          <a href="http://82.165.45.74:8100" className={`neu-header__cta${ctaVisible ? ' neu-header__cta--visible' : ''}`}>Access Platform</a>
+          <a href="/app" className={`neu-header__cta${ctaVisible ? ' neu-header__cta--visible' : ''}`}>Access Platform</a>
         </nav>
       </header>
 
@@ -163,14 +166,17 @@ export default function NeuPage() {
         className="neu__laser"
         onPointerMove={(e) => {
           if (e.pointerType === 'touch') return;
-          const rect = e.currentTarget.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          const el = revealImgRef.current;
-          if (el) {
-            el.style.setProperty('--mx', `${x}px`);
-            el.style.setProperty('--my', `${y}px`);
-          }
+          if (pointerRafRef.current) return;
+          const cx = e.clientX, cy = e.clientY, tgt = e.currentTarget;
+          pointerRafRef.current = requestAnimationFrame(() => {
+            pointerRafRef.current = 0;
+            const rect = tgt.getBoundingClientRect();
+            const el = revealImgRef.current;
+            if (el) {
+              el.style.setProperty('--mx', `${cx - rect.left}px`);
+              el.style.setProperty('--my', `${cy - rect.top}px`);
+            }
+          });
         }}
         onPointerLeave={(e) => {
           if (e.pointerType === 'touch') return;
@@ -210,6 +216,8 @@ export default function NeuPage() {
             ref={revealImgRef}
             src="/background.webp"
             alt=""
+            width="1920"
+            height="1080"
             className="neu__reveal-img"
           />
         </picture>
@@ -234,7 +242,7 @@ export default function NeuPage() {
             <Cursor />
           </p>
           <div className="neu-hero__ctas">
-            <a href="http://82.165.45.74:8100" className="neu-hero__cta neu-hero__cta--primary">
+            <a href="/app" className="neu-hero__cta neu-hero__cta--primary">
               Access Platform
             </a>
             <a href="#reach-out" className="neu-hero__cta neu-hero__cta--secondary">
@@ -243,18 +251,29 @@ export default function NeuPage() {
           </div>
         </div>
 
-        <div className="neu-hero__logo-wrap" aria-hidden="true">
-          <img src="/logo.png" alt="" className="neu-hero__logo" />
+        <div className="neu-hero__globe" aria-hidden="true">
+          <Suspense fallback={null}>
+            <RotatingEarth
+              size={600}
+              alerts={[
+                { lng: -98.5, lat: 39.8 },
+                { lng: 36.2, lat: 49.0 },
+                { lng: 44.4, lat: 33.3 },
+                { lng: 35.2, lat: 31.9 },
+                { lng: 100.5, lat: 13.7 },
+              ]}
+            />
+          </Suspense>
         </div>
       </section>
 
       {/* ═══ CONTENT SECTIONS (from landing page) ═══ */}
       <div className="vg">
         <PhilosophySection />
-        <CoreEngine />
-        <UseCases />
+        <Suspense fallback={null}><CoreEngine /></Suspense>
+        <Suspense fallback={null}><UseCases /></Suspense>
         <Suspense fallback={null}><IntelStack /></Suspense>
-        <AICouncil />
+        <Suspense fallback={null}><AICouncil /></Suspense>
         <ArchitectureSection />
       </div>
 
@@ -273,7 +292,7 @@ export default function NeuPage() {
             <button onClick={() => setContactOpen(true)} className="neu-reach__cta neu-reach__cta--primary">
               Get in Touch
             </button>
-            <a href="http://82.165.45.74:8100" className="neu-reach__cta neu-reach__cta--secondary">
+            <a href="/app" className="neu-reach__cta neu-reach__cta--secondary">
               Access Platform
             </a>
           </div>

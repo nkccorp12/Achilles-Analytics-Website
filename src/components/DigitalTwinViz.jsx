@@ -1,5 +1,10 @@
 import { useEffect, useRef } from 'react';
-import * as THREE from 'three';
+import {
+  WebGLRenderer, Scene, PerspectiveCamera, Color, SphereGeometry,
+  Group, Vector3, MeshBasicMaterial, Mesh, AdditiveBlending,
+  CanvasTexture, LinearFilter, SpriteMaterial, Sprite,
+  BufferGeometry, Float32BufferAttribute, LineBasicMaterial, Line,
+} from 'three';
 
 /* ─── Node Graph Data — Egypt closes Suez due to Gaza ─── */
 const NODES = [
@@ -35,10 +40,10 @@ function makeLabel(text, color) {
   ctx.textBaseline = 'middle';
   ctx.fillText(text, 12, h / 2);
 
-  const tex = new THREE.CanvasTexture(canvas);
-  tex.minFilter = THREE.LinearFilter;
-  const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false });
-  const sprite = new THREE.Sprite(mat);
+  const tex = new CanvasTexture(canvas);
+  tex.minFilter = LinearFilter;
+  const mat = new SpriteMaterial({ map: tex, transparent: true, depthTest: false });
+  const sprite = new Sprite(mat);
   sprite.scale.set(w / 120, h / 120, 1);
   return sprite;
 }
@@ -56,7 +61,7 @@ export default function DigitalTwinViz({ color = '#BCFF2F', step = 0 }) {
     if (!container) return;
 
     // --- Renderer ---
-    const renderer = new THREE.WebGLRenderer({
+    const renderer = new WebGLRenderer({
       antialias: true, alpha: true, powerPreference: 'high-performance',
     });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -67,8 +72,8 @@ export default function DigitalTwinViz({ color = '#BCFF2F', step = 0 }) {
     });
 
     // --- Scene & Camera ---
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+    const scene = new Scene();
+    const camera = new PerspectiveCamera(50, 1, 0.1, 100);
     camera.position.set(0, 3, 8);
     camera.lookAt(0, 0, 0);
 
@@ -92,29 +97,29 @@ export default function DigitalTwinViz({ color = '#BCFF2F', step = 0 }) {
     io.observe(container);
 
     // --- Build graph objects ---
-    const accentColor = new THREE.Color(color);
-    const dimColor = new THREE.Color(color).multiplyScalar(0.4);
+    const accentColor = new Color(color);
+    const dimColor = new Color(color).multiplyScalar(0.4);
     const nodeMap = {};
 
-    const sphereGeo = new THREE.SphereGeometry(0.12, 12, 12);
-    const glowGeo = new THREE.SphereGeometry(0.28, 12, 12);
+    const sphereGeo = new SphereGeometry(0.12, 12, 12);
+    const glowGeo = new SphereGeometry(0.28, 12, 12);
 
-    const graphGroup = new THREE.Group();
+    const graphGroup = new Group();
     scene.add(graphGroup);
 
     NODES.forEach((n) => {
-      const pos = new THREE.Vector3(...n.pos);
+      const pos = new Vector3(...n.pos);
 
-      const mat = new THREE.MeshBasicMaterial({ color: accentColor, transparent: true, opacity: 0 });
-      const mesh = new THREE.Mesh(sphereGeo, mat);
+      const mat = new MeshBasicMaterial({ color: accentColor, transparent: true, opacity: 0 });
+      const mesh = new Mesh(sphereGeo, mat);
       mesh.position.copy(pos);
       graphGroup.add(mesh);
 
-      const glowMat = new THREE.MeshBasicMaterial({
+      const glowMat = new MeshBasicMaterial({
         color: accentColor, transparent: true, opacity: 0,
-        blending: THREE.AdditiveBlending, depthWrite: false,
+        blending: AdditiveBlending, depthWrite: false,
       });
-      const glow = new THREE.Mesh(glowGeo, glowMat);
+      const glow = new Mesh(glowGeo, glowMat);
       glow.position.copy(pos);
       graphGroup.add(glow);
 
@@ -126,12 +131,12 @@ export default function DigitalTwinViz({ color = '#BCFF2F', step = 0 }) {
 
       let line = null;
       if (n.parent) {
-        const lineGeo = new THREE.BufferGeometry();
-        lineGeo.setAttribute('position', new THREE.Float32BufferAttribute([
+        const lineGeo = new BufferGeometry();
+        lineGeo.setAttribute('position', new Float32BufferAttribute([
           pos.x, pos.y, pos.z, pos.x, pos.y, pos.z,
         ], 3));
-        const lineMat = new THREE.LineBasicMaterial({ color: dimColor, transparent: true, opacity: 0 });
-        line = new THREE.Line(lineGeo, lineMat);
+        const lineMat = new LineBasicMaterial({ color: dimColor, transparent: true, opacity: 0 });
+        line = new Line(lineGeo, lineMat);
         graphGroup.add(line);
       }
 
@@ -191,14 +196,19 @@ export default function DigitalTwinViz({ color = '#BCFF2F', step = 0 }) {
           prevStep = currentStep;
         }
 
-        // Apply fade to all visible nodes
+        // Apply fade to all visible nodes (use base opacity * fade, not multiply)
         NODES.forEach((n) => {
           const obj = nodeMap[n.id];
           if (obj.appearTime !== null) {
-            obj.mesh.material.opacity *= fadeAlpha;
-            obj.glow.material.opacity *= fadeAlpha;
-            obj.label.material.opacity *= fadeAlpha;
-            if (obj.line) obj.line.material.opacity *= fadeAlpha;
+            const age = (now - obj.appearTime) / 1000;
+            const e = Math.min(age / NODE_GROW_DUR, 1);
+            obj.mesh.material.opacity = e * fadeAlpha;
+            obj.glow.material.opacity = e * 0.15 * fadeAlpha;
+            obj.label.material.opacity = e * 0.85 * fadeAlpha;
+            if (obj.line) {
+              const lp = Math.min(age / LINE_GROW_DUR, 1);
+              obj.line.material.opacity = lp * 0.5 * fadeAlpha;
+            }
           }
         });
 

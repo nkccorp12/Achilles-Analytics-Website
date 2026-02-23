@@ -55,22 +55,26 @@ function SynthesisOverlay() {
       const next = (idxRef.current + 1) % STRATEGIES.length;
       const target = STRATEGIES[next].conf;
       const steps = 20;
-      const stepTime = 1500 / steps;
-      let step = 0;
+      const duration = 1500;
+      let start = null;
 
-      counterIv = setInterval(() => {
-        step++;
-        const eased = 1 - Math.pow(1 - step / steps, 2);
+      const countFrame = (now) => {
+        if (!start) start = now;
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 2);
         setDisplayConf(+(eased * target).toFixed(1));
-        if (step >= steps) {
-          clearInterval(counterIv);
+        if (progress < 1) {
+          counterIv = requestAnimationFrame(countFrame);
+        } else {
           setDisplayConf(target);
           setSimulating(false);
           idxRef.current = next;
           setIdx(next);
           timeout = setTimeout(runCycle, 5000);
         }
-      }, stepTime);
+      };
+      counterIv = requestAnimationFrame(countFrame);
     };
 
     const io = new IntersectionObserver(([e]) => {
@@ -81,7 +85,7 @@ function SynthesisOverlay() {
     }, { threshold: 0.3 });
     io.observe(el);
 
-    return () => { clearTimeout(timeout); clearInterval(counterIv); io.disconnect(); };
+    return () => { clearTimeout(timeout); cancelAnimationFrame(counterIv); io.disconnect(); };
   }, []);
 
   const strat = STRATEGIES[idx];
