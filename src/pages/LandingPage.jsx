@@ -214,7 +214,7 @@ export default function LandingPage() {
           <source media="(max-width: 640px)" srcSet="/beammobile.webp" />
           <img
             ref={revealImgRef}
-            src="/background.webp"
+            src="/background.webp?v=2"
             alt=""
             width="1920"
             height="1080"

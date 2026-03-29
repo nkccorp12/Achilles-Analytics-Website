@@ -6,6 +6,7 @@
 - **OS:** Ubuntu 22.04
 - **User:** root (SSH-Key only, kein Passwort)
 - **SSH Key:** `~/.ssh/id_ed25519`
+- **SSH Port:** 2222
 - **Node:** v20.20.0
 - **Nginx:** Port 80 (redirect) + 443 (SSL)
 - **SSL:** Cloudflare Origin Certificate (`/etc/ssl/cloudflare/`)
@@ -16,27 +17,27 @@
 
 ```bash
 # 1. Upload source (excludes node_modules, .git, dist)
-rsync -avz --exclude='node_modules' --exclude='.git' --exclude='dist' \
-  /media/nkccorp/9AF48656F48635133/Projects/frontend_Draft/ \
+rsync -avz -e "ssh -p 2222" --exclude='node_modules' --exclude='.git' --exclude='dist' \
+  /media/nkccorp/9AF48656F48635133/Projects/achilles-website/ \
   root@66.102.141.221:/tmp/frontend-build/
 
 # 2. Build on server (Node 20 required, local Node 18 is too old for Vite 7)
-ssh root@66.102.141.221 \
+ssh -p 2222 root@66.102.141.221 \
   "cd /tmp/frontend-build && npm install --silent && npm run build"
 
 # 3. Deploy dist to nginx web root
-ssh root@66.102.141.221 \
-  "rm -rf /var/www/html/* && \
+ssh -p 2222 root@66.102.141.221 \
+  "rm -rf /var/www/html/*.html /var/www/html/assets /var/www/html/favicon.ico /var/www/html/logo2.png /var/www/html/og-image.jpg && \
    cp -r /tmp/frontend-build/dist/* /var/www/html/"
 
 # 4. Cleanup build dir
-ssh root@66.102.141.221 "rm -rf /tmp/frontend-build"
+ssh -p 2222 root@66.102.141.221 "rm -rf /tmp/frontend-build"
 ```
 
 ## One-liner
 
 ```bash
-rsync -avz --exclude='node_modules' --exclude='.git' --exclude='dist' /media/nkccorp/9AF48656F48635133/Projects/frontend_Draft/ root@66.102.141.221:/tmp/frontend-build/ && ssh root@66.102.141.221 "cd /tmp/frontend-build && npm install --silent && npm run build && rm -rf /var/www/html/* && cp -r dist/* /var/www/html/ && rm -rf /tmp/frontend-build && echo 'DEPLOYED'"
+rsync -avz -e "ssh -p 2222" --exclude='node_modules' --exclude='.git' --exclude='dist' /media/nkccorp/9AF48656F48635133/Projects/achilles-website/ root@66.102.141.221:/tmp/frontend-build/ && ssh -p 2222 root@66.102.141.221 "cd /tmp/frontend-build && npm install --silent && npm run build && rm -rf /var/www/html/*.html /var/www/html/assets /var/www/html/favicon.ico /var/www/html/logo2.png /var/www/html/og-image.jpg && cp -r dist/* /var/www/html/ && rm -rf /tmp/frontend-build && echo 'DEPLOYED'"
 ```
 
 ## Wichtig
@@ -44,12 +45,12 @@ rsync -avz --exclude='node_modules' --exclude='.git' --exclude='dist' /media/nkc
 - **Nicht direkt lokal bauen** — Node 18 lokal, Vite 7 braucht Node 20+
 - **Nginx-Config:** `/etc/nginx/sites-available/default`
 - **SSL-Zertifikate:** `/etc/ssl/cloudflare/cert.pem` + `key.pem` (gueltig bis 2041)
-- **NeuPage ist Startseite** — App.jsx rendert NeuPage direkt auf `/`
+- **Landing Page ist Startseite** — App.jsx rendert NeuPage direkt auf `/`
 
 ## Security
 
-- **SSH:** Key-only, kein Passwort-Login, MaxAuthTries 3
-- **Firewall (UFW):** aktiv, nur Port 22/80/443 offen
+- **SSH:** Key-only, kein Passwort-Login, Port 2222, MaxAuthTries 3
+- **Firewall (UFW):** aktiv, nur Port 2222/80/443 offen
 - **Fail2Ban:** aktiv, sperrt IPs nach 5 Fehlversuchen (1h Ban, Recidive 24h)
 - **Nginx Headers:** X-Frame-Options DENY, X-Content-Type-Options nosniff, X-XSS-Protection, Referrer-Policy, server_tokens off
 - **Cloudflare:** DDoS-Schutz, CDN, SSL Full (strict)
@@ -58,9 +59,17 @@ rsync -avz --exclude='node_modules' --exclude='.git' --exclude='dist' /media/nkc
 
 | Port | Service |
 |------|---------|
-| 22 | SSH (Key-only) |
+| 2222 | SSH (Key-only) |
 | 80 | nginx — HTTP redirect zu HTTPS |
 | 443 | nginx — HTTPS (Cloudflare Origin Cert) |
+| 3002 | osint-agents (Docker) |
+| 8000 | telegram-ingestion (Docker) |
+| 8001 | stance-engine (Docker) |
+| 8004 | council (Docker) |
+| 8005 | geo-intel (Docker) |
+| 5433 | PostgreSQL (Docker) |
+| 6333 | Qdrant (Docker) |
+| 6379 | Redis (Docker) |
 
 ## Alter Server (IONOS) — Referenz
 

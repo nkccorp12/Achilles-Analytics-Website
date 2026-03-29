@@ -107,19 +107,49 @@ export default function CardSwap({
         tl.call(() => { order.current = [...rest, front]; });
       };
 
-      initTO = window.setTimeout(() => {
+      // Pause/resume based on visibility
+      let isVisible = false;
+      const startSwapping = () => {
+        if (intervalRef.current) return;
         swap();
         intervalRef.current = window.setInterval(swap, delay);
+      };
+      const stopSwapping = () => {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+        tlRef.current?.pause();
+      };
+
+      const visObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          isVisible = e.isIntersecting;
+          if (isVisible) {
+            tlRef.current?.play();
+            startSwapping();
+          } else {
+            stopSwapping();
+          }
+        });
+      }, { threshold: 0.1 });
+      if (container.current) visObs.observe(container.current);
+
+      initTO = window.setTimeout(() => {
+        if (isVisible) startSwapping();
       }, delay);
 
       if (pauseOnHover && container.current) {
         const node = container.current;
-        const pause = () => { tlRef.current?.pause(); clearInterval(intervalRef.current); };
-        const resume = () => { tlRef.current?.play(); intervalRef.current = window.setInterval(swap, delay); };
+        const pause = () => { tlRef.current?.pause(); clearInterval(intervalRef.current); intervalRef.current = null; };
+        const resume = () => { if (isVisible) { tlRef.current?.play(); startSwapping(); } };
         node.addEventListener('mouseenter', pause);
         node.addEventListener('mouseleave', resume);
         hoverCleanup = () => { node.removeEventListener('mouseenter', pause); node.removeEventListener('mouseleave', resume); };
       }
+
+      hoverCleanup = (() => {
+        const prev = hoverCleanup;
+        return () => { prev?.(); visObs.disconnect(); };
+      })();
     });
 
     return () => {

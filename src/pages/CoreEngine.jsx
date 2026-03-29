@@ -1,199 +1,279 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import './CoreEngine.css';
 
 /* =========================================================================
-   CORE ENGINE PAGE — Impact vs. Vulnerability
-   Achilles Analytics — "Tactical Grid" Design System
+   CORE ENGINE — Narrative Network Pipeline
+   Signal → Narrative → Influence → Risk
    ========================================================================= */
 
-// --- Inline SVG Icons ---
+const COLORS = [
+  { r: 188, g: 255, b: 47 },  // signals
+  { r: 47, g: 200, b: 255 },  // narratives
+  { r: 255, g: 107, b: 47 },  // influence
+  { r: 255, g: 47, b: 90 },   // risk
+];
+const STAGE_COUNTS = [22, 14, 9, 5];
+const STAGE_SIZES = [[1.5, 3.5], [2, 4.5], [3, 5.5], [4, 7]];
+const STAGE_LABELS = ['SIGNALS', 'NARRATIVES', 'INFLUENCE', 'RISK'];
+const MAX_DIST = 140;
 
-const IconBolt = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path d="M13 2L3 14h9l-1 10 10-12h-9l1-10z" />
-  </svg>
-);
+function rgba(c, a) { return `rgba(${c.r},${c.g},${c.b},${a})`; }
+function lerpC(a, b, t) { return { r: a.r + (b.r - a.r) * t, g: a.g + (b.g - a.g) * t, b: a.b + (b.b - a.b) * t }; }
+function rand(a, b) { return a + Math.random() * (b - a); }
+function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+function bezierPt(ax, ay, cx, cy, bx, by, t) {
+  const u = 1 - t;
+  return { x: u * u * ax + 2 * u * t * cx + t * t * bx, y: u * u * ay + 2 * u * t * cy + t * t * by };
+}
 
-const IconAnalytics = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3 3v18h18v-2H5V3H3zm4 10v4h2v-4H7zm4-6v10h2V7h-2zm4 4v6h2v-6h-2zm4-8v14h2V3h-2z" />
-  </svg>
-);
-
-// --- Main Component ---
+const BOXES = [
+  { stage: 0, color: '#BCFF2F', borderColor: 'rgba(188,255,47,0.2)', tag: 'Signal', title: 'Hormuz closure rhetoric spikes', body: 'IRGC channels + 3 state outlets in 4h', left: '4%', top: '28%' },
+  { stage: 1, color: '#2FC8FF', borderColor: 'rgba(47,200,255,0.2)', tag: 'Narrative', title: 'Coordinated blockade narrative', body: 'Semantic cluster: 89% confidence', left: '27%', top: '34%' },
+  { stage: 2, color: '#FF6B2F', borderColor: 'rgba(255,107,47,0.2)', tag: 'Influence', title: 'IRGC + 8 proxies amplifying', body: 'Coordination: 3.1\u03C3', left: '52%', top: '26%' },
+  { stage: 3, color: '#FF2F5A', borderColor: 'rgba(255,47,90,0.2)', tag: 'Risk', title: 'Closure: 68% / 14 days', body: 'Oil +12%, reroute likely', left: '76%', top: '30%', action: true },
+];
 
 export default function CoreEngine() {
-  const splitRef = useRef(null);
+  const canvasRef = useRef(null);
+  const containerRef = useRef(null);
+  const stateRef = useRef({ nodes: [], crossEdges: [], pulseDots: [], revealStart: -1 });
 
-  useEffect(() => {
-    const el = splitRef.current;
-    if (!el) return;
-    const isMobile = window.matchMedia('(max-width: 640px)').matches;
-    if (!isMobile) return;
-
-    const panels = el.querySelectorAll('.vg-engine__panel');
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          entry.target.classList.toggle('vg-engine__panel--active', entry.isIntersecting);
-        });
-      },
-      { threshold: 0.5, rootMargin: '-20% 0px -20% 0px' }
-    );
-    panels.forEach((p) => observer.observe(p));
-    return () => observer.disconnect();
+  const initNodes = useCallback((cw, ch) => {
+    const state = stateRef.current;
+    state.nodes = [];
+    state.crossEdges = [];
+    state.pulseDots = [];
+    const stageXs = [cw * 0.12, cw * 0.37, cw * 0.62, cw * 0.87];
+    COLORS.forEach((col, ci) => {
+      const cx = stageXs[ci], count = STAGE_COUNTS[ci];
+      const [sMin, sMax] = STAGE_SIZES[ci];
+      for (let i = 0; i < count; i++) {
+        const ox = cx + rand(-cw * 0.09, cw * 0.09);
+        const oy = ch * 0.5 + rand(-ch * 0.28, ch * 0.28);
+        state.nodes.push({ x: ox, y: oy, ox, oy, size: rand(sMin, sMax), cluster: ci, phase: rand(0, Math.PI * 2), breathSpeed: rand(0.001, 0.003), wanderR: rand(4, 14), wanderSpeed: rand(0.0003, 0.0009) });
+      }
+    });
+    for (let i = 0; i < state.nodes.length; i++) {
+      for (let j = i + 1; j < state.nodes.length; j++) {
+        const a = state.nodes[i], b = state.nodes[j];
+        if (Math.abs(a.cluster - b.cluster) === 1 && dist(a, b) < MAX_DIST * 1.3)
+          state.crossEdges.push({ i, j, fromCluster: Math.min(a.cluster, b.cluster) });
+      }
+    }
+    state.crossEdges.forEach(e => {
+      for (let k = 0; k < 1 + Math.floor(rand(0, 2)); k++)
+        state.pulseDots.push({ edge: state.crossEdges.indexOf(e), progress: rand(0, 1), speed: rand(0.0003, 0.0007) });
+    });
   }, []);
 
-  return (
-    <section className="vg-engine-page">
-      {/* Section Label */}
-      <div className="vg__section-label">// CORE ENGINE</div>
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+    const ct = canvas.getContext('2d');
+    let cw, ch, connectorPts = [], animId;
+    const state = stateRef.current;
 
-      {/* Section Header */}
-      <div className="vg-engine__header">
-        <h1 className="vg-engine__headline">
-          Impact vs. Vulnerability
-        </h1>
-        <p className="vg-engine__subtitle">
-          Separating Event Reaction from System Hardening
-        </p>
+    function resize() {
+      const r = window.devicePixelRatio || 1;
+      const rect = container.getBoundingClientRect();
+      cw = rect.width; ch = rect.height;
+      canvas.width = cw * r; canvas.height = ch * r;
+      ct.setTransform(r, 0, 0, r, 0, 0);
+      initNodes(cw, ch);
+      updateConnectors();
+    }
+
+    function updateConnectors() {
+      connectorPts = [];
+      const pr = container.getBoundingClientRect();
+      container.querySelectorAll('.ce-sbox').forEach(box => {
+        const r = box.getBoundingClientRect();
+        connectorPts.push({ x: r.left - pr.left + r.width * 0.5, y: r.top - pr.top + r.height * 0.5, stage: +box.dataset.stage });
+      });
+    }
+
+    function sOp(ci, t) {
+      if (state.revealStart < 0) return 0;
+      return clamp((t - state.revealStart - ci * 400) / 600, 0, 1);
+    }
+
+    function tick(t) {
+      const stageXs = [cw * 0.12, cw * 0.37, cw * 0.62, cw * 0.87];
+      ct.clearRect(0, 0, cw, ch);
+      state.nodes.forEach(n => {
+        n.x = n.ox + Math.sin(t * n.wanderSpeed + n.phase) * n.wanderR;
+        n.y = n.oy + Math.cos(t * n.wanderSpeed * 0.8 + n.phase) * n.wanderR * 0.7;
+      });
+
+      // Within-cluster edges
+      for (let i = 0; i < state.nodes.length; i++) for (let j = i + 1; j < state.nodes.length; j++) {
+        const a = state.nodes[i], b = state.nodes[j];
+        if (a.cluster !== b.cluster) continue;
+        const d = dist(a, b); if (d >= MAX_DIST) continue;
+        const op = sOp(a.cluster, t); if (op <= 0) continue;
+        ct.beginPath(); ct.moveTo(a.x, a.y);
+        ct.quadraticCurveTo((a.x + b.x) * 0.5 + Math.sin(t * 0.0008 + i * 0.07) * 5, (a.y + b.y) * 0.5 + Math.cos(t * 0.0008 + j * 0.07) * 5, b.x, b.y);
+        ct.strokeStyle = rgba(COLORS[a.cluster], Math.min((1 - d / MAX_DIST) * 0.12 * op, 0.2));
+        ct.lineWidth = 0.6; ct.stroke();
+      }
+
+      // Cross-stage edges
+      state.crossEdges.forEach((e, ei) => {
+        const a = state.nodes[e.i], b = state.nodes[e.j];
+        const left = a.cluster < b.cluster ? a : b, right = a.cluster < b.cluster ? b : a;
+        const edgeOp = Math.min(sOp(left.cluster, t), sOp(right.cluster, t));
+        if (edgeOp <= 0) { e._op = 0; return; }
+        const c = lerpC(COLORS[left.cluster], COLORS[right.cluster], 0.5);
+        const mx = (left.x + right.x) * 0.5 + Math.sin(t * 0.0006 + ei * 0.2) * 8;
+        const my = (left.y + right.y) * 0.5 + Math.cos(t * 0.0006 + ei * 0.3) * 8;
+        ct.beginPath(); ct.moveTo(left.x, left.y); ct.quadraticCurveTo(mx, my, right.x, right.y);
+        ct.strokeStyle = rgba(c, Math.min(0.05 * edgeOp, 0.18)); ct.lineWidth = 0.5; ct.stroke();
+        e._lx = left.x; e._ly = left.y; e._mx = mx; e._my = my; e._rx = right.x; e._ry = right.y; e._c = c; e._op = edgeOp;
+      });
+
+      // Pulse dots
+      state.pulseDots.forEach(pd => {
+        pd.progress += pd.speed; if (pd.progress > 1) pd.progress -= 1;
+        const e = state.crossEdges[pd.edge];
+        if (!e || e._op <= 0 || e._lx == null) return;
+        const pt = bezierPt(e._lx, e._ly, e._mx, e._my, e._rx, e._ry, pd.progress);
+        if (!isFinite(pt.x) || !isFinite(pt.y)) return;
+        const pCol = lerpC(COLORS[e.fromCluster], COLORS[e.fromCluster + 1], pd.progress);
+        ct.beginPath(); ct.arc(pt.x, pt.y, 8, 0, Math.PI * 2);
+        const pg = ct.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, 8);
+        pg.addColorStop(0, rgba(pCol, 0.2 * e._op)); pg.addColorStop(1, rgba(pCol, 0)); ct.fillStyle = pg; ct.fill();
+        ct.beginPath(); ct.arc(pt.x, pt.y, 2, 0, Math.PI * 2); ct.fillStyle = rgba(pCol, 0.7 * e._op); ct.fill();
+      });
+
+      // Connector lines between boxes
+      for (let ci = 0; ci < connectorPts.length - 1; ci++) {
+        const a = connectorPts[ci], b = connectorPts[ci + 1];
+        const op = Math.min(sOp(a.stage, t), sOp(b.stage, t));
+        if (op <= 0) continue;
+        const c = lerpC(COLORS[a.stage], COLORS[b.stage], 0.5);
+        const mx = (a.x + b.x) * 0.5, my = (a.y + b.y) * 0.5 + 40;
+        ct.beginPath(); ct.moveTo(a.x, a.y); ct.quadraticCurveTo(mx, my, b.x, b.y);
+        ct.strokeStyle = rgba(c, 0.25 * op); ct.lineWidth = 2; ct.setLineDash([5, 5]); ct.stroke(); ct.setLineDash([]);
+        ct.beginPath(); ct.moveTo(a.x, a.y); ct.quadraticCurveTo(mx, my, b.x, b.y);
+        ct.strokeStyle = rgba(c, 0.06 * op); ct.lineWidth = 8; ct.stroke();
+        const prog = (t * 0.0004 + ci * 0.3) % 1;
+        const pt = bezierPt(a.x, a.y, mx, my, b.x, b.y, prog);
+        if (isFinite(pt.x) && isFinite(pt.y)) {
+          ct.beginPath(); ct.arc(pt.x, pt.y, 14, 0, Math.PI * 2);
+          const dg = ct.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, 14);
+          dg.addColorStop(0, rgba(c, 0.35 * op)); dg.addColorStop(1, rgba(c, 0)); ct.fillStyle = dg; ct.fill();
+          ct.beginPath(); ct.arc(pt.x, pt.y, 3, 0, Math.PI * 2); ct.fillStyle = rgba(c, 0.8 * op); ct.fill();
+        }
+      }
+
+      // Lines from boxes to graph nodes
+      connectorPts.forEach(cp => {
+        const op = sOp(cp.stage, t); if (op <= 0) return;
+        const c = COLORS[cp.stage]; let count = 0;
+        state.nodes.forEach(n => {
+          if (n.cluster !== cp.stage || count >= 6) return;
+          const d = dist(cp, n);
+          if (d < 250) {
+            ct.beginPath(); ct.moveTo(cp.x, cp.y); ct.lineTo(n.x, n.y);
+            ct.strokeStyle = rgba(c, 0.12 * op * (1 - d / 250)); ct.lineWidth = 0.8; ct.stroke();
+            count++;
+          }
+        });
+      });
+
+      // Nodes (dimmed)
+      const dim = 0.65;
+      state.nodes.forEach(n => {
+        const op = sOp(n.cluster, t); if (op <= 0) return;
+        const c = COLORS[n.cluster], breath = 1 + Math.sin(t * n.breathSpeed + n.phase) * 0.25, s = n.size * breath;
+        ct.beginPath(); ct.arc(n.x, n.y, s * 4, 0, Math.PI * 2);
+        const g2 = ct.createRadialGradient(n.x, n.y, 0, n.x, n.y, s * 4);
+        g2.addColorStop(0, rgba(c, 0.04 * op * dim)); g2.addColorStop(1, rgba(c, 0)); ct.fillStyle = g2; ct.fill();
+        ct.beginPath(); ct.arc(n.x, n.y, s * 2, 0, Math.PI * 2);
+        const g = ct.createRadialGradient(n.x, n.y, 0, n.x, n.y, s * 2);
+        g.addColorStop(0, rgba(c, 0.1 * op * dim)); g.addColorStop(1, rgba(c, 0)); ct.fillStyle = g; ct.fill();
+        ct.beginPath(); ct.arc(n.x, n.y, s, 0, Math.PI * 2); ct.fillStyle = rgba(c, 0.4 * op * dim); ct.fill();
+      });
+
+      // Labels
+      ct.font = '500 9px "IBM Plex Mono",monospace'; ct.textAlign = 'center';
+      STAGE_LABELS.forEach((lbl, ci) => {
+        const op = sOp(ci, t); if (op <= 0) return;
+        ct.fillStyle = rgba(COLORS[ci], 0.15 * op);
+        ct.fillText(lbl, stageXs[ci], ch * 0.08);
+      });
+      ct.textAlign = 'start';
+
+      animId = requestAnimationFrame(tick);
+    }
+
+    // Intersection observer for reveal
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting && state.revealStart < 0) {
+          state.revealStart = performance.now();
+          // Reveal boxes
+          container.querySelectorAll('.ce-sbox').forEach(box => {
+            const stage = +box.dataset.stage;
+            setTimeout(() => box.classList.add('ce-sbox--visible'), 800 + stage * 600);
+          });
+          // Reveal narration
+          const narr = container.querySelector('.ce-narr');
+          if (narr) setTimeout(() => narr.classList.add('ce-narr--visible'), 1200);
+        }
+      });
+    }, { threshold: 0.3 });
+    obs.observe(container);
+
+    resize();
+    window.addEventListener('resize', () => { resize(); });
+    animId = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', resize);
+      obs.disconnect();
+    };
+  }, [initNodes]);
+
+  return (
+    <section className="ce-section" ref={containerRef}>
+      <canvas ref={canvasRef} className="ce-canvas" />
+
+      {/* Header */}
+      <div className="ce-header">
+        <div className="ce-tag">// CORE ENGINE</div>
+        <h2 className="ce-headline">See the <em>unseen.</em> Act with confidence.</h2>
       </div>
 
-      {/* Split-Screen Container */}
-      <div className="vg-engine__split" ref={splitRef}>
-        {/* ============================================================
-            LEFT PANEL: Impact Analysis
-            ============================================================ */}
-        <div className="vg-engine__panel">
-          {/* Header */}
-          <div className="vg-engine__panel-header">
-            <div className="vg-engine__panel-icon vg-engine__panel-icon--impact">
-              <IconBolt />
-            </div>
-            <div>
-              <h3 className="vg-engine__panel-title">Impact Analysis</h3>
-            </div>
+      {/* Stage boxes */}
+      {BOXES.map((b) => (
+        <div key={b.stage} className="ce-sbox" data-stage={b.stage} style={{ left: b.left, top: b.top, borderColor: b.borderColor }}>
+          <div className="ce-sbox__tag" style={{ color: b.color }}>
+            <span className="ce-sbox__dot" style={{ background: b.color }} />
+            {b.tag}
           </div>
-
-          {/* Key Metric */}
-          <div className="vg-engine__metric vg-engine__metric--impact">
-            <div className="vg-engine__metric-label vg-engine__metric-label--accent">
-              Key Metric
-            </div>
-            <div className="vg-engine__metric-row">
-              <span className="vg-engine__metric-name">
-                Reactive State Engine
-              </span>
-            </div>
-          </div>
-
-          {/* Visualization: Impact Ripple */}
-          <div className="vg-engine__viz vg-engine__viz--impact">
-            <div className="vg-engine__viz-grid" />
-            <div className="vg-engine__ripple-container">
-              {/* Center glow node */}
-              <div className="vg-engine__ripple-core" />
-              {/* Ripple rings */}
-              <div className="vg-engine__ripple-ring vg-engine__ripple-ring--sm" />
-              <div className="vg-engine__ripple-ring vg-engine__ripple-ring--md" />
-              <div className="vg-engine__ripple-ring vg-engine__ripple-ring--lg" />
-              {/* Peripheral nodes */}
-              <div className="vg-engine__ripple-node vg-engine__ripple-node--top" />
-              <div className="vg-engine__ripple-node vg-engine__ripple-node--bottom" />
-              <div className="vg-engine__ripple-node vg-engine__ripple-node--left" />
-              <div className="vg-engine__ripple-node vg-engine__ripple-node--right" />
-            </div>
-            {/* Legend */}
-            <div className="vg-engine__viz-legend">
-              <div className="vg-engine__viz-legend-item">
-                <span className="vg-engine__viz-legend-dot vg-engine__viz-legend-dot--accent" />
-                <span className="vg-engine__viz-legend-text">Cascading</span>
-              </div>
-              <div className="vg-engine__viz-legend-item">
-                <span className="vg-engine__viz-legend-dot vg-engine__viz-legend-dot--white" />
-                <span className="vg-engine__viz-legend-text">Stable</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Description */}
-          <div className="vg-engine__data-rows">
-            <p className="vg-engine__panel-text">
-              Traces cascade paths through system nodes. Quantifies remaining capacity and failure probability in real time.
-            </p>
-          </div>
+          <div className="ce-sbox__title">{b.title}</div>
+          <div className="ce-sbox__body">{b.body}</div>
+          {b.action && (
+            <span className="ce-sbox__action" style={{ color: '#FF2F5A', borderColor: '#FF2F5A' }}>
+              Act &rarr;
+            </span>
+          )}
         </div>
+      ))}
 
-        {/* ============================================================
-            RIGHT PANEL: Vulnerability Analysis
-            ============================================================ */}
-        <div className="vg-engine__panel">
-          {/* Header */}
-          <div className="vg-engine__panel-header">
-            <div className="vg-engine__panel-icon vg-engine__panel-icon--vuln">
-              <IconAnalytics />
-            </div>
-            <div>
-              <h3 className="vg-engine__panel-title">Vulnerability Analysis</h3>
-            </div>
-          </div>
-
-          {/* Key Metric */}
-          <div className="vg-engine__metric vg-engine__metric--vuln">
-            <div className="vg-engine__metric-label vg-engine__metric-label--dim">
-              Leverage Point Identification
-            </div>
-            <div className="vg-engine__metric-row">
-              <span className="vg-engine__metric-name">Proactive_Audit_Engine</span>
-            </div>
-          </div>
-
-          {/* Visualization: Leverage Points Map */}
-          <div className="vg-engine__viz vg-engine__viz--vuln">
-            <div className="vg-engine__viz-grid" />
-            <svg
-              className="vg-engine__svg-map"
-              width="200"
-              height="200"
-              viewBox="0 0 200 200"
-            >
-              {/* Network Connections */}
-              <line x1="100" y1="50" x2="60" y2="100" stroke="rgba(188, 255, 47, 0.4)" strokeWidth="1" />
-              <line x1="100" y1="50" x2="140" y2="100" stroke="rgba(188, 255, 47, 0.4)" strokeWidth="1" />
-              <line x1="60" y1="100" x2="100" y2="150" stroke="rgba(188, 255, 47, 0.4)" strokeWidth="1" />
-              <line x1="140" y1="100" x2="100" y2="150" stroke="rgba(188, 255, 47, 0.4)" strokeWidth="1" />
-              <line x1="60" y1="100" x2="140" y2="100" stroke="rgba(188, 255, 47, 0.4)" strokeWidth="1" />
-              {/* Leverage Heat Zone */}
-              <circle
-                cx="100"
-                cy="50"
-                r="12"
-                fill="rgba(188, 255, 47, 0.12)"
-                stroke="rgba(188, 255, 47, 1)"
-                strokeWidth="2"
-                style={{ filter: 'drop-shadow(0 0 8px rgba(188, 255, 47, 0.5))' }}
-              />
-              <circle cx="100" cy="50" r="4" fill="rgba(188, 255, 47, 1)" />
-              {/* Static Nodes */}
-              <circle cx="60" cy="100" r="4" fill="rgba(255, 255, 255, 0.4)" />
-              <circle cx="140" cy="100" r="4" fill="rgba(255, 255, 255, 0.4)" />
-              <circle cx="100" cy="150" r="4" fill="rgba(255, 255, 255, 0.4)" />
-            </svg>
-            {/* Bottleneck Badge */}
-            <div className="vg-engine__viz-badge">
-              <span className="vg-engine__viz-badge-text">
-                Structural Bottleneck Detected
-              </span>
-            </div>
-          </div>
-
-          {/* Description */}
-          <div className="vg-engine__data-rows">
-            <p className="vg-engine__panel-text">
-              Scans for structural weaknesses before exploitation. Maps leverage points and stress tolerance across the network.
-            </p>
-          </div>
-        </div>
+      {/* Narration */}
+      <div className="ce-narr">
+        <p className="ce-narr__text">
+          <strong>Achilles detected coordinated Hormuz closure rhetoric across IRGC channels and state media.</strong>
+          {' '}
+          <span className="ce-narr__dim">
+            Within minutes, it clustered the noise into a single narrative, mapped the actors driving it, and projected a 68% closure probability within 14 days — before the first headline was published. Act with confidence.
+          </span>
+        </p>
       </div>
     </section>
   );
