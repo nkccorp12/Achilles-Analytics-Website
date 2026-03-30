@@ -911,26 +911,23 @@
 
   .neu-hero {
     padding: 16px;
-    padding-top: 140px;
+    padding-top: 120px;
     margin-top: 0;
-    min-height: 80vh;
-    min-height: 80dvh;
+    min-height: 75vh;
+    min-height: 75dvh;
   }
 
   .neu-hero__content {
     padding: 0 0 24px;
-    justify-content: center;
+    justify-content: flex-end;
   }
 
   .neu-hero__headline {
     font-size: clamp(1.8rem, 7vw, 2.6rem);
-    margin-bottom: 20px;
   }
 
   .neu-hero__sub {
-    font-size: 0.85rem;
-    line-height: 1.7;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
 
   .neu-hero__ctas {
@@ -941,9 +938,27 @@
     text-align: center;
     justify-content: center;
     width: 100%;
-    padding: 12px 32px;
   }
 
+  /* Background logo — same as positioned above */
+  .neu-hero__bg {
+    top: 17% !important;
+    left: 25% !important;
+    right: auto;
+    bottom: auto;
+    width: 80% !important;
+    height: auto !important;
+    transform: translate(-50%, -50%);
+    opacity: 0.25 !important;
+    mix-blend-mode: normal !important;
+    filter: none;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+  }
+
+  .neu-hero__bg-reveal {
+    display: none;
+  }
 
   /* Globe on mobile — top right, contained */
   .neu-hero__globe {
