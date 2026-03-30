@@ -11,7 +11,7 @@ Card.displayName = 'Card';
 
 const makeSlot = (i, distX, distY, total) => ({
   x: i * distX,
-  y: -i * distY,
+  y: 0,
   z: -i * distX * 1.5,
   zIndex: total - i
 });
@@ -89,7 +89,7 @@ export default function CardSwap({
         const tl = gsap.timeline();
         tlRef.current = tl;
 
-        tl.to(elFront, { y: '+=500', duration: config.durDrop, ease: config.ease }, 0);
+        tl.to(elFront, { x: '+=500', duration: config.durDrop, ease: config.ease }, 0);
         tl.to(elFront, { opacity: 0, duration: config.durDrop * 0.3, ease: 'power2.in' }, 0);
 
         tl.addLabel('promote', `-=${config.durDrop * config.promoteOverlap}`);

@@ -140,25 +140,27 @@ export default function LandingPage() {
     <div className="neu">
       {/* ═══ FIXED HEADER ═══ */}
       <header className={`neu-header${headerVisible ? ' neu-header--visible' : ''}`}>
-        <div className="neu-header__wordmark">
-          <span>A</span>CHILLES <span className="neu-header__wordmark-sub">Analytics</span>
+        <div className="neu-header__inner">
+          <div className="neu-header__wordmark">
+            <span>A</span>CHILLES <span className="neu-header__wordmark-sub">Analytics</span>
+          </div>
+          <button
+            className={`neu-header__hamburger${menuOpen ? ' neu-header__hamburger--active' : ''}`}
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle navigation menu"
+            aria-expanded={menuOpen}
+          >
+            <span className="neu-header__hamburger-line" />
+            <span className="neu-header__hamburger-line" />
+            <span className="neu-header__hamburger-line" />
+          </button>
+          <nav className={`neu-header__nav${menuOpen ? ' neu-header__nav--open' : ''}`}>
+            <a href="#use-cases" className="neu-header__link" onClick={() => setMenuOpen(false)}>Case Study</a>
+            <a href="#intel-stack" className="neu-header__link" onClick={() => setMenuOpen(false)}>The Stack</a>
+            <button onClick={() => { setContactOpen(true); setMenuOpen(false); }} className="neu-header__link neu-header__link--btn">Reach Out</button>
+            <a href="/app" className={`neu-header__cta${ctaVisible ? ' neu-header__cta--visible' : ''}`}>Access Platform</a>
+          </nav>
         </div>
-        <button
-          className={`neu-header__hamburger${menuOpen ? ' neu-header__hamburger--active' : ''}`}
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle navigation menu"
-          aria-expanded={menuOpen}
-        >
-          <span className="neu-header__hamburger-line" />
-          <span className="neu-header__hamburger-line" />
-          <span className="neu-header__hamburger-line" />
-        </button>
-        <nav className={`neu-header__nav${menuOpen ? ' neu-header__nav--open' : ''}`}>
-          <a href="#use-cases" className="neu-header__link" onClick={() => setMenuOpen(false)}>Case Study</a>
-          <a href="#intel-stack" className="neu-header__link" onClick={() => setMenuOpen(false)}>The Stack</a>
-          <button onClick={() => { setContactOpen(true); setMenuOpen(false); }} className="neu-header__link neu-header__link--btn">Reach Out</button>
-          <a href="/app" className={`neu-header__cta${ctaVisible ? ' neu-header__cta--visible' : ''}`}>Access Platform</a>
-        </nav>
       </header>
 
       {/* ═══ LASER SECTION (100vh) ═══ */}

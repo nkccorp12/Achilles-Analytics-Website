@@ -37,9 +37,8 @@
   right: 0;
   z-index: 1000;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 32px;
+  justify-content: center;
+  padding: 16px clamp(1rem, 5vw, 3rem);
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
@@ -47,6 +46,14 @@
   opacity: 0;
   transition: transform 0.4s ease, opacity 0.4s ease;
   pointer-events: none;
+}
+
+.neu-header__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: var(--content-max-width, 1320px);
 }
 
 .neu-header--visible {
@@ -174,11 +181,7 @@
    ========================================================================== */
 
 .neu__laser {
-  position: relative;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-  background-color: var(--black);
+  display: none;
 }
 
 .neu__reveal-img {
@@ -285,11 +288,11 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 24px 32px;
+  align-items: center;
+  padding: 24px clamp(1rem, 5vw, 3rem);
   position: relative;
   overflow: hidden;
   background-color: var(--black);
-  margin-top: -40vh;
   z-index: 10;
 }
 
@@ -298,6 +301,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  width: 100%;
+  max-width: 960px;
   padding-bottom: 32px;
   border-bottom: 1px solid var(--border);
 }
@@ -322,6 +327,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
   max-width: 960px;
   padding: 96px 0;
 }
@@ -394,10 +400,10 @@
   box-shadow: var(--glow-sm);
 }
 
-/* Globe watermark */
+/* Globe watermark — stays near content on widescreen */
 .neu-hero__globe {
   position: absolute;
-  right: -60px;
+  right: max(calc(50% - 900px), -120px);
   bottom: -20px;
   width: 600px;
   height: 600px;
@@ -432,7 +438,7 @@
 
 .neu-reach {
   position: relative;
-  padding: 120px 32px 80px;
+  padding: 120px clamp(1rem, 5vw, 3rem) 80px;
   background-color: var(--black);
   border-top: 1px solid var(--border);
 }
@@ -839,10 +845,11 @@
    ========================================================================== */
 
 @media (max-width: 640px) {
-  /* Shrink beam section on mobile */
+  /* Hide beam section on mobile */
   .neu__laser {
-    height: 45vh;
-    height: 45dvh;
+    display: none;
+    height: 0;
+    overflow: hidden;
   }
 
   .neu__reveal-img {
@@ -853,19 +860,20 @@
   }
 
   .neu__impact {
-    top: 60%;
+    display: none;
   }
 
   .neu-hero {
     padding: 16px;
-    margin-top: -18vh;
-    margin-top: -18dvh;
+    margin-top: 0;
+    margin-top: 0;
     min-height: 75vh;
     min-height: 75dvh;
   }
 
   .neu-hero__content {
-    padding: 24px 0 48px;
+    padding: 24px 0 24px;
+    justify-content: flex-end;
   }
 
   .neu-hero__headline {
@@ -886,13 +894,16 @@
     width: 100%;
   }
 
-  /* Shrink globe on mobile */
+  /* Globe on mobile — top right, contained */
   .neu-hero__globe {
-    width: 280px;
-    height: 280px;
-    right: -40px;
-    bottom: -30px;
-    opacity: 0.6;
+    width: 180px;
+    height: 180px;
+    right: -20px;
+    left: auto;
+    transform: none;
+    bottom: auto;
+    top: 30px;
+    opacity: 0.4;
   }
 
   .neu-header {

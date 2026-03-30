@@ -1,4 +1,5 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
+import gsap from 'gsap';
 import './CoreEngine.css';
 
 /* =========================================================================
@@ -34,23 +35,95 @@ const BOXES = [
   { stage: 3, color: '#FF2F5A', borderColor: 'rgba(255,47,90,0.2)', tag: 'Risk', title: 'Closure: 68% / 14 days', body: 'Oil +12%, reroute likely', left: '76%', top: '30%', action: true },
 ];
 
+/* ── Mobile GSAP Nodes ── */
+const MOBILE_NODE_COUNT = 14;
+function generateMobileNodes() {
+  const nodes = [];
+  for (let i = 0; i < MOBILE_NODE_COUNT; i++) {
+    nodes.push({
+      x: rand(8, 92),   // % position
+      y: rand(8, 92),
+      size: rand(4, 10),
+      delay: rand(0, 3),
+      duration: rand(4, 8),
+      driftX: rand(-15, 15),
+      driftY: rand(-10, 10),
+      opacity: rand(0.3, 0.7),
+    });
+  }
+  return nodes;
+}
+
+/* ── Typewriter text component ── */
+const NARR_STRONG = 'Achilles detected coordinated Hormuz closure rhetoric across IRGC channels and state media.';
+const NARR_DIM = ' Within minutes, it clustered the noise into a single narrative, mapped the actors driving it, and projected a 68% closure probability within 14 days — before the first headline was published. Act with confidence.';
+
+function Typewriter({ trigger }) {
+  const [displayed, setDisplayed] = useState('');
+  const fullText = NARR_STRONG + NARR_DIM;
+  const rafRef = useRef(null);
+
+  useEffect(() => {
+    if (!trigger) return;
+    let idx = 0;
+    const speed = 8;
+    let lastTime = 0;
+    function type(t) {
+      if (t - lastTime >= speed) {
+        idx++;
+        setDisplayed(fullText.slice(0, idx));
+        lastTime = t;
+      }
+      if (idx < fullText.length) rafRef.current = requestAnimationFrame(type);
+    }
+    rafRef.current = requestAnimationFrame(type);
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+  }, [trigger, fullText]);
+
+  const strongLen = NARR_STRONG.length;
+  const strongPart = displayed.slice(0, strongLen);
+  const dimPart = displayed.slice(strongLen);
+
+  return (
+    <p className="ce-type">
+      <strong className="ce-type__strong">{strongPart}</strong>
+      <span className="ce-type__dim">{dimPart}</span>
+      {displayed.length < fullText.length && <span className="ce-type__cursor">█</span>}
+    </p>
+  );
+}
+
 export default function CoreEngine() {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
+  const mobileNodesRef = useRef(null);
   const stateRef = useRef({ nodes: [], crossEdges: [], pulseDots: [], revealStart: -1 });
+  const [mobileNodes] = useState(() => generateMobileNodes());
+  const [cmdTrigger, setCmdTrigger] = useState(false);
 
   const initNodes = useCallback((cw, ch) => {
     const state = stateRef.current;
     state.nodes = [];
     state.crossEdges = [];
     state.pulseDots = [];
-    const stageXs = [cw * 0.12, cw * 0.37, cw * 0.62, cw * 0.87];
-    COLORS.forEach((col, ci) => {
-      const cx = stageXs[ci], count = STAGE_COUNTS[ci];
-      const [sMin, sMax] = STAGE_SIZES[ci];
+    const isMobile = cw < 640;
+    const stageXs = isMobile
+      ? [cw * 0.5]
+      : [cw * 0.12, cw * 0.37, cw * 0.62, cw * 0.87];
+    state.stageXs = stageXs;
+    state.isMobile = isMobile;
+    if (isMobile) return; // Mobile uses GSAP divs, not canvas nodes
+    const colorsToUse = COLORS;
+    const countsToUse = STAGE_COUNTS;
+    const sizesToUse = STAGE_SIZES;
+    colorsToUse.forEach((col, ci) => {
+      const cx = stageXs[ci], count = countsToUse[ci];
+      const [sMin, sMax] = sizesToUse[ci];
+      const spreadX = cw * 0.09;
+      const spreadY = ch * 0.28;
       for (let i = 0; i < count; i++) {
-        const ox = cx + rand(-cw * 0.09, cw * 0.09);
-        const oy = ch * 0.5 + rand(-ch * 0.28, ch * 0.28);
+        const ox = cx + rand(-spreadX, spreadX);
+        const oy = ch * 0.5 + rand(-spreadY, spreadY);
         state.nodes.push({ x: ox, y: oy, ox, oy, size: rand(sMin, sMax), cluster: ci, phase: rand(0, Math.PI * 2), breathSpeed: rand(0.001, 0.003), wanderR: rand(4, 14), wanderSpeed: rand(0.0003, 0.0009) });
       }
     });
@@ -67,18 +140,55 @@ export default function CoreEngine() {
     });
   }, []);
 
+  /* ── GSAP mobile node animations ── */
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const isMobile = window.innerWidth < 640;
+    if (!isMobile || !mobileNodesRef.current) return;
+
+    const nodes = mobileNodesRef.current.querySelectorAll('.ce-mnode');
+    const gsapCtx = gsap.context(() => {
+      nodes.forEach((node, i) => {
+        const n = mobileNodes[i];
+        gsap.to(node, {
+          scale: rand(1.1, 1.4),
+          opacity: n.opacity,
+          duration: rand(2, 4),
+          ease: 'sine.inOut',
+          repeat: -1,
+          yoyo: true,
+          delay: n.delay * 0.3,
+        });
+        gsap.to(node, {
+          x: n.driftX,
+          y: n.driftY,
+          duration: n.duration,
+          ease: 'sine.inOut',
+          repeat: -1,
+          yoyo: true,
+          delay: n.delay * 0.15,
+        });
+      });
+    }, mobileNodesRef.current);
+
+    return () => gsapCtx.revert();
+  }, [mobileNodes]);
+
+  /* ── Desktop canvas animation ── */
   useEffect(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
     const ct = canvas.getContext('2d');
-    let cw, ch, connectorPts = [], animId;
+    let cw, ch, connectorPts = [], animId, isMobile = false;
     const state = stateRef.current;
 
     function resize() {
       const r = window.devicePixelRatio || 1;
       const rect = container.getBoundingClientRect();
       cw = rect.width; ch = rect.height;
+      isMobile = cw < 640;
+      if (isMobile) { canvas.width = 0; canvas.height = 0; return; }
       canvas.width = cw * r; canvas.height = ch * r;
       ct.setTransform(r, 0, 0, r, 0, 0);
       initNodes(cw, ch);
@@ -100,7 +210,8 @@ export default function CoreEngine() {
     }
 
     function tick(t) {
-      const stageXs = [cw * 0.12, cw * 0.37, cw * 0.62, cw * 0.87];
+      if (isMobile) { animId = requestAnimationFrame(tick); return; }
+      const stageXs = state.stageXs || [cw * 0.12, cw * 0.37, cw * 0.62, cw * 0.87];
       ct.clearRect(0, 0, cw, ch);
       state.nodes.forEach(n => {
         n.x = n.ox + Math.sin(t * n.wanderSpeed + n.phase) * n.wanderR;
@@ -133,7 +244,7 @@ export default function CoreEngine() {
         e._lx = left.x; e._ly = left.y; e._mx = mx; e._my = my; e._rx = right.x; e._ry = right.y; e._c = c; e._op = edgeOp;
       });
 
-      // Pulse dots
+      // Pulse dots (desktop only)
       state.pulseDots.forEach(pd => {
         pd.progress += pd.speed; if (pd.progress > 1) pd.progress -= 1;
         const e = state.crossEdges[pd.edge];
@@ -214,21 +325,51 @@ export default function CoreEngine() {
       entries.forEach(e => {
         if (e.isIntersecting && state.revealStart < 0) {
           state.revealStart = performance.now();
-          // Reveal boxes
-          container.querySelectorAll('.ce-sbox').forEach(box => {
+          const boxes = container.querySelectorAll('.ce-sbox');
+          const isMob = cw < 640;
+          const collapseDelay = 400 + 3 * 500 + 1000;
+          // Reveal boxes with staggered delay
+          boxes.forEach(box => {
             const stage = +box.dataset.stage;
-            setTimeout(() => box.classList.add('ce-sbox--visible'), 800 + stage * 600);
+            setTimeout(() => box.classList.add('ce-sbox--visible'), isMob ? 400 + stage * 500 : 800 + stage * 600);
           });
-          // Reveal narration
-          const narr = container.querySelector('.ce-narr');
-          if (narr) setTimeout(() => narr.classList.add('ce-narr--visible'), 1200);
+          // Mobile: after all cards fly in, collapse top 3 → only Risk remains
+          if (isMob) {
+            setTimeout(() => {
+              boxes.forEach(box => {
+                const stage = +box.dataset.stage;
+                if (stage < 3) box.classList.add('ce-sbox--collapsed');
+              });
+              // Lime glow on Act button + hero emphasis on Risk card
+              setTimeout(() => {
+                boxes.forEach(box => {
+                  if (+box.dataset.stage === 3) {
+                    box.classList.add('ce-sbox--hero');
+                    const actBtn = box.querySelector('.ce-sbox__action');
+                    if (actBtn) actBtn.classList.add('ce-sbox__action--glow');
+                  }
+                });
+                // Trigger header + typewriter after glow pulse settles
+                setTimeout(() => {
+                  const hdr = container.querySelector('.ce-header');
+                  if (hdr) hdr.classList.add('ce-header--visible');
+                  setCmdTrigger(true);
+                }, 2000);
+              }, 600);
+            }, collapseDelay);
+          }
+          // Desktop: reveal narration normally
+          if (!isMob) {
+            const narr = container.querySelector('.ce-narr');
+            if (narr) setTimeout(() => narr.classList.add('ce-narr--visible'), 1200);
+          }
         }
       });
     }, { threshold: 0.3 });
     obs.observe(container);
 
     resize();
-    window.addEventListener('resize', () => { resize(); });
+    window.addEventListener('resize', resize);
     animId = requestAnimationFrame(tick);
 
     return () => {
@@ -241,6 +382,23 @@ export default function CoreEngine() {
   return (
     <section className="ce-section" ref={containerRef}>
       <canvas ref={canvasRef} className="ce-canvas" />
+
+      {/* Mobile: GSAP-animated div nodes */}
+      <div className="ce-mnodes" ref={mobileNodesRef}>
+        {mobileNodes.map((n, i) => (
+          <div
+            key={i}
+            className="ce-mnode"
+            style={{
+              left: `${n.x}%`,
+              top: `${n.y}%`,
+              width: n.size,
+              height: n.size,
+              opacity: 0.15,
+            }}
+          />
+        ))}
+      </div>
 
       {/* Header */}
       <div className="ce-header">
@@ -265,7 +423,7 @@ export default function CoreEngine() {
         </div>
       ))}
 
-      {/* Narration */}
+      {/* Desktop narration */}
       <div className="ce-narr">
         <p className="ce-narr__text">
           <strong>Achilles detected coordinated Hormuz closure rhetoric across IRGC channels and state media.</strong>
@@ -274,6 +432,11 @@ export default function CoreEngine() {
             Within minutes, it clustered the noise into a single narrative, mapped the actors driving it, and projected a 68% closure probability within 14 days — before the first headline was published. Act with confidence.
           </span>
         </p>
+      </div>
+
+      {/* Mobile: typewriter narration */}
+      <div className="ce-type-wrap">
+        <Typewriter trigger={cmdTrigger} />
       </div>
     </section>
   );

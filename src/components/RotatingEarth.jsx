@@ -1,58 +1,16 @@
 import { useEffect, useRef } from 'react';
-import { geoOrthographic, geoPath, geoBounds, geoGraticule } from 'd3-geo';
+import { geoOrthographic, geoPath, geoGraticule } from 'd3-geo';
 import { timer } from 'd3-timer';
 
 const A = '188, 255, 47';
 const R = '255, 60, 60';
 
 let geoCache = null;
-
-function ptInPoly(pt, ring) {
-  const [x, y] = pt;
-  let inside = false;
-  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
-    const [xi, yi] = ring[i];
-    const [xj, yj] = ring[j];
-    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi)
-      inside = !inside;
-  }
-  return inside;
-}
-
-function ptInFeature(pt, feature) {
-  const g = feature.geometry;
-  if (g.type === 'Polygon') {
-    if (!ptInPoly(pt, g.coordinates[0])) return false;
-    for (let i = 1; i < g.coordinates.length; i++)
-      if (ptInPoly(pt, g.coordinates[i])) return false;
-    return true;
-  }
-  if (g.type === 'MultiPolygon') {
-    for (const poly of g.coordinates) {
-      if (ptInPoly(pt, poly[0])) {
-        let hole = false;
-        for (let i = 1; i < poly.length; i++)
-          if (ptInPoly(pt, poly[i])) { hole = true; break; }
-        if (!hole) return true;
-      }
-    }
-  }
-  return false;
-}
+let dotsCache = null;
 
 function edgeFade(px, py, cx, cy, r) {
   const dist = Math.hypot(px - cx, py - cy);
   return Math.max(0, Math.min(1, (1 - dist / r) / 0.6));
-}
-
-function makeDots(feature, spacing = 16) {
-  const dots = [];
-  const [[minLng, minLat], [maxLng, maxLat]] = geoBounds(feature);
-  const step = spacing * 0.08;
-  for (let lng = minLng; lng <= maxLng; lng += step)
-    for (let lat = minLat; lat <= maxLat; lat += step)
-      if (ptInFeature([lng, lat], feature)) dots.push([lng, lat]);
-  return dots;
 }
 
 export default function RotatingEarth({ size = 600, alerts = [] }) {
@@ -166,21 +124,25 @@ export default function RotatingEarth({ size = 600, alerts = [] }) {
       }
     };
 
-    // load geojson (module-level cache)
-    const applyGeo = (data) => {
-      land = data;
-      data.features.forEach((f) => makeDots(f, 16).forEach((d) => dots.push(d)));
+    // load pre-computed dots + geojson (module-level cache)
+    const isMob = size < 400;
+    const dotsFile = isMob ? '/land-dots-24.json' : '/land-dots-16.json';
+    const applyData = (geoData, dotsData) => {
+      land = geoData;
+      dotsData.forEach(d => dots.push(d));
       render();
     };
-    if (geoCache) {
-      applyGeo(geoCache);
+    if (geoCache && dotsCache) {
+      applyData(geoCache, dotsCache);
     } else {
-      fetch(
-        'https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/110m/physical/ne_110m_land.json'
-      )
-        .then((r) => r.json())
-        .then((data) => { geoCache = data; applyGeo(data); })
-        .catch(() => {});
+      Promise.all([
+        geoCache ? Promise.resolve(geoCache) : fetch('/land.json').then(r => r.json()),
+        dotsCache ? Promise.resolve(dotsCache) : fetch(dotsFile).then(r => r.json()),
+      ]).then(([geo, pts]) => {
+        geoCache = geo;
+        dotsCache = pts;
+        applyData(geo, pts);
+      }).catch(() => {});
     }
 
     // auto-rotate

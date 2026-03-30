@@ -337,11 +337,14 @@ export default function UseCaseModal({ open, onClose, useCase, variant = 'a' }) 
   useEffect(() => {
     if (open) {
       setPhase('opening');
+      document.body.style.overflow = 'hidden';
     } else if (phase !== 'closed') {
       setPhase('closing');
+      document.body.style.overflow = '';
       const t = setTimeout(() => setPhase('closed'), 600);
       return () => clearTimeout(t);
     }
+    return () => { document.body.style.overflow = ''; };
   }, [open]);
 
   if (phase === 'closed') return null;

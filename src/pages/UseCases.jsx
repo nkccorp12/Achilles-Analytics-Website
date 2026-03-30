@@ -206,7 +206,7 @@ export default function UseCases() {
         <div
           ref={maritimeRef}
           className={`vg-usecase__card vg-usecase__card--maritime${maritimeActive ? ' vg-usecase__card--active' : ''}`}
-          onClick={() => { setMaritimeActive(!maritimeActive); setModalCase('maritime'); setModalVariant('b'); setModalOpen(true); }}
+          onClick={() => { setMaritimeActive(!maritimeActive); setModalCase('maritime'); setModalVariant('a'); setModalOpen(true); }}
         >
           <div className="vg-usecase__card-header">
             <div className="vg-usecase__card-icon">
@@ -234,7 +234,7 @@ export default function UseCases() {
         <div
           ref={infraRef}
           className={`vg-usecase__card vg-usecase__card--infra${infraActive ? ' vg-usecase__card--active' : ''}`}
-          onClick={() => { setInfraActive(!infraActive); setModalCase('infrastructure'); setModalVariant('c'); setModalOpen(true); }}
+          onClick={() => { setInfraActive(!infraActive); setModalCase('infrastructure'); setModalVariant('a'); setModalOpen(true); }}
         >
           <div className="vg-usecase__card-header">
             <div className="vg-usecase__card-icon">

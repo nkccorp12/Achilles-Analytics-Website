@@ -146,8 +146,8 @@
    ========================================================================== */
 
 .vg__section {
-  padding: var(--spacing-5xl) var(--spacing-xl);
-  max-width: 1320px;
+  padding: var(--spacing-5xl) clamp(1rem, 5vw, 3rem);
+  max-width: var(--content-max-width, 1320px);
   margin: 0 auto;
   position: relative;
 }

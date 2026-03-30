@@ -20,6 +20,9 @@
   --text-secondary: #888888;
   --text-dim: #555555;
 
+  --content-max-width: 1320px;
+  --content-padding: clamp(1rem, 5vw, 3rem);
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -52,4 +55,21 @@ a:hover {
 ::selection {
   background: var(--accent);
   color: var(--black);
+}
+
+.container {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin-inline: auto;
+  padding-inline: var(--content-padding);
+}
+
+/* ==========================================================================
+   WIDESCREEN — Comfortable density adjustments for 1440px+
+   ========================================================================== */
+
+@media (min-width: 1440px) {
+  :root {
+    --content-padding: clamp(2rem, 4vw, 4rem);
+  }
 }
