@@ -216,7 +216,7 @@ export default function LandingPage() {
           <source media="(max-width: 640px)" srcSet="/beammobile.webp" />
           <img
             ref={revealImgRef}
-            src="/background.webp?v=2"
+            src="/hero-bg.webp?v=2"
             alt=""
             width="1920"
             height="1080"
@@ -253,8 +253,8 @@ export default function LandingPage() {
           }
         }}
       >
-        <img src="/background.webp" alt="" className="neu-hero__bg" aria-hidden="true" />
-        <img src="/background.webp" alt="" className="neu-hero__bg-reveal" aria-hidden="true" />
+        <img src="/hero-bg.webp" alt="" className="neu-hero__bg" aria-hidden="true" />
+        <img src="/hero-bg.webp" alt="" className="neu-hero__bg-reveal" aria-hidden="true" />
         <div className="neu-hero__content">
           <h1 className="neu-hero__headline">
             Make the consequences <em>visible</em> — before they occur.

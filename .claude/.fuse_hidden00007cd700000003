@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rsync -avz -e \"ssh -p 2222\" --exclude='node_modules' --exclude='.git' --exclude='dist' /media/nkccorp/9AF48656F48635133/Projects/achilles-website/ root@66.102.141.221:/tmp/frontend-build/)",
+      "Bash(ssh -p 2222 root@66.102.141.221 \"cd /tmp/frontend-build && npm install --silent 2>&1 && npm run build 2>&1 && rm -rf /var/www/html/index.html /var/www/html/assets /var/www/html/design /var/www/html/favicon.ico /var/www/html/vite.svg && cp -r dist/* /var/www/html/ && rm -rf /tmp/frontend-build && echo DEPLOYED\")",
+      "WebSearch",
+      "WebFetch(domain:www.graphika.com)",
+      "WebFetch(domain:primer.ai)",
+      "WebFetch(domain:www.recordedfuture.com)",
+      "Bash(rsync -avz --partial --timeout=60 -e \"ssh -p 2222\" --exclude='.git' --exclude='dist' --exclude='*.png' --exclude='*.jpg' --exclude='*.webp' --exclude='*.zip' --exclude='template' /media/nkccorp/9AF48656F48635133/Projects/achilles-website/ root@66.102.141.221:/tmp/frontend-build/)",
+      "Bash(ssh -p 2222 -o ServerAliveInterval=10 root@66.102.141.221 \"cd /tmp/frontend-build && npm install --silent 2>&1 && npm run build 2>&1 && rm -rf /var/www/html/index.html /var/www/html/assets /var/www/html/favicon.ico /var/www/html/vite.svg && cp -r dist/* /var/www/html/ && rm -rf /tmp/frontend-build && echo DEPLOYED\")"
+    ]
+  }
+}

@@ -259,16 +259,17 @@
   .ce-mnode {
     position: absolute;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(188, 255, 47, 0.6) 0%, rgba(188, 255, 47, 0.2) 40%, transparent 70%);
+    background: radial-gradient(circle, rgba(188, 255, 47, 1) 0%, rgba(188, 255, 47, 0.6) 30%, transparent 65%);
     will-change: transform, opacity;
+    box-shadow: 0 0 12px rgba(188, 255, 47, 0.5), 0 0 24px rgba(188, 255, 47, 0.2);
   }
 
   .ce-mnode::after {
     content: '';
     position: absolute;
-    inset: -12px;
+    inset: -18px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(188, 255, 47, 0.18) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(188, 255, 47, 0.25) 0%, transparent 65%);
     pointer-events: none;
   }
 
@@ -304,7 +305,7 @@
     order: 2;
     opacity: 0;
     transform: translateX(30px);
-    transition: opacity 0.4s ease, transform 0.5s ease;
+    transition: opacity 1.3s ease, transform 1.8s cubic-bezier(0.16, 1, 0.3, 1);
     border-left-width: 3px;
   }
 

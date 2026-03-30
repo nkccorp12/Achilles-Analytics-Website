@@ -376,6 +376,14 @@
   padding: 96px 0;
   position: relative;
   z-index: 2;
+  opacity: 0;
+  animation: heroFadeIn 0.6s ease forwards;
+  animation-delay: 0.5s;
+}
+
+@keyframes heroFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .neu-hero__headline {
@@ -428,6 +436,14 @@
 .neu-hero__cta--primary {
   background-color: var(--accent);
   color: var(--black);
+}
+
+@media (max-width: 640px) {
+  .neu-hero__cta--primary {
+    background-color: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
 }
 
 .neu-hero__cta--primary:hover {
@@ -911,15 +927,16 @@
 
   .neu-hero {
     padding: 16px;
-    padding-top: 120px;
+    padding-top: 56px;
     margin-top: 0;
-    min-height: 75vh;
-    min-height: 75dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 
   .neu-hero__content {
     padding: 0 0 24px;
     justify-content: flex-end;
+    padding-bottom: 8vh;
   }
 
   .neu-hero__headline {
@@ -938,6 +955,20 @@
     text-align: center;
     justify-content: center;
     width: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .neu-hero__cta--primary:hover,
+  .neu-hero__cta--primary:active {
+    background-color: var(--accent);
+    color: var(--black);
+    box-shadow: none;
+  }
+
+  .neu-hero__cta--secondary:hover,
+  .neu-hero__cta--secondary:active {
+    background-color: transparent;
+    box-shadow: none;
   }
 
   /* Background logo — same as positioned above */
@@ -949,7 +980,7 @@
     width: 80% !important;
     height: auto !important;
     transform: translate(-50%, -50%);
-    opacity: 0.25 !important;
+    opacity: 0.3 !important;
     mix-blend-mode: normal !important;
     filter: none;
     -webkit-mask-image: none !important;

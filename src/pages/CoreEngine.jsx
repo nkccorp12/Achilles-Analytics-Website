@@ -330,10 +330,10 @@ export default function CoreEngine() {
           // Reveal boxes with stagger (mobile waits for viewport)
           boxes.forEach(box => {
             const stage = +box.dataset.stage;
-            setTimeout(() => box.classList.add('ce-sbox--visible'), isMob ? 300 + stage * 400 : 800 + stage * 600);
+            setTimeout(() => box.classList.add('ce-sbox--visible'), isMob ? 650 + stage * 1040 : 800 + stage * 600);
           });
           // Mobile: after cards visible, collapse top 3 → only Risk remains
-          const collapseDelay = 300 + 3 * 400 + 1000;
+          const collapseDelay = 650 + 3 * 1040 + 1560;
           if (isMob) {
             setTimeout(() => {
               boxes.forEach(box => {
@@ -394,7 +394,7 @@ export default function CoreEngine() {
               top: `${n.y}%`,
               width: n.size,
               height: n.size,
-              opacity: 0.5,
+              opacity: 1,
             }}
           />
         ))}
