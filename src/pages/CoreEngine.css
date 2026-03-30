@@ -259,20 +259,20 @@
   .ce-mnode {
     position: absolute;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(188, 255, 47, 0.5) 0%, rgba(188, 255, 47, 0.15) 40%, transparent 70%);
+    background: radial-gradient(circle, rgba(188, 255, 47, 0.6) 0%, rgba(188, 255, 47, 0.2) 40%, transparent 70%);
     will-change: transform, opacity;
   }
 
   .ce-mnode::after {
     content: '';
     position: absolute;
-    inset: -8px;
+    inset: -12px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(188, 255, 47, 0.12) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(188, 255, 47, 0.18) 0%, transparent 70%);
     pointer-events: none;
   }
 
-  /* Header — top, full width, hidden until animation done */
+  /* Header — top, full width, always visible */
   .ce-header {
     position: relative;
     top: auto;
@@ -280,14 +280,6 @@
     max-width: none;
     padding: 28px 20px 12px;
     order: 0;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-
-  .ce-header--visible {
-    opacity: 1;
-    transform: translateY(0);
   }
 
   .ce-tag {
@@ -301,7 +293,7 @@
     line-height: 1.3;
   }
 
-  /* ── Cards: uniform stack, slide in from right ── */
+  /* ── Cards: visible on viewport entry, collapse animates later ── */
   .ce-sbox {
     position: relative;
     left: auto !important;
@@ -311,8 +303,8 @@
     padding: 16px 18px;
     order: 2;
     opacity: 0;
-    transform: translateX(80px);
-    transition: opacity 1s ease, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateX(30px);
+    transition: opacity 0.4s ease, transform 0.5s ease;
     border-left-width: 3px;
   }
 

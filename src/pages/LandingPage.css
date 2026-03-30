@@ -296,6 +296,50 @@
   z-index: 10;
 }
 
+/* Background reveal on hover (desktop only) */
+.neu-hero__bg {
+  position: absolute;
+  top: 10%;
+  left: -15%;
+  width: 80%;
+  height: 80%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.1;
+  mix-blend-mode: lighten;
+}
+
+/* Reveal layer — brighter circle follows mouse */
+.neu-hero__bg-reveal {
+  position: absolute;
+  top: 10%;
+  left: -15%;
+  width: 80%;
+  height: 80%;
+  object-fit: cover;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.3;
+  mix-blend-mode: lighten;
+  --mx: -9999px;
+  --my: -9999px;
+  -webkit-mask-image: radial-gradient(
+    circle 180px at var(--mx) var(--my),
+    rgba(255,255,255,1) 0px,
+    rgba(255,255,255,0.6) 70px,
+    rgba(255,255,255,0.2) 130px,
+    rgba(255,255,255,0) 180px
+  );
+  mask-image: radial-gradient(
+    circle 180px at var(--mx) var(--my),
+    rgba(255,255,255,1) 0px,
+    rgba(255,255,255,0.6) 70px,
+    rgba(255,255,255,0.2) 130px,
+    rgba(255,255,255,0) 180px
+  );
+}
+
 /* Top bar */
 .neu-hero__topbar {
   display: flex;
@@ -330,6 +374,8 @@
   width: 100%;
   max-width: 960px;
   padding: 96px 0;
+  position: relative;
+  z-index: 2;
 }
 
 .neu-hero__headline {
@@ -892,6 +938,26 @@
     text-align: center;
     justify-content: center;
     width: 100%;
+  }
+
+  /* Background — atmospheric recon image behind hero text */
+  .neu-hero__bg {
+    top: 17% !important;
+    left: 25% !important;
+    right: auto;
+    bottom: auto;
+    width: 80% !important;
+    height: auto !important;
+    transform: translate(-50%, -50%);
+    opacity: 0.25 !important;
+    mix-blend-mode: normal !important;
+    filter: none;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+  }
+
+  .neu-hero__bg-reveal {
+    display: none;
   }
 
   /* Globe on mobile — top right, contained */

@@ -43,12 +43,12 @@ function generateMobileNodes() {
     nodes.push({
       x: rand(8, 92),   // % position
       y: rand(8, 92),
-      size: rand(4, 10),
-      delay: rand(0, 3),
+      size: rand(6, 14),
+      delay: rand(0, 1),
       duration: rand(4, 8),
       driftX: rand(-15, 15),
       driftY: rand(-10, 10),
-      opacity: rand(0.3, 0.7),
+      opacity: rand(0.5, 0.9),
     });
   }
   return nodes;
@@ -327,13 +327,13 @@ export default function CoreEngine() {
           state.revealStart = performance.now();
           const boxes = container.querySelectorAll('.ce-sbox');
           const isMob = cw < 640;
-          const collapseDelay = 400 + 3 * 500 + 1000;
-          // Reveal boxes with staggered delay
+          // Reveal boxes immediately with fast stagger
           boxes.forEach(box => {
             const stage = +box.dataset.stage;
-            setTimeout(() => box.classList.add('ce-sbox--visible'), isMob ? 400 + stage * 500 : 800 + stage * 600);
+            setTimeout(() => box.classList.add('ce-sbox--visible'), isMob ? 100 + stage * 150 : 800 + stage * 600);
           });
-          // Mobile: after all cards fly in, collapse top 3 → only Risk remains
+          // Mobile: after cards visible, collapse top 3 → only Risk remains
+          const collapseDelay = 100 + 3 * 150 + 800;
           if (isMob) {
             setTimeout(() => {
               boxes.forEach(box => {
@@ -365,7 +365,7 @@ export default function CoreEngine() {
           }
         }
       });
-    }, { threshold: 0.3 });
+    }, { threshold: 0.1 });
     obs.observe(container);
 
     resize();

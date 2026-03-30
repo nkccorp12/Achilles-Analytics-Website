@@ -91,66 +91,47 @@ function HeroSection() {
 // ═══════════════════════════════════════════════════════════════════════════
 
 const INTEL_PRODUCTS = [
-  { group: 'THE EYES',  name: 'Crisis Map',          desc: 'Real-time global crisis monitoring & geospatial threat visualization.', img: '/map.webp' },
-  { group: 'THE BRAIN', name: 'Digital Twin',         desc: '3D network relationship mapping of adversary connections.', img: '/twin.webp' },
-  { group: 'THE BRAIN', name: 'OSINT Atlas',          desc: 'Active tool orchestration for targeted intelligence gathering.', img: '/twin2.webp' },
-  { group: 'THE VOICE', name: 'AI Strategic Council', desc: 'Multi-persona AI debate engine for adversarial stress-testing.', img: '/report.webp' },
+  { group: 'THE EYES',  name: 'Crisis Map',          desc: 'Real-time global crisis monitoring & geospatial threat visualization.', img: '/map.webp', fx: 'scan' },
+  { group: 'THE BRAIN', name: 'Digital Twin',         desc: '3D network relationship mapping of adversary connections.', img: '/twin.webp', fx: 'scan' },
+  { group: 'THE BRAIN', name: 'OSINT Atlas',          desc: 'Active tool orchestration for targeted intelligence gathering.', img: '/twin2.webp', fx: 'scan' },
+  { group: 'THE VOICE', name: 'AI Strategic Council', desc: 'Multi-persona AI debate engine for adversarial stress-testing.', img: '/report.webp', fx: 'scan' },
 ];
 
 function PhilosophySection() {
-  // Responsive breakpoint detection
-  const isMobile = useMediaQuery('(max-width: 640px)');
-  const isTablet = useMediaQuery('(max-width: 1024px)');
-
-  // Compute responsive dimensions based on viewport
-  const cardWidth = isMobile ? 280 : isTablet ? 320 : 380;
-  const cardHeight = isMobile ? 220 : isTablet ? 280 : 320;
-  const cardDist = isMobile ? 25 : isTablet ? 32 : 40;
-  const vertDist = isMobile ? 20 : isTablet ? 40 : 50;
-
   return (
     <section className="vg__section" id="philosophy">
       <div className="vg__section-label">// Philosophy</div>
-      <div className="vg-philosophy">
-        {/* Left: Text */}
-        <div className="vg-philosophy__text">
-          <blockquote className="vg-philosophy__quote">
-            &ldquo;The critical failure is never a lack of information — it is a lack of structured interpretation.&rdquo;
-          </blockquote>
-          <p className="vg-philosophy__message">
-            We do not replace intuition with AI — we make{' '}
-            <strong>decision logic explicit and auditable</strong>. Every
-            analytical output traces back to its source assumptions, every risk
-            assessment carries a documented rationale, and every recommendation
-            is stress-tested against adversarial perspectives.
-          </p>
-        </div>
 
-        {/* Right: Card Swap */}
-        <div className="vg-philosophy__panel">
-          <CardSwap
-            width={cardWidth}
-            height={cardHeight}
-            cardDistance={cardDist}
-            verticalDistance={vertDist}
-            delay={3000}
-            pauseOnHover={false}
-            skewAmount={4}
-            easing="elastic"
-          >
-            {INTEL_PRODUCTS.map((p) => (
-              <Card key={p.name} className="vg-philosophy__card">
-                <img src={p.img} alt="" className="vg-philosophy__card-img" />
-                <div className="vg-philosophy__card-body">
-                  <span className="vg-philosophy__card-tag">{p.group}</span>
-                  <h4 className="vg-philosophy__card-title">{p.name}</h4>
-                  <p className="vg-philosophy__card-desc">{p.desc}</p>
-                </div>
-              </Card>
-            ))}
-          </CardSwap>
+      {/* Text block — full width above grid */}
+      <div className="vg-philosophy__text">
+        <blockquote className="vg-philosophy__quote">
+          &ldquo;The critical failure is never a lack of information — it is a lack of structured interpretation.&rdquo;
+        </blockquote>
+        <p className="vg-philosophy__message">
+          We do not replace intuition with AI — we make{' '}
+          <strong>decision logic explicit and auditable</strong>. Every
+          analytical output traces back to its source assumptions, every risk
+          assessment carries a documented rationale, and every recommendation
+          is stress-tested against adversarial perspectives.
+        </p>
+      </div>
 
-        </div>
+      {/* Product grid */}
+      <div className="vg-philosophy__grid">
+        {INTEL_PRODUCTS.map((p) => (
+          <div key={p.name} className={`vg-pgrid__card${p.fx ? ` vg-pgrid--${p.fx}` : ''}`}>
+            <div className="vg-pgrid__img-wrap">
+              <img src={p.img} alt={p.name} className="vg-pgrid__img" loading="lazy" />
+              {p.fx === 'scan' && <div className="vg-pgrid__scanline" />}
+              <div className="vg-pgrid__img-fade" />
+            </div>
+            <div className="vg-pgrid__info">
+              <span className="vg-pgrid__tag">{p.group}</span>
+              <h4 className="vg-pgrid__title">{p.name}</h4>
+              <p className="vg-pgrid__desc">{p.desc}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );
