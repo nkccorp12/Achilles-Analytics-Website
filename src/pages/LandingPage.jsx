@@ -117,6 +117,7 @@ export default function LandingPage() {
   const [ctaVisible, setCtaVisible] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [desktopNotice, setDesktopNotice] = useState(false);
 
   useEffect(() => {
     const impact = impactRef.current;
@@ -158,7 +159,9 @@ export default function LandingPage() {
             <a href="#use-cases" className="neu-header__link" onClick={() => setMenuOpen(false)}>Case Study</a>
             <a href="#intel-stack" className="neu-header__link" onClick={() => setMenuOpen(false)}>The Stack</a>
             <button onClick={() => { setContactOpen(true); setMenuOpen(false); }} className="neu-header__link neu-header__link--btn">Reach Out</button>
-            <a href="/app" className={`neu-header__cta${ctaVisible ? ' neu-header__cta--visible' : ''}`}>Access Platform</a>
+            <a href="/app" className={`neu-header__cta${ctaVisible ? ' neu-header__cta--visible' : ''}`} onClick={(e) => {
+              if (window.innerWidth < 640) { e.preventDefault(); setDesktopNotice(true); }
+            }}>Access Platform</a>
           </nav>
         </div>
       </header>
@@ -266,7 +269,11 @@ export default function LandingPage() {
             <Cursor />
           </p>
           <div className="neu-hero__ctas">
-            <a href="/app" className="neu-hero__cta neu-hero__cta--primary">
+            <a href="/app" className="neu-hero__cta neu-hero__cta--primary" onClick={(e) => {
+              if (window.innerWidth < 640) {
+                e.preventDefault(); setDesktopNotice(true);
+              }
+            }}>
               Access Platform
             </a>
             <a href="#reach-out" className="neu-hero__cta neu-hero__cta--secondary">
@@ -330,6 +337,27 @@ export default function LandingPage() {
 
       {/* ═══ CONTACT MODAL ═══ */}
       <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
+
+      {/* ═══ DESKTOP NOTICE MODAL ═══ */}
+      {desktopNotice && (
+        <div className="neu-notice__overlay" onClick={() => setDesktopNotice(false)}>
+          <div className="neu-notice" onClick={(e) => e.stopPropagation()}>
+            <div className="neu-notice__icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
+            </div>
+            <p className="neu-notice__text">
+              The platform is currently optimized for <strong>desktop only</strong>. Please switch to a laptop or desktop for full access.
+            </p>
+            <button className="neu-notice__btn" onClick={() => setDesktopNotice(false)}>
+              Understood
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

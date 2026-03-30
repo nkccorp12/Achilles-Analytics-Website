@@ -597,6 +597,85 @@
 }
 
 /* ==========================================================================
+   DESKTOP NOTICE MODAL
+   ========================================================================== */
+
+.neu-notice__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  animation: noticeOverlayIn 0.3s ease;
+}
+
+.neu-notice {
+  background: #0a0a0a;
+  border: 1px solid rgba(188, 255, 47, 0.15);
+  padding: 28px 24px;
+  max-width: 340px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  animation: noticeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neu-notice__icon {
+  color: var(--accent);
+  opacity: 0.7;
+}
+
+.neu-notice__text {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.neu-notice__text strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.neu-notice__btn {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 12px 32px;
+  background: transparent;
+  border: 1px solid rgba(188, 255, 47, 0.25);
+  color: var(--accent);
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+}
+
+.neu-notice__btn:hover {
+  background: rgba(188, 255, 47, 0.06);
+  border-color: var(--accent);
+}
+
+@keyframes noticeOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes noticeSlideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
    CONTACT MODAL — Spaceship Hatch Animation
    ========================================================================== */
 
