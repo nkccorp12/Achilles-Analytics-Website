@@ -126,7 +126,7 @@ function HeroSection() {
         conviction.
       </p>
       <div className="ach-hero__ctas">
-        <a href="http://82.165.45.74:8100" className="ach-btn ach-btn--primary">
+        <a href="/app" className="ach-btn ach-btn--primary">
           Access Platform
         </a>
         <button className="ach-btn ach-btn--glass">

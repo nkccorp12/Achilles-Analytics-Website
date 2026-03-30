@@ -68,7 +68,7 @@ function HeroSection() {
           <Cursor />
         </p>
         <div className="vg-hero__ctas">
-          <a href="http://82.165.45.74:8100" className="vg-hero__cta vg-hero__cta--primary">
+          <a href="/app" className="vg-hero__cta vg-hero__cta--primary">
             Access Platform
           </a>
           <a href="#architecture" className="vg-hero__cta vg-hero__cta--secondary">
