@@ -327,13 +327,13 @@ export default function CoreEngine() {
           state.revealStart = performance.now();
           const boxes = container.querySelectorAll('.ce-sbox');
           const isMob = cw < 640;
-          // Reveal boxes immediately with fast stagger
+          // Reveal boxes with stagger (mobile waits for viewport)
           boxes.forEach(box => {
             const stage = +box.dataset.stage;
-            setTimeout(() => box.classList.add('ce-sbox--visible'), isMob ? 100 + stage * 150 : 800 + stage * 600);
+            setTimeout(() => box.classList.add('ce-sbox--visible'), isMob ? 300 + stage * 400 : 800 + stage * 600);
           });
           // Mobile: after cards visible, collapse top 3 → only Risk remains
-          const collapseDelay = 100 + 3 * 150 + 800;
+          const collapseDelay = 300 + 3 * 400 + 1000;
           if (isMob) {
             setTimeout(() => {
               boxes.forEach(box => {
@@ -394,7 +394,7 @@ export default function CoreEngine() {
               top: `${n.y}%`,
               width: n.size,
               height: n.size,
-              opacity: 0.15,
+              opacity: 0.5,
             }}
           />
         ))}

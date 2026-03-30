@@ -911,14 +911,14 @@
 
   .neu-hero {
     padding: 16px;
-    margin-top: 0;
+    padding-top: 120px;
     margin-top: 0;
     min-height: 75vh;
     min-height: 75dvh;
   }
 
   .neu-hero__content {
-    padding: 24px 0 24px;
+    padding: 0 0 24px;
     justify-content: flex-end;
   }
 
@@ -927,7 +927,7 @@
   }
 
   .neu-hero__sub {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
 
   .neu-hero__ctas {
@@ -938,9 +938,10 @@
     text-align: center;
     justify-content: center;
     width: 100%;
+    padding: 12px 32px;
   }
 
-  /* Background — atmospheric recon image behind hero text */
+  /* Background logo — same as positioned above */
   .neu-hero__bg {
     top: 17% !important;
     left: 25% !important;
