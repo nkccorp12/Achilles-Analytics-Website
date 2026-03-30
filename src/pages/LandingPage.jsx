@@ -232,29 +232,7 @@ export default function LandingPage() {
       </section>
 
       {/* ═══ HERO SECTION (cloned from landing) ═══ */}
-      <section
-        className="neu-hero"
-        ref={heroRef}
-        onPointerMove={(e) => {
-          if (e.pointerType === 'touch') return;
-          const el = heroRef.current?.querySelector('.neu-hero__bg-reveal');
-          if (el) {
-            const rect = heroRef.current.getBoundingClientRect();
-            el.style.setProperty('--mx', `${e.clientX - rect.left}px`);
-            el.style.setProperty('--my', `${e.clientY - rect.top}px`);
-          }
-        }}
-        onPointerLeave={(e) => {
-          if (e.pointerType === 'touch') return;
-          const el = heroRef.current?.querySelector('.neu-hero__bg-reveal');
-          if (el) {
-            el.style.setProperty('--mx', '-9999px');
-            el.style.setProperty('--my', '-9999px');
-          }
-        }}
-      >
-        <img src="/background.webp" alt="" className="neu-hero__bg" aria-hidden="true" />
-        <img src="/background.webp" alt="" className="neu-hero__bg-reveal" aria-hidden="true" />
+      <section className="neu-hero" ref={heroRef}>
         <div className="neu-hero__content">
           <h1 className="neu-hero__headline">
             Make the consequences <em>visible</em> — before they occur.

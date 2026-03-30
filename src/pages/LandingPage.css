@@ -944,25 +944,6 @@
     padding: 12px 32px;
   }
 
-  /* Background wallpaper on mobile — behind hero text */
-  .neu-hero__bg {
-    top: 40% !important;
-    left: 50% !important;
-    right: auto;
-    bottom: auto;
-    width: 90% !important;
-    height: auto !important;
-    transform: translate(-50%, -50%);
-    opacity: 0.35 !important;
-    mix-blend-mode: normal !important;
-    filter: none;
-    -webkit-mask-image: none !important;
-    mask-image: none !important;
-  }
-
-  .neu-hero__bg-reveal {
-    display: none;
-  }
 
   /* Globe on mobile — top right, contained */
   .neu-hero__globe {
