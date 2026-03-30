@@ -1,0 +1,203 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   LEGAL PAGES — Privacy Policy & Terms of Service
+   Shared styling: dark, minimal, military-analytical
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.legal-page {
+  min-height: 100vh;
+  background: var(--black);
+  color: var(--text-secondary);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.9rem;
+  line-height: 1.75;
+  padding: 0 0 80px;
+}
+
+/* ─── Top bar ─── */
+
+.legal-page__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px clamp(1.5rem, 5vw, 3rem);
+  border-bottom: 1px solid var(--border);
+}
+
+.legal-page__back {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  cursor: pointer;
+  transition: opacity 0.2s;
+  text-decoration: none;
+}
+
+.legal-page__back:hover {
+  opacity: 0.7;
+}
+
+.legal-page__wordmark {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  user-select: none;
+}
+
+/* ─── Content container ─── */
+
+.legal-page__content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 60px clamp(1.5rem, 5vw, 3rem) 0;
+}
+
+/* ─── Header ─── */
+
+.legal-page__title {
+  font-family: 'IBM Plex Serif', serif;
+  font-weight: 600;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  color: var(--text-primary);
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
+
+.legal-page__effective {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 48px;
+}
+
+/* ─── Sections ─── */
+
+.legal-page__section {
+  padding-top: 36px;
+  margin-top: 36px;
+  border-top: 1px solid var(--border);
+}
+
+.legal-page__section:first-of-type {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.legal-page__section-title {
+  font-family: 'IBM Plex Serif', serif;
+  font-weight: 500;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  letter-spacing: 0.3px;
+}
+
+.legal-page__section p {
+  margin-bottom: 14px;
+}
+
+.legal-page__section p:last-child {
+  margin-bottom: 0;
+}
+
+/* ─── Lists ─── */
+
+.legal-page__section ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 12px 0;
+}
+
+.legal-page__section ul li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 8px;
+}
+
+.legal-page__section ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 6px;
+  height: 1px;
+  background: var(--accent);
+}
+
+/* ─── Email links ─── */
+
+.legal-page__section a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.legal-page__section a:hover {
+  opacity: 0.7;
+}
+
+/* ─── Bottom mark ─── */
+
+.legal-page__footer {
+  max-width: 800px;
+  margin: 64px auto 0;
+  padding: 24px clamp(1.5rem, 5vw, 3rem) 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.legal-page__footer-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE — Mobile adjustments
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .legal-page {
+    font-size: 0.85rem;
+    padding-bottom: 48px;
+  }
+
+  .legal-page__topbar {
+    padding: 16px 1rem;
+  }
+
+  .legal-page__wordmark {
+    font-size: 0.6rem;
+    letter-spacing: 2.5px;
+  }
+
+  .legal-page__content {
+    padding-top: 40px;
+  }
+
+  .legal-page__title {
+    margin-bottom: 8px;
+  }
+
+  .legal-page__effective {
+    margin-bottom: 32px;
+  }
+
+  .legal-page__section {
+    padding-top: 28px;
+    margin-top: 28px;
+  }
+
+  .legal-page__footer {
+    margin-top: 40px;
+  }
+}

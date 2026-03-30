@@ -88,6 +88,7 @@ function ContactModal({ open, onClose }) {
                 <span className="nm-submit__text">Transmit</span>
                 <span className="nm-submit__arrow">&rarr;</span>
               </button>
+              <p className="nm-consent">By contacting us, you consent to the processing of your inquiry per our <a href="/privacy">Privacy Policy</a>.</p>
             </form>
           ) : (
             <div className="nm-sent">
@@ -334,6 +335,17 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ═══ LEGAL FOOTER ═══ */}
+      <footer className="neu-legal">
+        <div className="neu-legal__links">
+          <a href="/privacy" className="neu-legal__link">Privacy Policy</a>
+          <span className="neu-legal__sep">&middot;</span>
+          <a href="/terms" className="neu-legal__link">Terms of Service</a>
+        </div>
+        <p className="neu-legal__copy">&copy; 2026 Achilles Analytics. All rights reserved.</p>
+        <p className="neu-legal__loc">Canada</p>
+      </footer>
 
       {/* ═══ CONTACT MODAL ═══ */}
       <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
