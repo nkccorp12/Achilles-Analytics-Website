@@ -316,9 +316,10 @@ function AICouncil() {
         <p className="council__cta-tagline">
           <span>4</span> Models. <span>3</span> Stages. <span>1</span> Consensus.
         </p>
-        <span className="council__cta-button council__cta-button--soon">
-          Coming Soon
-        </span>
+        <a href="https://council.achillesanalytics.ca" target="_blank" rel="noopener noreferrer" className="council__cta-button">
+          Launch Council Platform
+          <span className="council__cta-arrow">&#8599;</span>
+        </a>
       </div>
     </section>
   );
