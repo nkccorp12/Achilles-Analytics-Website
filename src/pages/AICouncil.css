@@ -7,14 +7,14 @@
 
 /* ── CSS Custom Properties (component-scoped) ──────────────── */
 .council {
-  --bg: #080c12;
-  --bg-panel: #0d1219;
-  --bg-panel-hover: #111820;
+  --bg: #0a0a0a;
+  --bg-panel: #111111;
+  --bg-panel-hover: #161616;
   --border: rgba(255, 255, 255, 0.06);
   --border-bright: rgba(255, 255, 255, 0.1);
   --text: #e2e5ea;
-  --text-dim: #6b7a8d;
-  --text-muted: #3a4658;
+  --text-dim: #777777;
+  --text-muted: #444444;
   --accent: #BCFF2F;
   --accent-dim: rgba(188, 255, 47, 0.1);
   --accent-glow: rgba(188, 255, 47, 0.25);
