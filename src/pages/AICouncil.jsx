@@ -1,307 +1,326 @@
-import { useEffect, useRef, useState } from 'react';
 import './AICouncil.css';
 
 /* ==========================================================================
-   AI COUNCIL PAGE — "Tactical Grid" Design System
-   Suez Canal Scenario — Simulated council of AI agents
+   AI COUNCIL — Style 5 "Isometric Data Viz"
+   Ported from prototypes/style5-isometric.html
    ========================================================================== */
-
-// --- Inline SVG Icons ---
-
-const IconTerminal = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-    strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="4 17 10 11 4 5" />
-    <line x1="12" y1="19" x2="20" y2="19" />
-  </svg>
-);
-
-const IconRefresh = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-    strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="23 4 23 10 17 10" />
-    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
-  </svg>
-);
-
-// --- Synthesis Strategies (Suez Canal) ---
-
-const STRATEGIES = [
-  { name: 'Cape Reroute',           conf: 72.3, tag: 'COST_IMPACT: +340%' },
-  { name: 'Turkey Rail Corridor',   conf: 89.4, tag: 'TIME_DELTA: +3 DAYS' },
-  { name: 'Suez Negotiation',       conf: 34.1, tag: 'RISK: CRITICAL' },
-  { name: 'EU Pre-Stock Warehouse', conf: 91.7, tag: 'DELAY: 0 DAYS' },
-];
-
-// --- Animated Synthesis Overlay ---
-
-function SynthesisOverlay() {
-  const [idx, setIdx] = useState(0);
-  const [simulating, setSimulating] = useState(false);
-  const [displayConf, setDisplayConf] = useState(STRATEGIES[0].conf);
-  const ref = useRef(null);
-  const startedRef = useRef(false);
-  const idxRef = useRef(0);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    let timeout;
-    let counterIv;
-
-    const runCycle = () => {
-      setSimulating(true);
-
-      const next = (idxRef.current + 1) % STRATEGIES.length;
-      const target = STRATEGIES[next].conf;
-      const steps = 20;
-      const duration = 1500;
-      let start = null;
-
-      const countFrame = (now) => {
-        if (!start) start = now;
-        const elapsed = now - start;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 2);
-        setDisplayConf(+(eased * target).toFixed(1));
-        if (progress < 1) {
-          counterIv = requestAnimationFrame(countFrame);
-        } else {
-          setDisplayConf(target);
-          setSimulating(false);
-          idxRef.current = next;
-          setIdx(next);
-          timeout = setTimeout(runCycle, 5000);
-        }
-      };
-      counterIv = requestAnimationFrame(countFrame);
-    };
-
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !startedRef.current) {
-        startedRef.current = true;
-        timeout = setTimeout(runCycle, 4000);
-      }
-    }, { threshold: 0.3 });
-    io.observe(el);
-
-    return () => { clearTimeout(timeout); cancelAnimationFrame(counterIv); io.disconnect(); };
-  }, []);
-
-  const strat = STRATEGIES[idx];
-
-  return (
-    <div className="vg-council__synthesis" ref={ref}>
-      <span className="vg-council__synthesis-label">Synthesis Result</span>
-      <span className={`vg-council__synthesis-value${simulating ? ' vg-council__synthesis-value--sim' : ''}`}>
-        {simulating ? 'Re-simulating...' : strat.name}
-      </span>
-      <span className={`vg-council__synthesis-confidence${simulating ? ' vg-council__synthesis-confidence--active' : ''}`}>
-        CONFIDENCE: {displayConf}%
-      </span>
-    </div>
-  );
-}
-
-// ==========================================================================
-// AI COUNCIL COMPONENT
-// ==========================================================================
 
 function AICouncil() {
   return (
-    <section className="vg-council" id="ai-council">
-      {/* Section label */}
-      <div className="vg__section-label">// AI COUNCIL</div>
+    <section className="council" id="ai-council">
+      {/* Grid background */}
+      <div className="council__grid-bg" />
 
-      {/* Header area */}
-      <div className="vg-council__header">
-        <div className="vg-council__badge">
-          <span className="vg-council__badge-dot" />
-          <span className="vg-council__badge-label">Spotlight Feature</span>
+      {/* Header + Counters */}
+      <div className="council__header reveal d1">
+        <div className="council__header-left">
+          <div className="council__tag">
+            <span className="council__tag-dot" />
+            AI Council
+          </div>
+          <h1 className="council__headline">
+            Escape the<br />Echo <em>Chamber.</em>
+          </h1>
+          <p className="council__subheadline">
+            Four frontier models answer the same question independently, rank each other
+            through blind peer review, then a synthesizer distills the consensus. Multi-model
+            intelligence, no single point of failure.
+          </p>
         </div>
-        <h1 className="vg-council__headline">Escape the Echo Chamber.</h1>
-        <p className="vg-council__description">
-          A simulated council of AI agents with distinct personas challenges your assumptions, forcing rigorous debate before execution.
+        <div className="council__counters">
+          <div className="council__counter">
+            <div className="council__counter-num">4</div>
+            <div className="council__counter-label">Models</div>
+          </div>
+          <div className="council__counter">
+            <div className="council__counter-num">3</div>
+            <div className="council__counter-label">Stages</div>
+          </div>
+          <div className="council__counter">
+            <div className="council__counter-num">1</div>
+            <div className="council__counter-label">Consensus</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Isometric pipeline */}
+      <div className="council__pipeline reveal d2">
+        <div className="council__pipeline-track">
+          <div className="council__hex">
+            <div className="council__hex-border" />
+            <div className="council__hex-shape" />
+            <div className="council__hex-content">
+              <div className="council__hex-stage">Stage 1</div>
+              <div className="council__hex-name">Collect</div>
+              <div className="council__hex-desc">4 models respond</div>
+            </div>
+          </div>
+
+          <div className="council__pipe">
+            <div className="council__pipe-flow" />
+            <div className="council__pipe-particle council__pipe-particle--r" />
+            <div className="council__pipe-particle council__pipe-particle--b" />
+            <div className="council__pipe-particle council__pipe-particle--g" />
+          </div>
+
+          <div className="council__hex">
+            <div className="council__hex-border" />
+            <div className="council__hex-shape" />
+            <div className="council__hex-content">
+              <div className="council__hex-stage">Stage 2</div>
+              <div className="council__hex-name">Rank</div>
+              <div className="council__hex-desc">Peer review</div>
+            </div>
+          </div>
+
+          <div className="council__pipe">
+            <div className="council__pipe-flow" />
+            <div className="council__pipe-particle council__pipe-particle--r" />
+            <div className="council__pipe-particle council__pipe-particle--b" />
+            <div className="council__pipe-particle council__pipe-particle--g" />
+          </div>
+
+          <div className="council__hex">
+            <div className="council__hex-border" />
+            <div className="council__hex-shape" />
+            <div className="council__hex-content">
+              <div className="council__hex-stage">Stage 3</div>
+              <div className="council__hex-name">Synthesize</div>
+              <div className="council__hex-desc">Consensus</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Persona data panels */}
+      <div className="council__panels reveal d3">
+        {/* Cynic */}
+        <div className="council__panel council__panel--cynic">
+          <div className="council__panel-accent" />
+          <div className="council__panel-header">
+            <span className="council__panel-name">The Cynic</span>
+            <span className="council__panel-model">Model A</span>
+          </div>
+          <p className="council__panel-text">
+            You&rsquo;ll burn 18 months and $2M training a model that GPT-6 will obsolete
+            before your next board meeting. Rent the foundation, invest in distribution.
+          </p>
+          <div className="council__bars">
+            <div className="council__bar-row">
+              <span className="council__bar-label">Confidence</span>
+              <div className="council__bar-track">
+                <div className="council__bar-fill" style={{ width: '88%' }} />
+              </div>
+              <span className="council__bar-value">88%</span>
+            </div>
+            <div className="council__bar-row">
+              <span className="council__bar-label">Relevance</span>
+              <div className="council__bar-track">
+                <div className="council__bar-fill" style={{ width: '72%' }} />
+              </div>
+              <span className="council__bar-value">72%</span>
+            </div>
+            <div className="council__bar-row">
+              <span className="council__bar-label">Novelty</span>
+              <div className="council__bar-track">
+                <div className="council__bar-fill" style={{ width: '45%' }} />
+              </div>
+              <span className="council__bar-value">45%</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Strategist */}
+        <div className="council__panel council__panel--strategist">
+          <div className="council__panel-accent" />
+          <div className="council__panel-header">
+            <span className="council__panel-name">The Strategist</span>
+            <span className="council__panel-model">Model B</span>
+          </div>
+          <p className="council__panel-text">
+            Fine-tune on proprietary data, but don&rsquo;t train from scratch. Own the last
+            mile -- the embedding layer that makes your product defensible -- while renting
+            the foundation.
+          </p>
+          <div className="council__bars">
+            <div className="council__bar-row">
+              <span className="council__bar-label">Confidence</span>
+              <div className="council__bar-track">
+                <div className="council__bar-fill" style={{ width: '94%' }} />
+              </div>
+              <span className="council__bar-value">94%</span>
+            </div>
+            <div className="council__bar-row">
+              <span className="council__bar-label">Relevance</span>
+              <div className="council__bar-track">
+                <div className="council__bar-fill" style={{ width: '91%' }} />
+              </div>
+              <span className="council__bar-value">91%</span>
+            </div>
+            <div className="council__bar-row">
+              <span className="council__bar-label">Novelty</span>
+              <div className="council__bar-track">
+                <div className="council__bar-fill" style={{ width: '67%' }} />
+              </div>
+              <span className="council__bar-value">67%</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Optimist */}
+        <div className="council__panel council__panel--optimist">
+          <div className="council__panel-accent" />
+          <div className="council__panel-header">
+            <span className="council__panel-name">The Optimist</span>
+            <span className="council__panel-model">Model C</span>
+          </div>
+          <p className="council__panel-text">
+            Infrastructure investment creates compounding moats. Start small with
+            domain-specific models. The teams that own their stack will own their market
+            in 3 years.
+          </p>
+          <div className="council__bars">
+            <div className="council__bar-row">
+              <span className="council__bar-label">Confidence</span>
+              <div className="council__bar-track">
+                <div className="council__bar-fill" style={{ width: '79%' }} />
+              </div>
+              <span className="council__bar-value">79%</span>
+            </div>
+            <div className="council__bar-row">
+              <span className="council__bar-label">Relevance</span>
+              <div className="council__bar-track">
+                <div className="council__bar-fill" style={{ width: '83%' }} />
+              </div>
+              <span className="council__bar-value">83%</span>
+            </div>
+            <div className="council__bar-row">
+              <span className="council__bar-label">Novelty</span>
+              <div className="council__bar-track">
+                <div className="council__bar-fill" style={{ width: '81%' }} />
+              </div>
+              <span className="council__bar-value">81%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Live conversation preview */}
+      <div className="council__demo reveal d4">
+        <div className="council__demo-header">
+          <span className="council__demo-title">Live Council Session</span>
+          <span className="council__demo-mode">Strategy Mode</span>
+        </div>
+
+        <div className="council__demo-question">
+          &ldquo;Should a Series-A startup invest in building proprietary LLM infrastructure?&rdquo;
+        </div>
+
+        <div className="council__demo-messages">
+          <div className="council__msg">
+            <div className="council__msg-dot council__msg-dot--cynic" />
+            <div className="council__msg-body">
+              <div className="council__msg-sender council__msg-sender--cynic">The Cynic</div>
+              <div className="council__msg-text">
+                Absolutely not at this stage. You&rsquo;re competing against $100B training
+                budgets with Series-A money. The opportunity cost is your entire runway.
+              </div>
+              <div className="council__msg-rank">
+                Peer rank
+                <div className="council__msg-rank-bar">
+                  <div
+                    className="council__msg-rank-fill"
+                    style={{ width: '68%', background: 'var(--cynic)' }}
+                  />
+                </div>
+                #2
+              </div>
+            </div>
+          </div>
+
+          <div className="council__msg">
+            <div className="council__msg-dot council__msg-dot--strategist" />
+            <div className="council__msg-body">
+              <div className="council__msg-sender council__msg-sender--strategist">The Strategist</div>
+              <div className="council__msg-text">
+                Hybrid approach. API-first with a fine-tuning pipeline on your proprietary data.
+                Build the moat at the application layer, not the model layer.
+              </div>
+              <div className="council__msg-rank">
+                Peer rank
+                <div className="council__msg-rank-bar">
+                  <div
+                    className="council__msg-rank-fill"
+                    style={{ width: '92%', background: 'var(--strategist)' }}
+                  />
+                </div>
+                #1
+              </div>
+            </div>
+          </div>
+
+          <div className="council__msg">
+            <div className="council__msg-dot council__msg-dot--optimist" />
+            <div className="council__msg-body">
+              <div className="council__msg-sender council__msg-sender--optimist">The Optimist</div>
+              <div className="council__msg-text">
+                Small, domain-specific models are cheaper than you think. Start with distillation
+                on your niche. The learning compounds.
+              </div>
+              <div className="council__msg-rank">
+                Peer rank
+                <div className="council__msg-rank-bar">
+                  <div
+                    className="council__msg-rank-fill"
+                    style={{ width: '55%', background: 'var(--optimist)' }}
+                  />
+                </div>
+                #3
+              </div>
+            </div>
+          </div>
+
+          <div className="council__msg">
+            <div className="council__msg-dot council__msg-dot--synth" />
+            <div className="council__msg-body">
+              <div className="council__msg-sender council__msg-sender--synth">Synthesizer</div>
+              <div className="council__typing">
+                <span className="council__typing-dot" />
+                <span className="council__typing-dot" />
+                <span className="council__typing-dot" />
+              </div>
+              <div
+                className="council__msg-text"
+                style={{ marginTop: '0.4rem', color: 'var(--text)', fontWeight: 500 }}
+              >
+                Fine-tune on proprietary data using foundation model APIs. Invest in the data
+                pipeline and embedding layer, not base model training. Revisit infrastructure
+                ownership after Series B.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mode chips */}
+      <div className="council__modes reveal d5">
+        <div className="council__mode-chip">Synthesize</div>
+        <div className="council__mode-chip">Research</div>
+        <div className="council__mode-chip">Debate</div>
+        <div className="council__mode-chip council__mode-chip--active">Strategy</div>
+        <div className="council__mode-chip">Research Light</div>
+      </div>
+
+      {/* CTA */}
+      <div className="council__cta reveal d6">
+        <p className="council__cta-tagline">
+          <span>4</span> Models. <span>3</span> Stages. <span>1</span> Consensus.
         </p>
+        <a href="https://council.achillesanalytics.ca" className="council__cta-button">
+          Launch Council Platform
+          <span className="council__cta-arrow">&#8599;</span>
+        </a>
       </div>
-
-      {/* Main panel */}
-      <div className="vg-council__panel">
-        <div className="vg-council__panel-gradient" />
-
-        {/* 12-column grid */}
-        <div className="vg-council__grid">
-
-          {/* LEFT COLUMN (3/12) — THE CYNIC */}
-          <div className="vg-council__left">
-            <div className="vg-council__card vg-council__card--cynic">
-              <div className="vg-council__card-connector--cynic" />
-              <h3 className="vg-council__card-title--cynic">THE CYNIC</h3>
-              <p className="vg-council__card-model">MODEL: ADVERSARIAL_V4</p>
-              <p className="vg-council__card-quote">
-                &ldquo;+14 days, 2x fuel cost, insurance up 200%. Margin collapses.&rdquo;
-              </p>
-              <div className="vg-council__card-footer vg-council__card-footer--cynic">
-                <span className="vg-council__tag vg-council__tag--cynic">RISK_DETECTION: CRITICAL</span>
-              </div>
-            </div>
-          </div>
-
-          {/* CENTER COLUMN (6/12) — SVG VISUALIZATION */}
-          <div className="vg-council__center">
-            <svg
-              className="vg-council__svg"
-              viewBox="0 0 600 400"
-              preserveAspectRatio="xMidYMid meet"
-            >
-              <defs>
-                <filter id="council-glow-red" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="4" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-                <filter id="council-glow-green" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="4" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-                <filter id="council-glow-blue" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="4" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-
-              {/* Vertical center line */}
-              <line
-                x1="300" y1="50" x2="300" y2="350"
-                stroke="white" strokeOpacity="0.2" strokeWidth="2"
-              />
-
-              {/* Dashed circle at center */}
-              <circle
-                cx="300" cy="200" r="40"
-                fill="none" stroke="white" strokeOpacity="0.3"
-                strokeWidth="1" strokeDasharray="4 4"
-              />
-
-              {/* Center dot */}
-              <circle cx="300" cy="200" r="4" fill="white" />
-
-              {/* Animated paths from persona nodes to center */}
-              <path
-                className="vg-council__node-line"
-                d="M 50 200 C 150 200, 150 180, 260 190"
-                fill="none" stroke="#ef4444" strokeWidth="2" opacity="0.6"
-              />
-              <path
-                className="vg-council__node-line"
-                d="M 550 320 C 450 320, 400 250, 330 220"
-                fill="none" stroke="#10b981" strokeWidth="2" opacity="0.6"
-              />
-              <path
-                className="vg-council__node-line"
-                d="M 550 80 C 450 80, 400 150, 330 180"
-                fill="none" stroke="#3b82f6" strokeWidth="2" opacity="0.6"
-              />
-
-              {/* Cynic — red diamond */}
-              <rect
-                x="20" y="170" width="60" height="60"
-                fill="#111111" stroke="#ef4444" strokeWidth="2"
-                transform="rotate(45 50 200)"
-                filter="url(#council-glow-red)"
-              />
-
-              {/* Strategist — blue square (rotated diamond) */}
-              <rect
-                x="520" y="50" width="60" height="60"
-                fill="#111111" stroke="#3b82f6" strokeWidth="2"
-                transform="rotate(45 550 80)"
-                filter="url(#council-glow-blue)"
-              />
-
-              {/* Optimist — green circle */}
-              <circle
-                cx="550" cy="320" r="35"
-                fill="#111111" stroke="#10b981" strokeWidth="2"
-                filter="url(#council-glow-green)"
-              />
-            </svg>
-
-            {/* Animated Synthesis overlay */}
-            <SynthesisOverlay />
-          </div>
-
-          {/* RIGHT COLUMN (3/12) — STRATEGIST + OPTIMIST */}
-          <div className="vg-council__right">
-            {/* THE STRATEGIST */}
-            <div className="vg-council__card vg-council__card--strategist">
-              <div className="vg-council__card-connector--strategist" />
-              <h3 className="vg-council__card-title--strategist">THE STRATEGIST</h3>
-              <p className="vg-council__card-model">MODEL: LONG_TERM_V2</p>
-              <p className="vg-council__card-quote">
-                &ldquo;Turkey rail bypasses Suez. Lock capacity now — 3 day lead.&rdquo;
-              </p>
-              <div className="vg-council__card-footer vg-council__card-footer--strategist">
-                <span className="vg-council__tag vg-council__tag--strategist">ROI_PROJECTION: +14%</span>
-              </div>
-            </div>
-
-            {/* THE OPTIMIST */}
-            <div className="vg-council__card vg-council__card--optimist">
-              <div className="vg-council__card-connector--optimist" />
-              <h3 className="vg-council__card-title--optimist">THE OPTIMIST</h3>
-              <p className="vg-council__card-model">MODEL: GROWTH_ENGINE_V1</p>
-              <p className="vg-council__card-quote">
-                &ldquo;Pre-stock EU now. Supply gap = 3x market share for first movers.&rdquo;
-              </p>
-              <div className="vg-council__card-footer vg-council__card-footer--optimist">
-                <span className="vg-council__tag vg-council__tag--optimist">GROWTH_FACTOR: HIGH</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        {/* Bottom stats bar */}
-        <div className="vg-council__stats">
-          <div className="vg-council__stats-left">
-            <div className="vg-council__stats-group">
-              <span className="vg-council__stats-label">Scenario</span>
-              <span className="vg-council__stats-value">Suez Canal Closure</span>
-            </div>
-            <div className="vg-council__stats-divider" />
-            <div className="vg-council__stats-group">
-              <span className="vg-council__stats-label">Model</span>
-              <span className="vg-council__stats-value">ACHILLES_CORE_V4</span>
-            </div>
-          </div>
-          <div className="vg-council__stats-actions">
-            <button className="vg-council__btn vg-council__btn--outline">
-              <span className="vg-council__btn-icon">
-                <IconTerminal />
-              </span>
-              View Logic Trace
-            </button>
-            <a
-              href="https://council.achillesanalytics.ca"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="vg-council__btn vg-council__btn--primary"
-            >
-              Launch Council Platform
-            </a>
-          </div>
-        </div>
-      </div>
-
     </section>
   );
 }
