@@ -669,6 +669,19 @@
   box-shadow: 0 6px 30px var(--accent-glow);
 }
 
+.council__cta-button--soon {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  cursor: default;
+  opacity: 0.7;
+}
+
+.council__cta-button--soon:hover {
+  transform: none;
+  box-shadow: none;
+}
+
 .council__cta-button::after {
   content: '';
   position: absolute;
