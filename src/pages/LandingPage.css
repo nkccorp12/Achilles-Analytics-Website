@@ -488,6 +488,94 @@
   50% { opacity: 0; }
 }
 
+/* ==========================================================================
+   COUNCIL TEASER CARD — Hero inline promo
+   ========================================================================== */
+
+.neu-council-teaser {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 32px;
+  padding: 16px 20px;
+  max-width: 380px;
+  background: rgba(188, 255, 47, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(188, 255, 47, 0.15);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.4s ease, background 0.4s ease;
+  opacity: 0;
+  animation: heroFadeIn 0.5s ease forwards;
+  animation-delay: 1.2s;
+}
+
+.neu-council-teaser::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(188, 255, 47, 0.5), transparent);
+}
+
+.neu-council-teaser:hover {
+  border-color: rgba(188, 255, 47, 0.35);
+  background: rgba(188, 255, 47, 0.06);
+}
+
+.neu-council-teaser__badge {
+  font-family: var(--font-label);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #000;
+  background: #BCFF2F;
+  padding: 2px 8px;
+  align-self: flex-start;
+}
+
+.neu-council-teaser__title {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.neu-council-teaser__desc {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.neu-council-teaser__cta {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #BCFF2F;
+  margin-top: 4px;
+  transition: letter-spacing 0.3s ease;
+}
+
+.neu-council-teaser:hover .neu-council-teaser__cta {
+  letter-spacing: 4px;
+}
+
+@media (max-width: 640px) {
+  .neu-council-teaser {
+    max-width: 100%;
+    margin-top: 20px;
+    padding: 14px 16px;
+  }
+}
+
 /* Hide tactical grid overlay on /neu page */
 .neu .vg::before,
 .neu .vg::after {

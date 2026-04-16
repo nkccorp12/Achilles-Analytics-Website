@@ -91,10 +91,10 @@ function HeroSection() {
 // ═══════════════════════════════════════════════════════════════════════════
 
 const INTEL_PRODUCTS = [
+  { group: 'THE VOICE', name: 'AI Strategic Council', desc: 'Multi-model AI consensus platform. Adversarial debate across 4 LLMs with peer review and synthesis.', img: '/report.webp', fx: 'scan', featured: true },
   { group: 'THE EYES',  name: 'Crisis Map',          desc: 'Real-time global crisis monitoring & geospatial threat visualization.', img: '/map.webp', fx: 'scan' },
   { group: 'THE BRAIN', name: 'Digital Twin',         desc: '3D network relationship mapping of adversary connections.', img: '/twin.webp', fx: 'scan' },
   { group: 'THE BRAIN', name: 'OSINT Atlas',          desc: 'Active tool orchestration for targeted intelligence gathering.', img: '/twin2.webp', fx: 'scan' },
-  { group: 'THE VOICE', name: 'AI Strategic Council', desc: 'Multi-persona AI debate engine for adversarial stress-testing.', img: '/report.webp', fx: 'scan' },
 ];
 
 function PhilosophySection() {
@@ -119,7 +119,7 @@ function PhilosophySection() {
       {/* Product grid */}
       <div className="vg-philosophy__grid">
         {INTEL_PRODUCTS.map((p) => (
-          <div key={p.name} className={`vg-pgrid__card${p.fx ? ` vg-pgrid--${p.fx}` : ''}`}>
+          <div key={p.name} className={`vg-pgrid__card${p.fx ? ` vg-pgrid--${p.fx}` : ''}${p.featured ? ' vg-pgrid__card--featured' : ''}`}>
             <div className="vg-pgrid__img-wrap">
               <img src={p.img} alt={p.name} className="vg-pgrid__img" loading="lazy" />
               {p.fx === 'scan' && <div className="vg-pgrid__scanline" />}
@@ -129,6 +129,11 @@ function PhilosophySection() {
               <span className="vg-pgrid__tag">{p.group}</span>
               <h4 className="vg-pgrid__title">{p.name}</h4>
               <p className="vg-pgrid__desc">{p.desc}</p>
+              {p.featured && (
+                <a href="https://council.achillesanalytics.ca" target="_blank" rel="noopener noreferrer" className="vg-pgrid__featured-link">
+                  Standalone Platform &rarr;
+                </a>
+              )}
             </div>
           </div>
         ))}

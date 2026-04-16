@@ -109,7 +109,7 @@ function SynthesisOverlay() {
 
 function AICouncil() {
   return (
-    <section className="vg-council">
+    <section className="vg-council" id="ai-council">
       {/* Section label */}
       <div className="vg__section-label">// AI COUNCIL</div>
 
@@ -290,6 +290,14 @@ function AICouncil() {
               </span>
               View Logic Trace
             </button>
+            <a
+              href="https://council.achillesanalytics.ca"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="vg-council__btn vg-council__btn--primary"
+            >
+              Launch Council Platform
+            </a>
           </div>
         </div>
       </div>

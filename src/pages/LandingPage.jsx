@@ -159,6 +159,7 @@ export default function LandingPage() {
           <nav className={`neu-header__nav${menuOpen ? ' neu-header__nav--open' : ''}`}>
             <a href="#use-cases" className="neu-header__link" onClick={() => setMenuOpen(false)}>Case Study</a>
             <a href="#intel-stack" className="neu-header__link" onClick={() => setMenuOpen(false)}>The Stack</a>
+            <a href="#ai-council" className="neu-header__link" onClick={() => setMenuOpen(false)}>AI Council</a>
             <button onClick={() => { setContactOpen(true); setMenuOpen(false); }} className="neu-header__link neu-header__link--btn">Reach Out</button>
             <a href="/app" className={`neu-header__cta${ctaVisible ? ' neu-header__cta--visible' : ''}`} onClick={(e) => {
               if (window.innerWidth < 640) { e.preventDefault(); setDesktopNotice(true); }
@@ -281,6 +282,14 @@ export default function LandingPage() {
               Reach Out
             </a>
           </div>
+
+          {/* Council Teaser Card */}
+          <a href="https://council.achillesanalytics.ca" target="_blank" rel="noopener noreferrer" className="neu-council-teaser">
+            <span className="neu-council-teaser__badge">NEW: STANDALONE PRODUCT</span>
+            <span className="neu-council-teaser__title">AI Council</span>
+            <span className="neu-council-teaser__desc">Escape the echo chamber. 4 LLMs debate, rank, and synthesize.</span>
+            <span className="neu-council-teaser__cta">Try it &rarr;</span>
+          </a>
         </div>
 
         <div className="neu-hero__globe" aria-hidden="true">

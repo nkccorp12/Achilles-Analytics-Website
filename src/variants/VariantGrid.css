@@ -495,6 +495,94 @@
   opacity: 0.7;
 }
 
+/* ── Featured Card (AI Council — spans 2 columns) ── */
+.vg-pgrid__card--featured {
+  grid-column: span 2;
+  border: 1px solid rgba(188, 255, 47, 0.22);
+  position: relative;
+}
+
+.vg-pgrid__card--featured::before {
+  content: 'STANDALONE PRODUCT';
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  z-index: 5;
+  font-family: var(--font-label);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #000;
+  background: #BCFF2F;
+  padding: 3px 10px;
+}
+
+.vg-pgrid__card--featured .vg-pgrid__img-wrap {
+  aspect-ratio: 16 / 5;
+}
+
+.vg-pgrid__card--featured .vg-pgrid__img {
+  filter: saturate(0.4) brightness(0.55);
+}
+
+.vg-pgrid__card--featured:hover .vg-pgrid__img {
+  filter: saturate(0.65) brightness(0.7);
+}
+
+.vg-pgrid__card--featured .vg-pgrid__title {
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+}
+
+.vg-pgrid__card--featured .vg-pgrid__desc {
+  opacity: 0.85;
+  font-size: 0.85rem;
+}
+
+.vg-pgrid__featured-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #BCFF2F;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding: 6px 0;
+}
+
+.vg-pgrid__featured-link:hover {
+  text-shadow: 0 0 12px rgba(188, 255, 47, 0.5);
+  letter-spacing: 3px;
+}
+
+@media (max-width: 640px) {
+  .vg-pgrid__card--featured {
+    grid-column: span 1;
+  }
+
+  .vg-pgrid__card--featured .vg-pgrid__img-wrap {
+    aspect-ratio: 1 / 1;
+  }
+
+  .vg-pgrid__card--featured .vg-pgrid__desc {
+    display: block;
+    font-size: 0.75rem;
+  }
+
+  .vg-pgrid__card--featured::before {
+    font-size: 7px;
+    top: 8px;
+    right: 8px;
+    padding: 2px 6px;
+    letter-spacing: 2px;
+  }
+}
+
 /* ==========================================================================
    3. ARCHITECTURE & SECURITY
    ========================================================================== */
