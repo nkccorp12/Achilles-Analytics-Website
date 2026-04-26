@@ -145,7 +145,7 @@ export default function UseCases() {
           Operational Intelligence in Action
         </h2>
         <p className="vg-usecase__description">
-          From warehouse floors to open waters — Achilles adapts to any
+          From warehouse floors to open waters, Achilles adapts to any
           operational domain where structured foresight creates decisive
           advantage.
         </p>

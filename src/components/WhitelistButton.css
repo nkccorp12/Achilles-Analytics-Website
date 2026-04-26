@@ -1,0 +1,376 @@
+/* ==========================================================================
+   WHITELIST BUTTON — hover text swap + compact modal
+   Inherits variant styling from caller-passed className.
+   ========================================================================== */
+
+/* Unset native <button> so it visually matches <a> siblings */
+.wl-btn {
+  font: inherit;
+  cursor: pointer;
+  background: transparent;
+  color: inherit;
+  border: none;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Grid-overlap so both labels occupy the same cell and width = widest */
+.wl-btn__swap {
+  display: inline-grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  justify-items: center;
+  line-height: inherit;
+  position: relative;
+}
+
+.wl-btn__text {
+  grid-area: 1 / 1;
+  display: inline-block;
+  transition: opacity 0.26s ease, transform 0.26s cubic-bezier(.2,.7,.2,1);
+  will-change: transform, opacity;
+}
+
+.wl-btn__text--hover {
+  opacity: 0;
+  transform: translateY(110%);
+}
+
+.wl-btn:hover .wl-btn__text--base,
+.wl-btn:focus-visible .wl-btn__text--base {
+  opacity: 0;
+  transform: translateY(-110%);
+}
+
+.wl-btn:hover .wl-btn__text--hover,
+.wl-btn:focus-visible .wl-btn__text--hover {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Screen-reader only label combining both states */
+.wl-btn__sr {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   OVERLAY + MODAL SHELL
+   -------------------------------------------------------------------------- */
+.wl-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 40px);
+  opacity: 0;
+  transition: opacity 0.26s ease;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.wl-overlay--opening,
+.wl-overlay--open { opacity: 1; }
+
+.wl-overlay--closing { opacity: 0; }
+
+.wl-modal {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: auto;
+  background: #050505;
+  border: 1px solid rgba(188, 255, 47, 0.25);
+  padding: clamp(26px, 4vw, 38px) clamp(22px, 4vw, 34px);
+  color: #f0f0f0;
+  font-family: 'DM Sans', 'Helvetica Neue', sans-serif;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.9),
+    0 40px 80px rgba(0, 0, 0, 0.8),
+    0 0 60px rgba(188, 255, 47, 0.08);
+  transform: translateY(12px) scale(0.98);
+  opacity: 0;
+  transition: transform 0.28s cubic-bezier(.2,.7,.2,1), opacity 0.28s ease;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(188, 255, 47, 0.3) transparent;
+}
+
+.wl-modal::-webkit-scrollbar { width: 6px; }
+.wl-modal::-webkit-scrollbar-track { background: transparent; }
+.wl-modal::-webkit-scrollbar-thumb { background: rgba(188, 255, 47, 0.3); border-radius: 3px; }
+
+.wl-modal--opening,
+.wl-modal--open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.wl-modal--closing {
+  transform: translateY(8px) scale(0.99);
+  opacity: 0;
+}
+
+.wl-corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+}
+.wl-corner--tl { top: 6px; left: 6px; border-top: 1px solid #BCFF2F; border-left: 1px solid #BCFF2F; }
+.wl-corner--tr { top: 6px; right: 6px; border-top: 1px solid #BCFF2F; border-right: 1px solid #BCFF2F; }
+.wl-corner--bl { bottom: 6px; left: 6px; border-bottom: 1px solid #BCFF2F; border-left: 1px solid #BCFF2F; }
+.wl-corner--br { bottom: 6px; right: 6px; border-bottom: 1px solid #BCFF2F; border-right: 1px solid #BCFF2F; }
+
+.wl-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: 1px solid rgba(188, 255, 47, 0.2);
+  color: #BCFF2F;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.wl-close:hover,
+.wl-close:focus-visible {
+  background: rgba(188, 255, 47, 0.08);
+  border-color: #BCFF2F;
+  outline: none;
+}
+
+/* --------------------------------------------------------------------------
+   MODAL CONTENT
+   -------------------------------------------------------------------------- */
+.wl-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+  padding-right: 30px; /* space for close button */
+}
+
+.wl-head__label {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #BCFF2F;
+  font-weight: 600;
+}
+
+.wl-head__status {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(240, 240, 240, 0.55);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wl-head__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #BCFF2F;
+  box-shadow: 0 0 6px rgba(188, 255, 47, 0.6);
+}
+
+.wl-title {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  font-size: clamp(1.5rem, 3vw, 1.85rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.3px;
+  color: #f0f0f0;
+  margin: 0 0 12px;
+  max-width: 16ch;
+}
+
+.wl-title em {
+  font-style: italic;
+  color: #BCFF2F;
+  font-weight: 700;
+}
+
+.wl-lead {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: rgba(240, 240, 240, 0.68);
+  margin: 0 0 24px;
+}
+
+/* --------------------------------------------------------------------------
+   FORM
+   -------------------------------------------------------------------------- */
+.wl-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.wl-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.wl-field__label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(188, 255, 47, 0.9);
+}
+
+.wl-field__opt {
+  color: rgba(240, 240, 240, 0.35);
+  letter-spacing: 1px;
+  margin-left: 4px;
+  font-weight: 400;
+  text-transform: none;
+}
+
+.wl-input {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.92rem;
+  padding: 12px 14px;
+  background: rgba(188, 255, 47, 0.03);
+  border: 1px solid rgba(188, 255, 47, 0.2);
+  color: #f0f0f0;
+  caret-color: #BCFF2F;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  width: 100%;
+}
+
+.wl-input::placeholder {
+  color: rgba(240, 240, 240, 0.3);
+}
+
+.wl-input:focus {
+  outline: none;
+  border-color: #BCFF2F;
+  background: rgba(188, 255, 47, 0.06);
+  box-shadow: 0 0 0 1px rgba(188, 255, 47, 0.35);
+}
+
+.wl-error {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #ff6666;
+  letter-spacing: 0.5px;
+  margin-top: -4px;
+}
+
+.wl-submit {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  background: #BCFF2F;
+  color: #000;
+  border: 1px solid #BCFF2F;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+  transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.wl-submit:hover,
+.wl-submit:focus-visible {
+  background: transparent;
+  color: #BCFF2F;
+  box-shadow: 0 0 16px rgba(188, 255, 47, 0.3);
+  outline: none;
+}
+
+.wl-submit__arrow {
+  transition: transform 0.3s ease;
+}
+
+.wl-submit:hover .wl-submit__arrow {
+  transform: translateX(4px);
+}
+
+.wl-fine {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+  color: rgba(240, 240, 240, 0.38);
+  margin: 4px 0 0;
+}
+
+/* --------------------------------------------------------------------------
+   SUCCESS STATE
+   -------------------------------------------------------------------------- */
+.wl-sent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 12px 0 4px;
+}
+
+.wl-sent__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 0 10px rgba(188, 255, 47, 0.4));
+}
+
+.wl-sent__title {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f0f0f0;
+  margin: 0 0 8px;
+  letter-spacing: -0.3px;
+}
+
+.wl-sent__sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: rgba(240, 240, 240, 0.6);
+  margin: 0;
+  max-width: 34ch;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .wl-btn__text,
+  .wl-overlay,
+  .wl-modal,
+  .wl-submit,
+  .wl-submit__arrow { transition: opacity 0.15s ease; }
+}

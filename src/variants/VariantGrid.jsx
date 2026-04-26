@@ -60,10 +60,10 @@ function HeroSection() {
       {/* Main content */}
       <div className="vg-hero__content">
         <h1 className="vg-hero__headline">
-          Make the consequences <em>visible</em> — before they occur.
+          Make the consequences <em>visible</em>, before they occur.
         </h1>
         <p className="vg-hero__sub">
-          We turn fragmented data into structured foresight — exposing
+          We turn fragmented data into structured foresight that exposes
           blind spots before they become consequences.
           <Cursor />
         </p>
@@ -105,10 +105,10 @@ function PhilosophySection() {
       {/* Text block — full width above grid */}
       <div className="vg-philosophy__text">
         <blockquote className="vg-philosophy__quote">
-          &ldquo;The critical failure is never a lack of information — it is a lack of structured interpretation.&rdquo;
+          &ldquo;The critical failure is never a lack of information. It is a lack of structured interpretation.&rdquo;
         </blockquote>
         <p className="vg-philosophy__message">
-          We do not replace intuition with AI — we make{' '}
+          We do not replace intuition with AI. We make{' '}
           <strong>decision logic explicit and auditable</strong>. Every
           analytical output traces back to its source assumptions, every risk
           assessment carries a documented rationale, and every recommendation
@@ -155,7 +155,7 @@ const ARCH_PILLARS = [
   {
     icon: <IconHuman />,
     title: 'Human in the Loop',
-    desc: 'The system informs — it does not decide. AI-generated insights are always presented as recommendations, never as directives. Final authority remains with the human operator at every stage.',
+    desc: 'The system informs. It does not decide. AI-generated insights are always presented as recommendations, never as directives. Final authority remains with the human operator at every stage.',
   },
   {
     icon: <IconShield />,

@@ -48,13 +48,13 @@ export default function PrivacyPolicy({ onBack }) {
           </p>
           <ul>
             <li>
-              <strong>Contact form submissions</strong> &mdash; Your name, email
+              <strong>Contact form submissions.</strong> Your name, email
               address, and message content. Our contact form uses a direct
               mailto: link; no data is stored on our servers from form
               submissions.
             </li>
             <li>
-              <strong>Platform usage data</strong> &mdash; If you access our
+              <strong>Platform usage data.</strong> If you access our
               analytical platform, we may collect usage data necessary for
               service delivery, security, and performance.
             </li>

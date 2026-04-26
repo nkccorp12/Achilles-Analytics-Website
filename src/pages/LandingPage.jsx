@@ -9,6 +9,8 @@ import './LandingPage.css';
 const LaserFlow = lazy(() => import('../components/LaserFlow'));
 const IntelStack = lazy(() => import('./IntelStack'));
 const RotatingEarth = lazy(() => import('../components/RotatingEarth'));
+const HiringPill = lazy(() => import('../components/HiringPill'));
+import WhitelistButton from '../components/WhitelistButton';
 
 /* ─── Blinking Cursor (cloned from VariantGrid) ─── */
 const Cursor = () => <span className="neu__cursor" aria-hidden="true" />;
@@ -38,7 +40,7 @@ function ContactModal({ open, onClose }) {
     if (!name.trim() || !email.trim() || !msg.trim()) return;
     setSent(true);
     setTimeout(() => {
-      window.location.href = `mailto:contact@achilles-analytics.com?subject=Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(msg + '\n\n— ' + name + ' (' + email + ')')}`;
+      window.location.href = `mailto:contact@achilles-analytics.com?subject=Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(msg + '\n\n' + name + ' (' + email + ')')}`;
     }, 1800);
   }, [name, email, msg]);
 
@@ -119,6 +121,15 @@ export default function LandingPage() {
   const [contactOpen, setContactOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [desktopNotice, setDesktopNotice] = useState(false);
+  const [isMobileNav, setIsMobileNav] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 900px)');
+    const update = () => setIsMobileNav(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
 
   useEffect(() => {
     const impact = impactRef.current;
@@ -138,6 +149,22 @@ export default function LandingPage() {
     return () => { ioHeader.disconnect(); ioCta.disconnect(); };
   }, []);
 
+  // Resolve hash anchors after lazy-loaded sections render (e.g. arriving from /about#intel-stack)
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+    let tries = 0;
+    const tick = () => {
+      const el = document.getElementById(hash);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      if (tries++ < 30) setTimeout(tick, 150);
+    };
+    setTimeout(tick, 60);
+  }, []);
+
   return (
     <div className="neu">
       {/* ═══ FIXED HEADER ═══ */}
@@ -151,19 +178,22 @@ export default function LandingPage() {
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle navigation menu"
             aria-expanded={menuOpen}
+            aria-controls="primary-nav"
           >
             <span className="neu-header__hamburger-line" />
             <span className="neu-header__hamburger-line" />
             <span className="neu-header__hamburger-line" />
           </button>
-          <nav className={`neu-header__nav${menuOpen ? ' neu-header__nav--open' : ''}`}>
+          <nav
+            id="primary-nav"
+            className={`neu-header__nav${menuOpen ? ' neu-header__nav--open' : ''}`}
+            {...(isMobileNav && !menuOpen ? { 'aria-hidden': true, inert: '' } : {})}
+          >
             <a href="#use-cases" className="neu-header__link" onClick={() => setMenuOpen(false)}>Case Study</a>
             <a href="#intel-stack" className="neu-header__link" onClick={() => setMenuOpen(false)}>The Stack</a>
             <a href="#ai-council" className="neu-header__link" onClick={() => setMenuOpen(false)}>AI Council</a>
-            <button onClick={() => { setContactOpen(true); setMenuOpen(false); }} className="neu-header__link neu-header__link--btn">Reach Out</button>
-            <a href="/app" className={`neu-header__cta${ctaVisible ? ' neu-header__cta--visible' : ''}`} onClick={(e) => {
-              if (window.innerWidth < 640) { e.preventDefault(); setDesktopNotice(true); }
-            }}>Access Platform</a>
+            <a href="/about" className="neu-header__link" onClick={() => setMenuOpen(false)}>About</a>
+            <WhitelistButton className={`neu-header__cta${ctaVisible ? ' neu-header__cta--visible' : ''}`} baseLabel="Join Whitelist" hoverLabel="Join Whitelist" />
           </nav>
         </div>
       </header>
@@ -262,29 +292,30 @@ export default function LandingPage() {
         <img src="/hero-bg.webp" alt="" className="neu-hero__bg-reveal" aria-hidden="true" />
         <div className="neu-hero__content">
           <h1 className="neu-hero__headline">
-            Make the consequences <em>visible</em> — before they occur.
+            Make the consequences <em>visible</em>, before they occur.
           </h1>
           <p className="neu-hero__sub">
             We apply OSINT methodologies to turn fragmented data into
-            structured foresight — exposing blind spots before they
+            structured foresight that exposes blind spots before they
             become consequences.
             <Cursor />
           </p>
           <div className="neu-hero__ctas">
-            <a href="/app" className="neu-hero__cta neu-hero__cta--primary" onClick={(e) => {
-              if (window.innerWidth < 640) {
-                e.preventDefault(); setDesktopNotice(true);
-              }
-            }}>
-              Access Platform
-            </a>
+            <WhitelistButton className="neu-hero__cta neu-hero__cta--primary" />
             <a href="#reach-out" className="neu-hero__cta neu-hero__cta--secondary">
               Reach Out
             </a>
           </div>
 
           {/* Council Teaser Card */}
-          <a href="https://council.achillesanalytics.ca" target="_blank" rel="noopener noreferrer" className="neu-council-teaser">
+          <a
+            href="#ai-council"
+            className="neu-council-teaser"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('ai-council')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
             <span className="neu-council-teaser__badge">NEW: STANDALONE PRODUCT</span>
             <span className="neu-council-teaser__title">AI Council</span>
             <span className="neu-council-teaser__desc">Escape the echo chamber. 4 LLMs debate, rank, and synthesize.</span>
@@ -327,15 +358,13 @@ export default function LandingPage() {
           </h2>
           <p className="neu-reach__sub">
             Whether you&rsquo;re navigating geopolitical risk, supply chain disruption, or
-            competitive intelligence — we build the system that sees it first.
+            competitive intelligence, we build the system that sees it first.
           </p>
           <div className="neu-reach__ctas">
             <button onClick={() => setContactOpen(true)} className="neu-reach__cta neu-reach__cta--primary">
               Get in Touch
             </button>
-            <a href="/app" className="neu-reach__cta neu-reach__cta--secondary">
-              Access Platform
-            </a>
+            <WhitelistButton className="neu-reach__cta neu-reach__cta--secondary" />
           </div>
           <div className="neu-reach__footer">
             <span>ACHILLES ANALYTICS</span>
@@ -348,6 +377,8 @@ export default function LandingPage() {
       {/* ═══ LEGAL FOOTER ═══ */}
       <footer className="neu-legal">
         <div className="neu-legal__links">
+          <a href="/about" className="neu-legal__link">About</a>
+          <span className="neu-legal__sep">&middot;</span>
           <a href="/privacy" className="neu-legal__link">Privacy Policy</a>
           <span className="neu-legal__sep">&middot;</span>
           <a href="/terms" className="neu-legal__link">Terms of Service</a>
@@ -358,6 +389,9 @@ export default function LandingPage() {
 
       {/* ═══ CONTACT MODAL ═══ */}
       <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
+
+      {/* ═══ HIRING PILL ═══ */}
+      <Suspense fallback={null}><HiringPill /></Suspense>
 
       {/* ═══ DESKTOP NOTICE MODAL ═══ */}
       {desktopNotice && (

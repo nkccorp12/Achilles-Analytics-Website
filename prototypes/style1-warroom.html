@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Council — Style 1: War Room</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #060a0e;
+  --lime: #BCFF2F;
+  --lime-dim: rgba(188, 255, 47, 0.08);
+  --lime-glow: rgba(188, 255, 47, 0.3);
+  --red: #FF6B6B;
+  --blue: #44BBFF;
+  --green: #10B981;
+  --text: #c8ccc0;
+  --text-dim: rgba(200, 204, 192, 0.35);
+  --border: rgba(188, 255, 47, 0.1);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Mono', monospace;
+  overflow-x: hidden;
+}
+
+.section {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 100px 32px 80px;
+}
+
+/* === HERO — clean, no clutter === */
+.badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--lime);
+  margin-bottom: 24px;
+}
+
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.08;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-dim);
+  max-width: 520px;
+  margin-bottom: 72px;
+}
+
+/* === PIPELINE — 3 steps, horizontal, minimal === */
+.pipeline {
+  display: flex;
+  align-items: stretch;
+  gap: 1px;
+  margin-bottom: 80px;
+  background: var(--border);
+}
+
+.step {
+  flex: 1;
+  background: var(--bg);
+  padding: 32px 28px;
+}
+
+.step-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--lime);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.step-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.step-desc {
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--text-dim);
+}
+
+/* === PERSONAS — 3 cards, tight === */
+.personas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin-bottom: 80px;
+}
+
+.persona {
+  background: var(--bg);
+  padding: 28px 24px;
+}
+
+.persona-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.persona-role {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+}
+
+.persona-quote {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text);
+  border-left: 2px solid var(--accent);
+  padding-left: 14px;
+}
+
+/* === CTA — single line === */
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32px 0;
+  border-top: 1px solid var(--border);
+}
+
+.cta-tag {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.cta-tag strong { color: var(--lime); }
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: var(--lime);
+  color: #000;
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: box-shadow 0.2s;
+}
+
+.cta-btn:hover {
+  box-shadow: 0 0 32px var(--lime-glow);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 700px) {
+  .pipeline { flex-direction: column; }
+  .personas { grid-template-columns: 1fr; }
+  .cta { flex-direction: column; gap: 20px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<section class="section">
+
+  <div class="badge">AI Council</div>
+  <h1>Escape the<br>Echo Chamber.</h1>
+  <p class="subtitle">Four LLMs answer the same question. They rank each other blind. A synthesizer delivers the consensus. One answer no single model could produce alone.</p>
+
+  <!-- Pipeline -->
+  <div class="pipeline">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-name">Collect</div>
+      <div class="step-desc">4 models respond in parallel. Each brings different reasoning and blind spots.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-name">Rank</div>
+      <div class="step-desc">Anonymous peer review. No model knows whose answer it ranks. Pure merit.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-name">Synthesize</div>
+      <div class="step-desc">Best arguments distilled. Contradictions resolved. One consensus answer.</div>
+    </div>
+  </div>
+
+  <!-- Personas -->
+  <div class="personas">
+    <div class="persona">
+      <div class="persona-name" style="color: var(--red);">The Cynic</div>
+      <div class="persona-role">Risk Assessment</div>
+      <p class="persona-quote" style="--accent: var(--red);">"Rerouting via Cape adds $14B in delayed goods. The insurance market is already pricing in 340% premium increases."</p>
+    </div>
+    <div class="persona">
+      <div class="persona-name" style="color: var(--blue);">The Strategist</div>
+      <div class="persona-role">Systems Thinking</div>
+      <p class="persona-quote" style="--accent: var(--blue);">"Three scenarios: containment at 40%, escalation at 35%, diplomatic resolution within 72h at 25%. Each needs a different hedge."</p>
+    </div>
+    <div class="persona">
+      <div class="persona-name" style="color: var(--green);">The Optimist</div>
+      <div class="persona-role">Opportunity Mapping</div>
+      <p class="persona-quote" style="--accent: var(--green);">"Firms that pre-positioned inventory on alternative routes saw 23% less impact. The Arctic corridor is gaining permanent share."</p>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta">
+    <span class="cta-tag"><strong>4</strong> Models · <strong>3</strong> Stages · <strong>1</strong> Consensus</span>
+    <a href="https://council.achillesanalytics.ca" target="_blank" class="cta-btn">Launch Council</a>
+  </div>
+
+</section>
+
+</body>
+</html>

@@ -56,7 +56,7 @@ function generateMobileNodes() {
 
 /* ── Typewriter text component ── */
 const NARR_STRONG = 'Achilles detected coordinated Hormuz closure rhetoric across IRGC channels and state media.';
-const NARR_DIM = ' Within minutes, it clustered the noise into a single narrative, mapped the actors driving it, and projected a 68% closure probability within 14 days — before the first headline was published. Act with confidence.';
+const NARR_DIM = ' Within minutes, it clustered the noise into a single narrative, mapped the actors driving it, and projected a 68% closure probability within 14 days, before the first headline was published. Act with confidence.';
 
 function Typewriter({ trigger }) {
   const [displayed, setDisplayed] = useState('');
@@ -429,7 +429,7 @@ export default function CoreEngine() {
           <strong>Achilles detected coordinated Hormuz closure rhetoric across IRGC channels and state media.</strong>
           {' '}
           <span className="ce-narr__dim">
-            Within minutes, it clustered the noise into a single narrative, mapped the actors driving it, and projected a 68% closure probability within 14 days — before the first headline was published. Act with confidence.
+            Within minutes, it clustered the noise into a single narrative, mapped the actors driving it, and projected a 68% closure probability within 14 days, before the first headline was published. Act with confidence.
           </span>
         </p>
       </div>

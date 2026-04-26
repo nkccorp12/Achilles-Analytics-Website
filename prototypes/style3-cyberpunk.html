@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Council - Cyberpunk Terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+  :root {
+    --bg: #0a0e12;
+    --bg-panel: #0d1117;
+    --bg-terminal: #080c10;
+    --accent: #BCFF2F;
+    --accent-dim: rgba(188,255,47,0.08);
+    --accent-glow: rgba(188,255,47,0.3);
+    --text: #c8d6c8;
+    --text-bright: #e0ffe0;
+    --text-dim: #3a4a3a;
+    --text-muted: #5a7a5a;
+    --border: #1a2a1a;
+    --cynic: #FF6B6B;
+    --strategist: #44BBFF;
+    --optimist: #10B981;
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+    --mono-alt: 'Share Tech Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Scanline Overlay ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+  }
+
+  /* ── CRT vignette ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9997;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.5) 100%);
+  }
+
+  /* ── Matrix Rain Background ── */
+  .matrix-rain {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0.06;
+  }
+
+  .matrix-column {
+    position: absolute;
+    top: -100%;
+    font-family: var(--mono-alt);
+    font-size: 14px;
+    line-height: 1.2;
+    color: var(--accent);
+    white-space: nowrap;
+    writing-mode: vertical-rl;
+    animation: matrixFall linear infinite;
+  }
+
+  @keyframes matrixFall {
+    0% { transform: translateY(-100vh); }
+    100% { transform: translateY(200vh); }
+  }
+
+  /* Generate 20 columns */
+  .matrix-column:nth-child(1)  { left: 2%;  animation-duration: 12s; animation-delay: -1s;  font-size: 12px; }
+  .matrix-column:nth-child(2)  { left: 7%;  animation-duration: 18s; animation-delay: -5s;  font-size: 11px; }
+  .matrix-column:nth-child(3)  { left: 12%; animation-duration: 14s; animation-delay: -3s;  font-size: 13px; }
+  .matrix-column:nth-child(4)  { left: 17%; animation-duration: 20s; animation-delay: -8s;  font-size: 10px; }
+  .matrix-column:nth-child(5)  { left: 22%; animation-duration: 15s; animation-delay: -2s;  font-size: 14px; }
+  .matrix-column:nth-child(6)  { left: 28%; animation-duration: 22s; animation-delay: -11s; font-size: 11px; }
+  .matrix-column:nth-child(7)  { left: 33%; animation-duration: 13s; animation-delay: -4s;  font-size: 12px; }
+  .matrix-column:nth-child(8)  { left: 38%; animation-duration: 19s; animation-delay: -7s;  font-size: 13px; }
+  .matrix-column:nth-child(9)  { left: 43%; animation-duration: 16s; animation-delay: -1s;  font-size: 10px; }
+  .matrix-column:nth-child(10) { left: 48%; animation-duration: 21s; animation-delay: -9s;  font-size: 14px; }
+  .matrix-column:nth-child(11) { left: 53%; animation-duration: 14s; animation-delay: -6s;  font-size: 11px; }
+  .matrix-column:nth-child(12) { left: 58%; animation-duration: 17s; animation-delay: -3s;  font-size: 12px; }
+  .matrix-column:nth-child(13) { left: 63%; animation-duration: 23s; animation-delay: -10s; font-size: 10px; }
+  .matrix-column:nth-child(14) { left: 68%; animation-duration: 15s; animation-delay: -2s;  font-size: 13px; }
+  .matrix-column:nth-child(15) { left: 73%; animation-duration: 18s; animation-delay: -7s;  font-size: 11px; }
+  .matrix-column:nth-child(16) { left: 78%; animation-duration: 20s; animation-delay: -4s;  font-size: 14px; }
+  .matrix-column:nth-child(17) { left: 83%; animation-duration: 13s; animation-delay: -8s;  font-size: 12px; }
+  .matrix-column:nth-child(18) { left: 88%; animation-duration: 16s; animation-delay: -1s;  font-size: 10px; }
+  .matrix-column:nth-child(19) { left: 93%; animation-duration: 19s; animation-delay: -5s;  font-size: 13px; }
+  .matrix-column:nth-child(20) { left: 97%; animation-duration: 22s; animation-delay: -12s; font-size: 11px; }
+
+  /* ── Animations ── */
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    92% { opacity: 1; }
+    93% { opacity: 0.4; }
+    94% { opacity: 1; }
+    96% { opacity: 0.7; }
+    97% { opacity: 1; }
+  }
+  @keyframes typeIn {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  @keyframes glowPulse {
+    0%, 100% { text-shadow: 0 0 4px var(--accent-glow); }
+    50% { text-shadow: 0 0 16px var(--accent-glow), 0 0 32px rgba(188,255,47,0.15); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scanDown {
+    0% { top: -2px; }
+    100% { top: 100%; }
+  }
+  @keyframes dataStream {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 200px; }
+  }
+
+  .cursor-blink::after {
+    content: '_';
+    animation: blink 1s step-end infinite;
+    color: var(--accent);
+  }
+
+  .flicker { animation: flicker 4s ease-in-out infinite; }
+
+  /* ── Content wrapper ── */
+  .content {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Top Bar ── */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-panel);
+    font-size: 11px;
+    color: var(--text-dim);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .top-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .top-bar .logo {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2px;
+  }
+  .top-bar .status {
+    color: var(--optimist);
+  }
+  .top-bar .status::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--optimist);
+    margin-right: 6px;
+    animation: blink 2s ease infinite;
+  }
+  .top-bar-right {
+    display: flex;
+    gap: 24px;
+    color: var(--text-muted);
+  }
+
+  /* ── Hero Terminal ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    opacity: 0.15;
+    animation: scanDown 8s linear infinite;
+    box-shadow: 0 0 20px var(--accent-glow);
+  }
+
+  .terminal-window {
+    background: var(--bg-terminal);
+    border: 1px solid var(--border);
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+  }
+  .terminal-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    border: 1px solid;
+  }
+  .terminal-dot.red { border-color: var(--cynic); background: rgba(255,107,107,0.3); }
+  .terminal-dot.yellow { border-color: #f0c040; background: rgba(240,192,64,0.3); }
+  .terminal-dot.green { border-color: var(--optimist); background: rgba(16,185,129,0.3); }
+  .terminal-title {
+    margin-left: 12px;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  .terminal-body {
+    padding: 32px 24px;
+    font-size: 13px;
+    line-height: 1.8;
+  }
+
+  .prompt-line {
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .prompt-line .prompt {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .prompt-line .cmd {
+    color: var(--text-bright);
+  }
+  .prompt-line .flag {
+    color: var(--strategist);
+  }
+  .prompt-line .comment {
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .hero-ascii {
+    margin: 32px 0;
+    color: var(--accent);
+    font-size: 11px;
+    line-height: 1.3;
+    letter-spacing: 1px;
+    animation: glowPulse 3s ease infinite;
+  }
+
+  .hero-output {
+    margin: 24px 0;
+    padding: 16px 0;
+    border-top: 1px dashed var(--border);
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .hero-headline {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    color: var(--text-bright);
+    line-height: 1.2;
+    margin-bottom: 8px;
+    text-shadow: 0 0 20px rgba(188,255,47,0.1);
+  }
+  .hero-headline .accent {
+    color: var(--accent);
+    text-shadow: 0 0 30px var(--accent-glow);
+  }
+
+  .hero-sub {
+    color: var(--text-muted);
+    font-size: 13px;
+    max-width: 600px;
+    margin-bottom: 20px;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    padding: 10px 24px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform: translateX(-101%);
+    transition: transform 0.3s ease;
+    z-index: 0;
+  }
+  .hero-cta:hover::before { transform: translateX(0); }
+  .hero-cta:hover { color: var(--bg); }
+  .hero-cta span { position: relative; z-index: 1; }
+
+  /* ── ASCII Border Box ── */
+  .ascii-box {
+    border: 1px solid var(--border);
+    padding: 32px;
+    position: relative;
+    margin: 24px 0;
+  }
+  .ascii-box::before {
+    content: attr(data-label);
+    position: absolute;
+    top: -9px; left: 16px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    background: var(--bg);
+    padding: 0 8px;
+    text-transform: uppercase;
+  }
+
+  /* ── Section Base ── */
+  section {
+    padding: 100px 40px;
+    position: relative;
+  }
+
+  .section-divider {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 11px;
+    padding: 20px 0;
+    letter-spacing: 4px;
+    overflow: hidden;
+  }
+  .section-divider::before,
+  .section-divider::after {
+    content: '════════════════════════════';
+    color: var(--border);
+    display: block;
+    text-align: center;
+  }
+
+  /* ── Pipeline Flow Section ── */
+  .pipeline-section {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .pipeline-header {
+    margin-bottom: 48px;
+  }
+  .pipeline-header h2 {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pipeline-header h2::before {
+    content: '// ';
+    color: var(--text-dim);
+  }
+
+  .pipeline-cmd {
+    font-size: clamp(1rem, 2.2vw, 1.5rem);
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .pipeline-cmd .dollar {
+    color: var(--accent);
+    margin-right: 8px;
+  }
+  .pipeline-cmd .pipe {
+    color: var(--cynic);
+    margin: 0 6px;
+  }
+  .pipeline-cmd .flag {
+    color: var(--strategist);
+  }
+
+  .pipeline-stages {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 40px;
+  }
+
+  .pipeline-stage {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    padding: 28px 24px;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  .pipeline-stage:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(188,255,47,0.05), inset 0 0 20px rgba(188,255,47,0.02);
+  }
+  .pipeline-stage::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .pipeline-stage:nth-child(1)::before { background: var(--accent); }
+  .pipeline-stage:nth-child(2)::before { background: var(--strategist); }
+  .pipeline-stage:nth-child(3)::before { background: var(--optimist); }
+
+  /* Arrow connectors */
+  .pipeline-stage:not(:last-child)::after {
+    content: '>>>';
+    position: absolute;
+    right: -14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    color: var(--accent);
+    z-index: 2;
+    animation: glowPulse 2s ease infinite;
+  }
+
+  .stage-num {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .stage-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+  .stage-detail {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* ── Persona Terminal Cards ── */
+  .personas-section {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .personas-header h2 {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .personas-header h2::before { content: '// '; }
+
+  .persona-terminals {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .persona-terminal {
+    background: var(--bg-terminal);
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  .persona-terminal:hover {
+    border-color: rgba(255,255,255,0.1);
+  }
+
+  /* Scan effect on hover */
+  .persona-terminal::before {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: currentColor;
+    opacity: 0;
+    top: 0;
+    transition: opacity 0.3s ease;
+  }
+  .persona-terminal:hover::before {
+    opacity: 0.15;
+    animation: scanDown 2s linear infinite;
+  }
+
+  .persona-terminal.cynic { color: var(--cynic); }
+  .persona-terminal.strategist { color: var(--strategist); }
+  .persona-terminal.optimist { color: var(--optimist); }
+
+  .pt-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 12px;
+  }
+  .pt-prompt {
+    font-weight: 700;
+  }
+  .cynic .pt-prompt { color: var(--cynic); }
+  .strategist .pt-prompt { color: var(--strategist); }
+  .optimist .pt-prompt { color: var(--optimist); }
+
+  .pt-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .pt-pid {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  .pt-body {
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.7;
+    padding-left: 20px;
+    border-left: 2px solid;
+  }
+  .cynic .pt-body { border-color: rgba(255,107,107,0.3); }
+  .strategist .pt-body { border-color: rgba(68,187,255,0.3); }
+  .optimist .pt-body { border-color: rgba(16,185,129,0.3); }
+
+  .pt-topic {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    margin-top: 12px;
+  }
+
+  /* ── Demo Section ── */
+  .demo-section {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .demo-terminal {
+    background: var(--bg-terminal);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .demo-term-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.015);
+  }
+  .demo-term-header .dots {
+    display: flex;
+    gap: 6px;
+  }
+  .demo-term-header .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    border: 1px solid;
+    opacity: 0.6;
+  }
+  .demo-term-header .title {
+    margin-left: 8px;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  .demo-term-body {
+    padding: 24px;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+
+  .demo-line { margin-bottom: 4px; }
+  .demo-line .p { color: var(--accent); font-weight: 600; }
+  .demo-line .cmd { color: var(--text-bright); }
+  .demo-line .str { color: #f0c040; }
+  .demo-line .comment { color: var(--text-dim); font-style: italic; }
+  .demo-line .output { color: var(--text-muted); padding-left: 4px; }
+
+  .demo-response-block {
+    margin: 16px 0;
+    padding: 16px;
+    border: 1px dashed var(--border);
+    background: rgba(0,0,0,0.3);
+  }
+
+  .drb-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .drb-header.cynic { color: var(--cynic); }
+  .drb-header.strategist { color: var(--strategist); }
+  .drb-header.optimist { color: var(--optimist); }
+
+  .drb-rank {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+
+  .drb-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    padding-left: 16px;
+    border-left: 1px solid var(--border);
+  }
+
+  .demo-consensus-block {
+    margin-top: 16px;
+    padding: 16px;
+    border: 1px solid rgba(188,255,47,0.2);
+    background: rgba(188,255,47,0.03);
+  }
+  .demo-consensus-block .header {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+    animation: glowPulse 3s ease infinite;
+  }
+  .demo-consensus-block .text {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  /* ── Modes Section ── */
+  .modes-section {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .modes-header h2 {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .modes-header h2::before { content: '// '; }
+
+  .modes-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+  }
+
+  .mode-item {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    padding: 20px 16px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: default;
+    position: relative;
+  }
+  .mode-item::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 0;
+    background: var(--accent);
+    transition: height 0.3s ease;
+  }
+  .mode-item:hover::before {
+    height: 2px;
+  }
+  .mode-item:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 15px rgba(188,255,47,0.05);
+  }
+
+  .mode-item .mode-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+  }
+  .mode-item .mode-flag {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .mode-item.active {
+    background: rgba(188,255,47,0.06);
+    border-color: var(--accent);
+  }
+  .mode-item.active::before {
+    height: 2px;
+  }
+
+  /* ── CTA Section ── */
+  .cta-section {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 60px;
+    padding-bottom: 120px;
+  }
+
+  .cta-ascii {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    line-height: 1.3;
+    letter-spacing: 1px;
+  }
+
+  .cta-headline {
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 16px;
+    text-shadow: 0 0 20px rgba(188,255,47,0.1);
+  }
+  .cta-headline .accent { color: var(--accent); }
+
+  .cta-tagline {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  .cta-link {
+    display: inline-block;
+    padding: 14px 40px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    animation: glowPulse 3s ease infinite;
+  }
+  .cta-link::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform: translateX(-101%);
+    transition: transform 0.3s ease;
+    z-index: 0;
+  }
+  .cta-link:hover::before { transform: translateX(0); }
+  .cta-link:hover { color: var(--bg); text-shadow: none; }
+  .cta-link span { position: relative; z-index: 1; }
+
+  .cta-footer {
+    margin-top: 48px;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+  }
+
+  /* ── Bottom Bar ── */
+  .bottom-bar {
+    padding: 12px 24px;
+    border-top: 1px solid var(--border);
+    background: var(--bg-panel);
+    font-size: 10px;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+    letter-spacing: 1px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    section { padding: 60px 20px; }
+    .hero { padding: 60px 20px; }
+    .terminal-body { padding: 20px 16px; }
+    .hero-ascii { font-size: 8px; }
+    .pipeline-stages { grid-template-columns: 1fr; }
+    .pipeline-stage:not(:last-child)::after {
+      content: 'vvv';
+      right: auto;
+      left: 50%;
+      top: auto;
+      bottom: -12px;
+      transform: translateX(-50%);
+    }
+    .modes-list { grid-template-columns: 1fr 1fr; }
+    .top-bar-right { display: none; }
+    .pipeline-cmd { font-size: 11px; }
+  }
+
+  @media (max-width: 480px) {
+    .modes-list { grid-template-columns: 1fr; }
+    .hero-ascii { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Matrix Rain ── -->
+<div class="matrix-rain">
+  <div class="matrix-column">01001001 CONSENSUS 11010100 RANK 00101101 SYNTH 10110010 QUERY 01101001</div>
+  <div class="matrix-column">COLLECT RANK SYNTH QUERY PARSE MODEL GPT CLAUDE GEMINI GROK RANK</div>
+  <div class="matrix-column">10110100 01001 ACHILLES 10101 COUNCIL 01010 MULTI 11001 MODEL 00110</div>
+  <div class="matrix-column">CONSENSUS PEER REVIEW ANONYMOUS COLLECT FOUR MODELS RANK SYNTHESIZE</div>
+  <div class="matrix-column">01101001 SUEZ CANAL CRISIS TRADE GEOPOLITICAL 10101100 DISRUPTION 01</div>
+  <div class="matrix-column">CYNIC STRATEGIST OPTIMIST SYNTH COLLECT RANK PIPELINE PROCESS 0110</div>
+  <div class="matrix-column">11010010 ACHILLES 00101 ANALYTICS 10110 COUNCIL 01001 CONSENSUS 10</div>
+  <div class="matrix-column">PEER RANK ANONYMOUS REVIEW BIAS ELIMINATION STRUCTURAL MODEL FOUR</div>
+  <div class="matrix-column">00101101 MULTI MODEL 10110010 CONSENSUS 01001001 PLATFORM 11010100</div>
+  <div class="matrix-column">COLLECT SYNTHESIZE RANK DEBATE RESEARCH STRATEGY LIGHT MODE QUERY</div>
+  <div class="matrix-column">10110010 ESCAPE 01001 ECHO 11010 CHAMBER 00101 FOUR 10110 MODELS 01</div>
+  <div class="matrix-column">GLOBAL TRADE ARCTIC ROUTE NEARSHORING CHOKEPOINT RISK STRATEGY 01</div>
+  <div class="matrix-column">01001001 PIPELINE 11010100 PROCESS 00101101 STAGE 10110010 THREE 01</div>
+  <div class="matrix-column">ACHILLES COUNCIL CONSENSUS PEER ANONYMOUS RANK COLLECT SYNTHESIZE</div>
+  <div class="matrix-column">10101100 DISRUPTION 01101001 INFRASTRUCTURE 11010010 RESILIENCE 00</div>
+  <div class="matrix-column">MODEL A MODEL B MODEL C MODEL D RANK PEER REVIEW ANONYMOUS BIAS 01</div>
+  <div class="matrix-column">01001001 10110100 CONSENSUS 01010101 COUNCIL 10101010 ACHILLES 011</div>
+  <div class="matrix-column">ESCAPE ECHO CHAMBER MULTI MODEL FOUR STAGES THREE ONE CONSENSUS 1</div>
+  <div class="matrix-column">11010100 SYNTHESIZE 00101101 DEBATE 10110010 RESEARCH 01001001 STR</div>
+  <div class="matrix-column">COLLECT RANK SYNTH QUERY MODEL PEER ANONYMOUS REVIEW BIAS COUNCIL</div>
+</div>
+
+<!-- ── Content ── -->
+<div class="content">
+
+<!-- ── Top Bar ── -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <span class="logo">[ACHILLES://COUNCIL]</span>
+    <span class="status">SYSTEM ONLINE</span>
+  </div>
+  <div class="top-bar-right">
+    <span>MODELS: 4/4 ACTIVE</span>
+    <span>LAT: 42ms</span>
+    <span>MEM: 2.4GB</span>
+  </div>
+</div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="terminal-window">
+    <div class="terminal-header">
+      <div class="terminal-dot red"></div>
+      <div class="terminal-dot yellow"></div>
+      <div class="terminal-dot green"></div>
+      <span class="terminal-title">council@achilles:~/consensus</span>
+    </div>
+    <div class="terminal-body">
+      <div class="prompt-line"><span class="prompt">$</span> <span class="cmd">council</span> <span class="flag">--init</span> <span class="flag">--models</span> <span class="cmd">4</span> <span class="flag">--mode</span> <span class="cmd">synthesize</span></div>
+      <div class="prompt-line"><span class="output">[INFO] Loading models: GPT-4o, Claude, Gemini, Grok</span></div>
+      <div class="prompt-line"><span class="output">[INFO] Anonymous peer-review enabled</span></div>
+      <div class="prompt-line"><span class="output">[INFO] Consensus pipeline ready</span></div>
+      <br>
+      <pre class="hero-ascii flicker">
+ ┌──────────────────────────────────────────────────────┐
+ │   ╔═╗╦  ╔═╗╔═╗╦ ╦╦╦  ╦  ╔═╗╔═╗                    │
+ │   ╠═╣║  ║  ╠═╣║ ║║║  ║  ║╣ ╚═╗                    │
+ │   ╩ ╩╩  ╚═╝╩ ╩╚═╝╩╩═╝╩═╝╚═╝╚═╝                    │
+ │               C O U N C I L                          │
+ └──────────────────────────────────────────────────────┘</pre>
+
+      <div class="hero-output">
+        <div class="hero-headline">Escape the <span class="accent">Echo Chamber.</span></div>
+        <div class="hero-sub">// Multi-model consensus platform. Four AI models answer the same question independently, rank each other anonymously, then a synthesizer creates the final consensus answer. No single point of failure. No single perspective.</div>
+      </div>
+
+      <div class="prompt-line"><span class="prompt">$</span> <span class="cmd">council</span> <span class="flag">--launch</span><span class="cursor-blink"></span></div>
+      <br>
+      <a href="https://council.achillesanalytics.ca" class="hero-cta"><span>&gt;&gt; LAUNCH COUNCIL PLATFORM</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ DIVIDER ═══════════ -->
+<div class="section-divider">[ PIPELINE ARCHITECTURE ]</div>
+
+<!-- ═══════════ 3-STAGE PIPELINE ═══════════ -->
+<section>
+  <div class="pipeline-section">
+    <div class="pipeline-header">
+      <h2>Process Pipeline</h2>
+      <div class="pipeline-cmd">
+        <span class="dollar">$</span>
+        <span>collect</span>
+        <span class="flag">--models 4</span>
+        <span class="pipe">|</span>
+        <span>rank</span>
+        <span class="flag">--anonymous</span>
+        <span class="pipe">|</span>
+        <span>synthesize</span>
+      </div>
+    </div>
+
+    <div class="pipeline-stages">
+      <div class="pipeline-stage">
+        <div class="stage-num">[STAGE 01]</div>
+        <div class="stage-name">COLLECT</div>
+        <div class="stage-detail">Four models respond independently. No cross-contamination. Each generates a complete analysis in isolation.</div>
+      </div>
+      <div class="pipeline-stage">
+        <div class="stage-num">[STAGE 02]</div>
+        <div class="stage-name">RANK</div>
+        <div class="stage-detail">Anonymous peer review. Each model evaluates and ranks the others' responses without knowing authorship. Bias structurally eliminated.</div>
+      </div>
+      <div class="pipeline-stage">
+        <div class="stage-num">[STAGE 03]</div>
+        <div class="stage-name">SYNTHESIZE</div>
+        <div class="stage-detail">Dedicated synthesizer combines top-ranked perspectives into a single consensus answer, weighted by peer-review scores.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ DIVIDER ═══════════ -->
+<div class="section-divider">[ ACTIVE PERSONAS ]</div>
+
+<!-- ═══════════ PERSONAS ═══════════ -->
+<section>
+  <div class="personas-section">
+    <div class="personas-header">
+      <h2>Model Output Streams</h2>
+    </div>
+
+    <div class="persona-terminals">
+      <div class="persona-terminal cynic">
+        <div class="pt-header">
+          <span class="pt-prompt">[CYNIC]&gt;</span>
+          <span class="pt-label">The Cynic</span>
+          <span class="pt-pid">PID:2847 | #FF6B6B</span>
+        </div>
+        <div class="pt-body">
+          Everyone's celebrating the canal reopening as a return to normal. But "normal" was a single point of failure for 12% of global trade. We didn't fix anything -- we just got lucky again.
+        </div>
+        <div class="pt-topic">// re: Suez Canal Crisis Analysis</div>
+      </div>
+
+      <div class="persona-terminal strategist">
+        <div class="pt-header">
+          <span class="pt-prompt">[STRAT]&gt;</span>
+          <span class="pt-label">The Strategist</span>
+          <span class="pt-pid">PID:2848 | #44BBFF</span>
+        </div>
+        <div class="pt-body">
+          The real story isn't the blockage itself -- it's the 48-hour window where every shipping company in the world simultaneously re-evaluated their dependency on a single chokepoint. That data is gold.
+        </div>
+        <div class="pt-topic">// re: Suez Canal Crisis Analysis</div>
+      </div>
+
+      <div class="persona-terminal optimist">
+        <div class="pt-header">
+          <span class="pt-prompt">[OPTI]&gt;</span>
+          <span class="pt-label">The Optimist</span>
+          <span class="pt-pid">PID:2849 | #10B981</span>
+        </div>
+        <div class="pt-body">
+          This is exactly the kind of disruption that accelerates the Arctic route conversation and nearshoring investment. Every supply chain shock creates a new generation of resilience infrastructure.
+        </div>
+        <div class="pt-topic">// re: Suez Canal Crisis Analysis</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ DIVIDER ═══════════ -->
+<div class="section-divider">[ LIVE DEMO: SUEZ CANAL QUERY ]</div>
+
+<!-- ═══════════ DEMO ═══════════ -->
+<section>
+  <div class="demo-section">
+    <div class="demo-terminal">
+      <div class="demo-term-header">
+        <div class="dots">
+          <div class="dot" style="border-color: var(--cynic);"></div>
+          <div class="dot" style="border-color: #f0c040;"></div>
+          <div class="dot" style="border-color: var(--optimist);"></div>
+        </div>
+        <span class="title">council@achilles:~/demo -- SESSION #4091</span>
+      </div>
+      <div class="demo-term-body">
+        <div class="demo-line"><span class="p">$</span> <span class="cmd">council query</span> <span class="str">"What are the long-term geopolitical implications of the Suez Canal disruption for global trade routes?"</span></div>
+        <div class="demo-line"><span class="output">[2026-04-16 14:32:01] Dispatching to 4 models...</span></div>
+        <div class="demo-line"><span class="output">[2026-04-16 14:32:03] All responses collected. Initiating peer review...</span></div>
+        <div class="demo-line"><span class="output">[2026-04-16 14:32:08] Rankings complete. Synthesizing...</span></div>
+        <br>
+
+        <div class="demo-response-block">
+          <div class="drb-header cynic">
+            <span>[CYNIC] Model A Response</span>
+            <span class="drb-rank">PEER_RANK: #2 | SCORE: 7.8/10</span>
+          </div>
+          <div class="drb-text">The disruption exposed what everyone already knew but ignored: 12% of global trade flowing through a single canal is a systemic risk, not infrastructure. Expect performative policy changes but no structural shifts until the next crisis forces them.</div>
+        </div>
+
+        <div class="demo-response-block">
+          <div class="drb-header strategist">
+            <span>[STRAT] Model B Response</span>
+            <span class="drb-rank">PEER_RANK: #1 | SCORE: 8.9/10</span>
+          </div>
+          <div class="drb-text">Three parallel developments will emerge: accelerated investment in the Northern Sea Route as Arctic ice retreats, Saudi Arabia's renewed push for the NEOM land bridge, and a quiet surge in port infrastructure across East Africa. The chokepoint calculus is being rewritten.</div>
+        </div>
+
+        <div class="demo-response-block">
+          <div class="drb-header optimist">
+            <span>[OPTI] Model C Response</span>
+            <span class="drb-rank">PEER_RANK: #3 | SCORE: 7.2/10</span>
+          </div>
+          <div class="drb-text">Every major supply chain disruption has historically catalyzed diversification. The Suez blockage is accelerating nearshoring timelines by 3-5 years and creating investment opportunities in regional trade corridors that were previously considered uneconomical.</div>
+        </div>
+
+        <div class="demo-consensus-block">
+          <div class="header">[CONSENSUS] SYNTHESIZED OUTPUT</div>
+          <div class="text">The Suez disruption represents an inflection point in global trade route strategy. While structural dependencies will persist in the medium term, three trends are accelerating: Arctic route development, Middle Eastern corridor alternatives, and nearshoring investment. The consensus indicates the primary impact is not physical but strategic -- reshaping how nations and corporations model chokepoint risk in their long-term planning.</div>
+        </div>
+
+        <br>
+        <div class="demo-line"><span class="output">[2026-04-16 14:32:12] Synthesis complete. Confidence: 0.87</span></div>
+        <div class="demo-line"><span class="p">$</span> <span class="cursor-blink"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ DIVIDER ═══════════ -->
+<div class="section-divider">[ AVAILABLE MODES ]</div>
+
+<!-- ═══════════ MODES ═══════════ -->
+<section>
+  <div class="modes-section">
+    <div class="modes-header">
+      <h2>Council Operating Modes</h2>
+    </div>
+    <div class="modes-list">
+      <div class="mode-item active">
+        <div class="mode-name">Synthesize</div>
+        <div class="mode-flag">--mode synth</div>
+      </div>
+      <div class="mode-item">
+        <div class="mode-name">Research</div>
+        <div class="mode-flag">--mode research</div>
+      </div>
+      <div class="mode-item">
+        <div class="mode-name">Debate</div>
+        <div class="mode-flag">--mode debate</div>
+      </div>
+      <div class="mode-item">
+        <div class="mode-name">Strategy</div>
+        <div class="mode-flag">--mode strategy</div>
+      </div>
+      <div class="mode-item">
+        <div class="mode-name">Research Light</div>
+        <div class="mode-flag">--mode lite</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA ═══════════ -->
+<section>
+  <div class="cta-section">
+    <pre class="cta-ascii">
+┌─────────────────────────────────────────┐
+│  4 MODELS  ·  3 STAGES  ·  1 CONSENSUS │
+└─────────────────────────────────────────┘</pre>
+    <div class="cta-headline">Stop Trusting <span class="accent">One Model.</span></div>
+    <div class="cta-tagline">4 Models &middot; 3 Stages &middot; 1 Consensus</div>
+    <a href="https://council.achillesanalytics.ca" class="cta-link"><span>&gt;&gt; LAUNCH COUNCIL PLATFORM</span></a>
+    <div class="cta-footer">[ACHILLES://COUNCIL] -- MULTI-MODEL CONSENSUS PLATFORM -- v2.0</div>
+  </div>
+</section>
+
+<!-- ── Bottom Bar ── -->
+<div class="bottom-bar">
+  <span>[ACHILLES ANALYTICS] COUNCIL v2.0</span>
+  <span>4 MODELS | 3 STAGES | 1 CONSENSUS</span>
+</div>
+
+</div><!-- /content -->
+
+</body>
+</html>

@@ -163,11 +163,11 @@ const IconAccountTree = () => (
 // ======================================================================
 
 const BIAS_ITEMS = [
-  { source: 'REUTERS', text: 'Egypt shuts Suez — global shipping halts.',              cred: 96, stance: 'CENTER',      left: 45, center: 20, right: 35 },
+  { source: 'REUTERS', text: 'Egypt shuts Suez. Global shipping halts.',              cred: 96, stance: 'CENTER',      left: 45, center: 20, right: 35 },
   { source: 'AL JAZ.', text: 'Cairo: "Sovereignty over our waterway."',                cred: 78, stance: 'CENTER-LEFT', left: 60, center: 10, right: 30 },
-  { source: 'BBC',     text: 'Cape reroute — freight costs surge 340%.',               cred: 91, stance: 'CENTER',      left: 42, center: 18, right: 40 },
+  { source: 'BBC',     text: 'Cape reroute: freight costs surge 340%.',               cred: 91, stance: 'CENTER',      left: 42, center: 18, right: 40 },
   { source: 'RT',      text: 'Western pressure drove Egypt to closure.',               cred: 28, stance: 'FAR-RIGHT',   left: 8,  center: 5,  right: 87 },
-  { source: 'AP',      text: 'UN emergency session — no resolution on Suez.',          cred: 93, stance: 'NEUTRAL',     left: 38, center: 24, right: 38 },
+  { source: 'AP',      text: 'UN emergency session, no resolution on Suez.',          cred: 93, stance: 'NEUTRAL',     left: 38, center: 24, right: 38 },
   { source: 'AFP',     text: 'EU warns of food supply crisis within weeks.',           cred: 87, stance: 'CENTER',      left: 44, center: 16, right: 40 },
 ];
 
@@ -330,7 +330,7 @@ export default function IntelStack() {
         <div className="vg-istack__group-header">
           <div>
             <h3 className="vg-istack__group-title">Group A: Global Situational Awareness</h3>
-            <p className="vg-istack__group-subtitle">&mdash; THE EYES</p>
+            <p className="vg-istack__group-subtitle">// THE EYES</p>
           </div>
         </div>
 
@@ -385,7 +385,7 @@ export default function IntelStack() {
                 <div className="vg-istack__feed-item vg-istack__feed-item--highlight">
                   <div className="vg-istack__feed-meta">REUTERS</div>
                   <p className="vg-istack__feed-text vg-istack__feed-text--bright">
-                    Kherson shelling intensifies — civilian evac.
+                    Kherson shelling intensifies. Civilian evac.
                   </p>
                 </div>
                 <div className="vg-istack__feed-item">
@@ -403,13 +403,13 @@ export default function IntelStack() {
                 <div className="vg-istack__feed-item">
                   <div className="vg-istack__feed-meta">AP</div>
                   <p className="vg-istack__feed-text">
-                    Energy grid strike — Odesa blackout.
+                    Energy grid strike. Odesa blackout.
                   </p>
                 </div>
                 <div className="vg-istack__feed-item vg-istack__feed-item--highlight">
                   <div className="vg-istack__feed-meta">DARKWEB</div>
                   <p className="vg-istack__feed-text vg-istack__feed-text--bright">
-                    Leaked docs — Wagner supply chain.
+                    Leaked docs: Wagner supply chain.
                   </p>
                 </div>
                 <div className="vg-istack__feed-item">
@@ -421,14 +421,14 @@ export default function IntelStack() {
                 <div className="vg-istack__feed-item vg-istack__feed-item--highlight">
                   <div className="vg-istack__feed-meta">X-API</div>
                   <p className="vg-istack__feed-text vg-istack__feed-text--bright">
-                    Disinfo campaign detected — 91% conf.
+                    Disinfo campaign detected. 91% conf.
                   </p>
                 </div>
                 {/* Duplicate for seamless loop */}
                 <div className="vg-istack__feed-item vg-istack__feed-item--highlight" aria-hidden="true">
                   <div className="vg-istack__feed-meta">REUTERS</div>
                   <p className="vg-istack__feed-text vg-istack__feed-text--bright">
-                    Kherson shelling intensifies — civilian evac.
+                    Kherson shelling intensifies. Civilian evac.
                   </p>
                 </div>
                 <div className="vg-istack__feed-item" aria-hidden="true">
@@ -446,13 +446,13 @@ export default function IntelStack() {
                 <div className="vg-istack__feed-item" aria-hidden="true">
                   <div className="vg-istack__feed-meta">AP</div>
                   <p className="vg-istack__feed-text">
-                    Energy grid strike — Odesa blackout.
+                    Energy grid strike. Odesa blackout.
                   </p>
                 </div>
                 <div className="vg-istack__feed-item vg-istack__feed-item--highlight" aria-hidden="true">
                   <div className="vg-istack__feed-meta">DARKWEB</div>
                   <p className="vg-istack__feed-text vg-istack__feed-text--bright">
-                    Leaked docs — Wagner supply chain.
+                    Leaked docs: Wagner supply chain.
                   </p>
                 </div>
                 <div className="vg-istack__feed-item" aria-hidden="true">
@@ -464,7 +464,7 @@ export default function IntelStack() {
                 <div className="vg-istack__feed-item vg-istack__feed-item--highlight" aria-hidden="true">
                   <div className="vg-istack__feed-meta">X-API</div>
                   <p className="vg-istack__feed-text vg-istack__feed-text--bright">
-                    Disinfo campaign detected — 91% conf.
+                    Disinfo campaign detected. 91% conf.
                   </p>
                 </div>
               </div>
@@ -480,7 +480,7 @@ export default function IntelStack() {
         <div className="vg-istack__group-header">
           <div>
             <h3 className="vg-istack__group-title">Group B: Analytical Deep Dive</h3>
-            <p className="vg-istack__group-subtitle">&mdash; THE BRAIN</p>
+            <p className="vg-istack__group-subtitle">// THE BRAIN</p>
           </div>
         </div>
 
@@ -509,12 +509,12 @@ export default function IntelStack() {
               <span className="vg-istack__card-label">OSINT Atlas</span>
             </div>
             <div className="vg-istack__atlas-grid">
-              <div className="vg-istack__atlas-cell" title="WEBINT — Public Web Intelligence"><IconPublic /></div>
-              <div className="vg-istack__atlas-cell" title="CYBINT — Digital Forensics &amp; Fingerprinting"><IconFingerprint /></div>
-              <div className="vg-istack__atlas-cell" title="TECHINT — Technical Infrastructure Analysis"><IconTerminal /></div>
-              <div className="vg-istack__atlas-cell" title="GEOINT — Satellite &amp; Geospatial Intelligence"><IconSatellite /></div>
-              <div className="vg-istack__atlas-cell" title="SOCMINT — Social Network Mapping"><IconShare /></div>
-              <div className="vg-istack__atlas-cell" title="PSYINT — Behavioral &amp; Psychological Profiling"><IconPsychology /></div>
+              <div className="vg-istack__atlas-cell" title="WEBINT: Public Web Intelligence"><IconPublic /></div>
+              <div className="vg-istack__atlas-cell" title="CYBINT: Digital Forensics &amp; Fingerprinting"><IconFingerprint /></div>
+              <div className="vg-istack__atlas-cell" title="TECHINT: Technical Infrastructure Analysis"><IconTerminal /></div>
+              <div className="vg-istack__atlas-cell" title="GEOINT: Satellite &amp; Geospatial Intelligence"><IconSatellite /></div>
+              <div className="vg-istack__atlas-cell" title="SOCMINT: Social Network Mapping"><IconShare /></div>
+              <div className="vg-istack__atlas-cell" title="PSYINT: Behavioral &amp; Psychological Profiling"><IconPsychology /></div>
             </div>
             <p className="vg-istack__card-desc">
               Active tool orchestration for targeted intelligence gathering missions.
@@ -530,7 +530,7 @@ export default function IntelStack() {
         <div className="vg-istack__group-header">
           <div>
             <h3 className="vg-istack__group-title">Group C: Decision Support</h3>
-            <p className="vg-istack__group-subtitle">&mdash; THE VOICE</p>
+            <p className="vg-istack__group-subtitle">// THE VOICE</p>
           </div>
         </div>
 
@@ -555,7 +555,7 @@ export default function IntelStack() {
                     <span className="vg-istack__message-name">THE STRATEGIST</span>
                   </div>
                   <div className="vg-istack__bubble vg-istack__bubble--strategist">
-                    Suez closure locks 12% of global freight. Reroute via Cape adds 14 days — activate alternate carriers now.
+                    Suez closure locks 12% of global freight. Reroute via Cape adds 14 days. Activate alternate carriers now.
                   </div>
                 </div>
               </div>
@@ -570,7 +570,7 @@ export default function IntelStack() {
                     <span className="vg-istack__message-name">THE CYNIC</span>
                   </div>
                   <div className="vg-istack__bubble vg-istack__bubble--cynic">
-                    Cape route doubles fuel cost. Insurance premiums already spiking — rerouting alone won't save the margin.
+                    Cape route doubles fuel cost. Insurance premiums already spiking. Rerouting alone won't save the margin.
                   </div>
                 </div>
               </div>
@@ -585,7 +585,7 @@ export default function IntelStack() {
                     <span className="vg-istack__message-name">THE OPTIMIST</span>
                   </div>
                   <div className="vg-istack__bubble vg-istack__bubble--optimist">
-                    Rail corridor through Turkey still open. Secure capacity now — competitors haven't moved yet.
+                    Rail corridor through Turkey still open. Secure capacity now. Competitors haven't moved yet.
                   </div>
                 </div>
               </div>

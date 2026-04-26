@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Council -- Luxury Minimal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  /* ── Reset & Base ─────────────────────────────────────── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0f14;
+    --bg-elevated: #0e1319;
+    --surface: #141a22;
+    --text-primary: #e8eaed;
+    --text-secondary: #6b7280;
+    --text-tertiary: #3a4150;
+    --accent: #BCFF2F;
+    --accent-dim: rgba(188, 255, 47, 0.08);
+    --cynic: #FF6B6B;
+    --strategist: #44BBFF;
+    --optimist: #10B981;
+    --font-display: 'Outfit', sans-serif;
+    --font-body: 'Instrument Sans', sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background: var(--bg);
+    overflow-x: hidden;
+  }
+
+  /* ── Scroll-driven fade-in ────────────────────────────── */
+  @supports (animation-timeline: view()) {
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      animation: fadeUp 0.6s ease forwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+  }
+
+  /* Fallback for browsers without scroll-driven animations */
+  @supports not (animation-timeline: view()) {
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      animation: fadeUpFallback 0.8s ease forwards;
+    }
+    .reveal:nth-child(1) { animation-delay: 0.1s; }
+    .reveal:nth-child(2) { animation-delay: 0.25s; }
+    .reveal:nth-child(3) { animation-delay: 0.4s; }
+    .reveal:nth-child(4) { animation-delay: 0.55s; }
+    .reveal:nth-child(5) { animation-delay: 0.7s; }
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUpFallback {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Section wrapper ──────────────────────────────────── */
+  .council-section {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12vh 6vw 16vh;
+  }
+
+  /* Subtle grain overlay */
+  .council-section::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .council-section > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Micro label ──────────────────────────────────────── */
+  .label {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  .label--accent {
+    color: var(--accent);
+  }
+
+  /* ── Hero area ────────────────────────────────────────── */
+  .hero {
+    text-align: center;
+    max-width: 800px;
+    margin-bottom: 14vh;
+  }
+
+  .hero__overline {
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUpFallback 1s 0.2s ease forwards;
+  }
+
+  .hero__headline {
+    font-family: var(--font-display);
+    font-weight: 200;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    margin-bottom: 1.8rem;
+    opacity: 0;
+    animation: fadeUpFallback 1s 0.4s ease forwards;
+  }
+
+  .hero__headline em {
+    font-style: normal;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  .hero__sub {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    line-height: 1.7;
+    color: var(--text-secondary);
+    max-width: 520px;
+    margin: 0 auto;
+    opacity: 0;
+    animation: fadeUpFallback 1s 0.6s ease forwards;
+  }
+
+  /* ── Three-stage flow ─────────────────────────────────── */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 16vh;
+    width: 100%;
+    max-width: 720px;
+  }
+
+  .flow__node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .flow__circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 1px solid var(--text-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: border-color 0.6s ease;
+  }
+
+  .flow__circle:hover {
+    border-color: var(--accent);
+  }
+
+  .flow__circle::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .flow__circle:hover::after {
+    opacity: 1;
+  }
+
+  .flow__number {
+    font-family: var(--font-display);
+    font-weight: 100;
+    font-size: 1.8rem;
+    color: var(--text-secondary);
+    letter-spacing: -0.02em;
+    transition: color 0.4s ease;
+  }
+
+  .flow__circle:hover .flow__number {
+    color: var(--accent);
+  }
+
+  .flow__info {
+    text-align: center;
+  }
+
+  .flow__name {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    margin-bottom: 0.3rem;
+  }
+
+  .flow__desc {
+    font-weight: 300;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .flow__line {
+    flex: 1;
+    height: 1px;
+    background: var(--text-tertiary);
+    min-width: 60px;
+    position: relative;
+    margin: 0 -8px;
+    margin-bottom: 2.5rem;
+  }
+
+  /* Animated dot traveling along the line */
+  .flow__line::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    top: -1.5px;
+    left: 0;
+    animation: travelDot 3s ease-in-out infinite;
+  }
+
+  @keyframes travelDot {
+    0%, 10% { left: 0; opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    90%, 100% { left: 100%; opacity: 0; }
+  }
+
+  .flow__line:nth-of-type(2)::after {
+    animation-delay: 1.5s;
+  }
+
+  /* ── Perspectives (no cards, just text) ───────────────── */
+  .perspectives {
+    width: 100%;
+    max-width: 640px;
+    margin-bottom: 16vh;
+  }
+
+  .perspectives__header {
+    margin-bottom: 3.5rem;
+    text-align: center;
+  }
+
+  .perspectives__question {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: var(--text-primary);
+    margin-top: 1rem;
+    line-height: 1.5;
+  }
+
+  .perspective {
+    display: flex;
+    gap: 2rem;
+    padding: 2.2rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    align-items: flex-start;
+  }
+
+  .perspective:first-of-type {
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .perspective__bar {
+    width: 2px;
+    min-height: 100%;
+    flex-shrink: 0;
+    border-radius: 1px;
+    align-self: stretch;
+  }
+
+  .perspective__bar--cynic { background: var(--cynic); }
+  .perspective__bar--strategist { background: var(--strategist); }
+  .perspective__bar--optimist { background: var(--optimist); }
+
+  .perspective__content {
+    flex: 1;
+  }
+
+  .perspective__role {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.7rem;
+  }
+
+  .perspective__role--cynic { color: var(--cynic); }
+  .perspective__role--strategist { color: var(--strategist); }
+  .perspective__role--optimist { color: var(--optimist); }
+
+  .perspective__text {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  /* ── Demo / Consensus ─────────────────────────────────── */
+  .consensus {
+    width: 100%;
+    max-width: 640px;
+    margin-bottom: 16vh;
+    text-align: center;
+  }
+
+  .consensus__label {
+    margin-bottom: 1.5rem;
+  }
+
+  .consensus__text {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    line-height: 1.8;
+    color: var(--text-primary);
+    padding: 2.5rem 0;
+    border-top: 1px solid rgba(188, 255, 47, 0.12);
+    border-bottom: 1px solid rgba(188, 255, 47, 0.12);
+  }
+
+  .consensus__modes {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .consensus__mode {
+    font-weight: 400;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    transition: color 0.3s ease;
+    cursor: default;
+  }
+
+  .consensus__mode:hover {
+    color: var(--accent);
+  }
+
+  .consensus__mode--active {
+    color: var(--accent);
+  }
+
+  /* ── Stats strip ──────────────────────────────────────── */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: clamp(3rem, 8vw, 8rem);
+    margin-bottom: 14vh;
+    width: 100%;
+    max-width: 640px;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat__number {
+    font-family: var(--font-display);
+    font-weight: 100;
+    font-size: clamp(3.5rem, 6vw, 5.5rem);
+    line-height: 1;
+    color: var(--text-primary);
+    letter-spacing: -0.04em;
+  }
+
+  .stat__unit {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-top: 0.6rem;
+  }
+
+  /* ── CTA ──────────────────────────────────────────────── */
+  .cta-area {
+    text-align: center;
+  }
+
+  .cta-button {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 1.1rem 3rem;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(188, 255, 47, 0.2);
+  }
+
+  .cta-button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+
+  .cta-button:hover::after {
+    transform: translateX(100%);
+  }
+
+  .cta__tagline {
+    margin-top: 2rem;
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Responsive ───────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .council-section {
+      padding: 8vh 5vw 12vh;
+    }
+
+    .flow {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .flow__line {
+      width: 1px;
+      height: 40px;
+      min-width: unset;
+      margin: 0;
+      margin-right: 2.5rem;
+    }
+
+    .flow__line::after {
+      top: 0;
+      left: -1.5px;
+      animation-name: travelDotVertical;
+    }
+
+    @keyframes travelDotVertical {
+      0%, 10% { top: 0; opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      90%, 100% { top: 100%; opacity: 0; }
+    }
+
+    .perspective {
+      gap: 1.2rem;
+    }
+
+    .stats {
+      gap: 2.5rem;
+    }
+
+    .consensus__modes {
+      gap: 1.2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero__headline {
+      font-size: 2.6rem;
+    }
+
+    .flow__circle {
+      width: 60px;
+      height: 60px;
+    }
+
+    .stat__number {
+      font-size: 3rem;
+    }
+
+    .cta-button {
+      padding: 1rem 2rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<section class="council-section">
+
+  <!-- Hero -->
+  <div class="hero">
+    <p class="label label--accent hero__overline">AI Council</p>
+    <h1 class="hero__headline">Escape the<br>Echo <em>Chamber.</em></h1>
+    <p class="hero__sub">
+      Four frontier models answer the same question. They rank each other anonymously. A synthesizer distills one consensus. No single model decides alone.
+    </p>
+  </div>
+
+  <!-- 3-stage flow -->
+  <div class="flow reveal">
+    <div class="flow__node">
+      <div class="flow__circle">
+        <span class="flow__number">1</span>
+      </div>
+      <div class="flow__info">
+        <p class="flow__name">Collect</p>
+        <p class="flow__desc">4 models respond</p>
+      </div>
+    </div>
+
+    <div class="flow__line"></div>
+
+    <div class="flow__node">
+      <div class="flow__circle">
+        <span class="flow__number">2</span>
+      </div>
+      <div class="flow__info">
+        <p class="flow__name">Rank</p>
+        <p class="flow__desc">Peer review</p>
+      </div>
+    </div>
+
+    <div class="flow__line"></div>
+
+    <div class="flow__node">
+      <div class="flow__circle">
+        <span class="flow__number">3</span>
+      </div>
+      <div class="flow__info">
+        <p class="flow__name">Synthesize</p>
+        <p class="flow__desc">Consensus</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Perspectives -->
+  <div class="perspectives reveal">
+    <div class="perspectives__header">
+      <p class="label">Strategic question</p>
+      <p class="perspectives__question">"Should a Series-A startup invest in building proprietary LLM infrastructure?"</p>
+    </div>
+
+    <div class="perspective">
+      <div class="perspective__bar perspective__bar--cynic"></div>
+      <div class="perspective__content">
+        <p class="perspective__role perspective__role--cynic">The Cynic</p>
+        <p class="perspective__text">You'll burn 18 months and $2M training a model that GPT-6 will obsolete before your next board meeting. Rent, don't build. Allocate your capital to distribution.</p>
+      </div>
+    </div>
+
+    <div class="perspective">
+      <div class="perspective__bar perspective__bar--strategist"></div>
+      <div class="perspective__content">
+        <p class="perspective__role perspective__role--strategist">The Strategist</p>
+        <p class="perspective__text">Fine-tune on proprietary data, but don't train from scratch. Own the last mile -- the embedding layer that makes your product defensible -- while renting the foundation.</p>
+      </div>
+    </div>
+
+    <div class="perspective">
+      <div class="perspective__bar perspective__bar--optimist"></div>
+      <div class="perspective__content">
+        <p class="perspective__role perspective__role--optimist">The Optimist</p>
+        <p class="perspective__text">Infrastructure investment creates compounding moats. Start small with domain-specific models. The teams that own their stack will own their market in 3 years.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Consensus -->
+  <div class="consensus reveal">
+    <p class="label label--accent consensus__label">Council Consensus</p>
+    <p class="consensus__text">
+      Fine-tune on proprietary data using foundation model APIs. Invest in the data pipeline and embedding layer, not base model training. Revisit full infrastructure ownership after Series B when unit economics justify the capital expenditure.
+    </p>
+    <div class="consensus__modes">
+      <span class="consensus__mode consensus__mode--active">Synthesize</span>
+      <span class="consensus__mode">Research</span>
+      <span class="consensus__mode">Debate</span>
+      <span class="consensus__mode">Strategy</span>
+      <span class="consensus__mode">Research Light</span>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats reveal">
+    <div class="stat">
+      <p class="stat__number">4</p>
+      <p class="stat__unit">Models</p>
+    </div>
+    <div class="stat">
+      <p class="stat__number">3</p>
+      <p class="stat__unit">Stages</p>
+    </div>
+    <div class="stat">
+      <p class="stat__number">1</p>
+      <p class="stat__unit">Consensus</p>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-area reveal">
+    <a href="https://council.achillesanalytics.ca" class="cta-button">Launch Council Platform</a>
+    <p class="cta__tagline">4 Models. 3 Stages. 1 Consensus.</p>
+  </div>
+
+</section>
+
+</body>
+</html>

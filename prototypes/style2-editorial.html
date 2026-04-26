@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Council - Editorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+  :root {
+    --bg: #0a0f14;
+    --bg-elevated: #0f1519;
+    --bg-card: #131a21;
+    --accent: #BCFF2F;
+    --accent-dim: rgba(188,255,47,0.12);
+    --text: #e8e6e1;
+    --text-muted: #8a8880;
+    --text-dim: #5a5850;
+    --cynic: #FF6B6B;
+    --strategist: #44BBFF;
+    --optimist: #10B981;
+    --serif: 'Playfair Display', Georgia, serif;
+    --body-serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body-serif);
+    font-size: 18px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Grain Texture Overlay ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+
+  /* ── Entrance Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes drawLine {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-60px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(60px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes accentPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  .anim-fade-up {
+    opacity: 0;
+    animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .anim-fade-in {
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+  }
+
+  /* ── Hero Section ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 60px 80px 80px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-right {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Decorative vertical line */
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--text-dim), transparent);
+    z-index: 3;
+    animation: fadeIn 2s ease 0.5s forwards;
+    opacity: 0;
+  }
+
+  .issue-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 40px;
+    animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+    opacity: 0;
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 32px;
+    animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
+    opacity: 0;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+    display: inline;
+  }
+
+  .hero-subtitle {
+    font-family: var(--body-serif);
+    font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+    font-weight: 300;
+    color: var(--text-muted);
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
+    opacity: 0;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--sans);
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 18px 40px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.8s forwards;
+    opacity: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.1);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+  .hero-cta:hover::before { transform: translateX(0); }
+  .hero-cta:hover { letter-spacing: 5px; }
+  .hero-cta .arrow { transition: transform 0.3s ease; }
+  .hero-cta:hover .arrow { transform: translateX(4px); }
+
+  /* ── Right side — abstract collage ── */
+  .editorial-collage {
+    position: relative;
+    width: 80%;
+    height: 70%;
+    animation: fadeIn 1.2s ease 0.8s forwards;
+    opacity: 0;
+  }
+
+  .collage-block {
+    position: absolute;
+    background: var(--bg-elevated);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .collage-block.b1 {
+    top: 0; right: 0;
+    width: 70%; height: 55%;
+    background: linear-gradient(135deg, var(--bg-elevated), var(--bg-card));
+  }
+  .collage-block.b2 {
+    bottom: 5%; left: 0;
+    width: 55%; height: 50%;
+    border: 1px solid var(--accent);
+    background: transparent;
+  }
+  .collage-block.b3 {
+    top: 20%; left: 15%;
+    width: 50%; height: 40%;
+    background: var(--accent-dim);
+    backdrop-filter: blur(20px);
+  }
+
+  .collage-label {
+    position: absolute;
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .collage-label.top { top: -24px; left: 0; }
+  .collage-label.bottom { bottom: -24px; right: 0; color: var(--accent); }
+
+  .collage-number {
+    font-family: var(--serif);
+    font-size: 8rem;
+    font-weight: 900;
+    color: rgba(188,255,47,0.07);
+    position: absolute;
+    bottom: -10%; right: -5%;
+    line-height: 1;
+  }
+
+  /* ── Tagline bar ── */
+  .tagline-bar {
+    background: var(--accent);
+    color: var(--bg);
+    text-align: center;
+    padding: 20px 40px;
+    font-family: var(--sans);
+    font-size: 13px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* ── 3-Stage Flow ── */
+  .flow-section {
+    padding: 140px 80px;
+    position: relative;
+  }
+
+  .flow-section-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    margin-bottom: 100px;
+    align-items: end;
+  }
+
+  .flow-section-header h2 {
+    font-family: var(--serif);
+    font-size: clamp(2.4rem, 4vw, 3.8rem);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  .flow-section-header h2 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .flow-section-header p {
+    font-family: var(--body-serif);
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    font-weight: 300;
+    max-width: 480px;
+  }
+
+  .flow-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    position: relative;
+  }
+
+  /* Connecting lines between steps */
+  .flow-steps::before,
+  .flow-steps::after {
+    content: '';
+    position: absolute;
+    top: 48px;
+    height: 1px;
+    background: linear-gradient(to right, var(--text-dim), var(--accent), var(--text-dim));
+    z-index: 0;
+  }
+  .flow-steps::before {
+    left: 33.33%;
+    width: 0%;
+    animation: drawLine 0.8s ease 1.5s forwards;
+    transform-origin: left;
+  }
+  .flow-steps::after {
+    left: 33.33%;
+    right: 0;
+    width: 33.33%;
+    animation: drawLine 0.8s ease 1.8s forwards;
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+
+  .flow-step {
+    padding: 0 48px;
+    position: relative;
+    z-index: 1;
+    border-left: 1px solid rgba(255,255,255,0.06);
+  }
+  .flow-step:first-child { border-left: none; }
+
+  .step-number {
+    font-family: var(--serif);
+    font-size: 6rem;
+    font-weight: 900;
+    color: rgba(188,255,47,0.08);
+    line-height: 1;
+    margin-bottom: -20px;
+    display: block;
+  }
+
+  .step-name {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .step-title {
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.25;
+  }
+
+  .step-desc {
+    font-family: var(--body-serif);
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ── Divider ── */
+  .editorial-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 80px;
+    gap: 24px;
+  }
+  .editorial-divider .line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--text-dim), transparent);
+  }
+  .editorial-divider .diamond {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  /* ── Persona Section ── */
+  .persona-section {
+    padding: 140px 80px;
+  }
+
+  .persona-header {
+    margin-bottom: 80px;
+  }
+  .persona-header h2 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 3.5vw, 3.2rem);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .persona-header .subtitle {
+    font-family: var(--body-serif);
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  .persona-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+    position: relative;
+  }
+
+  .persona-card {
+    position: relative;
+    padding: 48px 40px;
+    background: var(--bg-elevated);
+    border: 1px solid rgba(255,255,255,0.04);
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .persona-card:nth-child(2) {
+    transform: translateY(40px);
+  }
+  .persona-card:hover {
+    border-color: rgba(255,255,255,0.08);
+    transform: translateY(-4px);
+    box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+  }
+  .persona-card:nth-child(2):hover {
+    transform: translateY(36px);
+  }
+
+  .persona-quotemark {
+    font-family: var(--serif);
+    font-size: 8rem;
+    line-height: 0.8;
+    position: absolute;
+    top: 20px;
+    left: 32px;
+    opacity: 0.08;
+    pointer-events: none;
+  }
+
+  .persona-role {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .persona-role::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .persona-card.cynic .persona-role { color: var(--cynic); }
+  .persona-card.cynic .persona-role::before { background: var(--cynic); }
+  .persona-card.cynic .persona-quotemark { color: var(--cynic); }
+
+  .persona-card.strategist .persona-role { color: var(--strategist); }
+  .persona-card.strategist .persona-role::before { background: var(--strategist); }
+  .persona-card.strategist .persona-quotemark { color: var(--strategist); }
+
+  .persona-card.optimist .persona-role { color: var(--optimist); }
+  .persona-card.optimist .persona-role::before { background: var(--optimist); }
+  .persona-card.optimist .persona-quotemark { color: var(--optimist); }
+
+  .persona-quote {
+    font-family: var(--body-serif);
+    font-size: 1.35rem;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.65;
+    color: var(--text);
+    position: relative;
+    z-index: 1;
+    margin-bottom: 24px;
+  }
+
+  .persona-source {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  /* ── Demo / Case Study Section ── */
+  .demo-section {
+    padding: 140px 80px;
+    background: var(--bg-elevated);
+    position: relative;
+  }
+  .demo-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 80px; right: 80px;
+    height: 1px;
+    background: linear-gradient(to right, var(--accent), transparent);
+  }
+
+  .demo-layout {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .demo-sidebar {
+    position: sticky;
+    top: 80px;
+  }
+
+  .demo-label {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  .demo-sidebar h2 {
+    font-family: var(--serif);
+    font-size: 2.8rem;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 24px;
+  }
+  .demo-sidebar h2 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .demo-sidebar p {
+    font-family: var(--body-serif);
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .demo-content {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .demo-question {
+    background: var(--bg);
+    border: 1px solid rgba(188,255,47,0.2);
+    padding: 36px 40px;
+    position: relative;
+  }
+  .demo-question::before {
+    content: 'QUERY';
+    position: absolute;
+    top: -10px; left: 24px;
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    background: var(--bg-elevated);
+    padding: 0 12px;
+  }
+  .demo-question p {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .demo-responses {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .demo-response {
+    background: var(--bg);
+    padding: 32px 36px;
+    border-left: 3px solid;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  .demo-response:hover {
+    transform: translateX(8px);
+  }
+  .demo-response.r-cynic { border-color: var(--cynic); }
+  .demo-response.r-strategist { border-color: var(--strategist); }
+  .demo-response.r-optimist { border-color: var(--optimist); }
+
+  .response-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .response-model {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .r-cynic .response-model { color: var(--cynic); }
+  .r-strategist .response-model { color: var(--strategist); }
+  .r-optimist .response-model { color: var(--optimist); }
+
+  .response-rank {
+    font-family: var(--sans);
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-left: auto;
+    letter-spacing: 1px;
+  }
+
+  .response-text {
+    font-family: var(--body-serif);
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .demo-consensus {
+    background: rgba(188,255,47,0.04);
+    border: 1px solid rgba(188,255,47,0.15);
+    padding: 40px;
+    position: relative;
+  }
+  .demo-consensus::before {
+    content: 'CONSENSUS';
+    position: absolute;
+    top: -10px; left: 24px;
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    background: var(--bg-elevated);
+    padding: 0 12px;
+  }
+  .demo-consensus p {
+    font-family: var(--body-serif);
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  /* ── Modes Section ── */
+  .modes-section {
+    padding: 140px 80px;
+  }
+
+  .modes-header {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+  .modes-header h2 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .modes-grid {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    flex-wrap: wrap;
+  }
+
+  .mode-pill {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    background: var(--bg-elevated);
+    border: 1px solid rgba(255,255,255,0.04);
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+    cursor: default;
+  }
+  .mode-pill:hover {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+  .mode-pill.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+
+  /* ── CTA Section ── */
+  .cta-section {
+    padding: 160px 80px;
+    text-align: center;
+    position: relative;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 1px; height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--accent));
+  }
+
+  .cta-section h2 {
+    font-family: var(--serif);
+    font-size: clamp(2.8rem, 5vw, 5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 32px;
+  }
+  .cta-section h2 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .cta-section p {
+    font-family: var(--body-serif);
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    max-width: 520px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+  }
+
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--sans);
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 22px 56px;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-link::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.12);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+  .cta-link:hover::before { transform: translateX(0); }
+  .cta-link:hover { letter-spacing: 6px; }
+
+  .final-tagline {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 48px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .hero {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto;
+    }
+    .hero-left { padding: 100px 40px 60px; }
+    .hero-right { height: 50vh; }
+    .hero::after { display: none; }
+    .flow-section, .persona-section, .demo-section, .modes-section, .cta-section {
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+    .flow-section-header { grid-template-columns: 1fr; gap: 24px; }
+    .flow-steps { grid-template-columns: 1fr; gap: 60px; }
+    .flow-step { border-left: none; border-top: 1px solid rgba(255,255,255,0.06); padding: 40px 0 0; }
+    .flow-step:first-child { border-top: none; }
+    .flow-steps::before, .flow-steps::after { display: none; }
+    .persona-grid { grid-template-columns: 1fr; gap: 24px; }
+    .persona-card:nth-child(2) { transform: none; }
+    .persona-card:nth-child(2):hover { transform: translateY(-4px); }
+    .demo-layout { grid-template-columns: 1fr; gap: 40px; }
+    .demo-sidebar { position: static; }
+    .editorial-divider { padding: 0 40px; }
+  }
+
+  @media (max-width: 640px) {
+    .hero-left { padding: 80px 24px 40px; }
+    .flow-section, .persona-section, .demo-section, .modes-section, .cta-section {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    .persona-card { padding: 32px 24px; }
+    .editorial-divider { padding: 0 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="issue-label">Achilles Analytics -- Council Platform</div>
+    <h1>Escape the<br><em>Echo Chamber.</em></h1>
+    <p class="hero-subtitle">Four frontier AI models answer every question independently. Then they rank each other -- anonymously. What survives is not opinion, but consensus.</p>
+    <a href="https://council.achillesanalytics.ca" class="hero-cta">
+      Launch Council Platform <span class="arrow">&rarr;</span>
+    </a>
+  </div>
+  <div class="hero-right">
+    <div class="editorial-collage">
+      <div class="collage-block b1"></div>
+      <div class="collage-block b2"></div>
+      <div class="collage-block b3"></div>
+      <span class="collage-label top">Multi-Model Consensus</span>
+      <span class="collage-label bottom">4 Models. 1 Answer.</span>
+      <span class="collage-number">4</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TAGLINE BAR ═══════════ -->
+<div class="tagline-bar">4 Models &nbsp;&middot;&nbsp; 3 Stages &nbsp;&middot;&nbsp; 1 Consensus</div>
+
+<!-- ═══════════ 3-STAGE FLOW ═══════════ -->
+<section class="flow-section">
+  <div class="flow-section-header">
+    <h2>The <em>Process</em></h2>
+    <p>Every query passes through three distinct stages -- collection, peer review, and synthesis -- to distill noise into signal.</p>
+  </div>
+
+  <div class="flow-steps">
+    <div class="flow-step">
+      <span class="step-number">01</span>
+      <div class="step-name">Collect</div>
+      <h3 class="step-title">Four Models Respond</h3>
+      <p class="step-desc">GPT-4o, Claude, Gemini, and Grok each generate an independent response. No model sees the others. No contamination.</p>
+    </div>
+    <div class="flow-step">
+      <span class="step-number">02</span>
+      <div class="step-name">Rank</div>
+      <h3 class="step-title">Anonymous Peer Review</h3>
+      <p class="step-desc">Each model evaluates and ranks the others' responses without knowing who authored them. Bias is structurally eliminated.</p>
+    </div>
+    <div class="flow-step">
+      <span class="step-number">03</span>
+      <div class="step-name">Synthesize</div>
+      <h3 class="step-title">Consensus Emerges</h3>
+      <p class="step-desc">A dedicated synthesizer model combines the top-ranked perspectives into a single, nuanced answer -- weighted by peer-review scores.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ DIVIDER ═══════════ -->
+<div class="editorial-divider">
+  <div class="line"></div>
+  <div class="diamond"></div>
+  <div class="line"></div>
+</div>
+
+<!-- ═══════════ PERSONAS ═══════════ -->
+<section class="persona-section">
+  <div class="persona-header">
+    <h2>Voices at the Table</h2>
+    <p class="subtitle">Each model brings a distinct analytical temperament. The tension between them is the point.</p>
+  </div>
+
+  <div class="persona-grid">
+    <div class="persona-card cynic">
+      <span class="persona-quotemark">&ldquo;</span>
+      <div class="persona-role">The Cynic</div>
+      <p class="persona-quote">Everyone's celebrating the canal reopening as a return to normal. But 'normal' was a single point of failure for 12% of global trade. We didn't fix anything -- we just got lucky again.</p>
+      <span class="persona-source">On the Suez Canal Crisis</span>
+    </div>
+
+    <div class="persona-card strategist">
+      <span class="persona-quotemark">&ldquo;</span>
+      <div class="persona-role">The Strategist</div>
+      <p class="persona-quote">The real story isn't the blockage itself -- it's the 48-hour window where every shipping company in the world simultaneously re-evaluated their dependency on a single chokepoint. That data is gold.</p>
+      <span class="persona-source">On the Suez Canal Crisis</span>
+    </div>
+
+    <div class="persona-card optimist">
+      <span class="persona-quotemark">&ldquo;</span>
+      <div class="persona-role">The Optimist</div>
+      <p class="persona-quote">This is exactly the kind of disruption that accelerates the Arctic route conversation and nearshoring investment. Every supply chain shock creates a new generation of resilience infrastructure.</p>
+      <span class="persona-source">On the Suez Canal Crisis</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ DIVIDER ═══════════ -->
+<div class="editorial-divider">
+  <div class="line"></div>
+  <div class="diamond"></div>
+  <div class="line"></div>
+</div>
+
+<!-- ═══════════ DEMO / CASE STUDY ═══════════ -->
+<section class="demo-section">
+  <div class="demo-layout">
+    <div class="demo-sidebar">
+      <div class="demo-label">Case Study</div>
+      <h2>The Suez Canal <em>Question</em></h2>
+      <p>Watch four models tackle a geopolitical crisis -- then see the consensus that emerges when peer review strips away bias and overconfidence.</p>
+    </div>
+
+    <div class="demo-content">
+      <div class="demo-question">
+        <p>"What are the long-term geopolitical implications of the Suez Canal disruption for global trade routes?"</p>
+      </div>
+
+      <div class="demo-responses">
+        <div class="demo-response r-cynic">
+          <div class="response-header">
+            <span class="response-model">Model A -- The Cynic</span>
+            <span class="response-rank">Peer Rank: #2</span>
+          </div>
+          <p class="response-text">The disruption exposed what everyone already knew but ignored: 12% of global trade flowing through a single canal is a systemic risk, not infrastructure. Expect performative policy changes but no structural shifts until the next crisis forces them.</p>
+        </div>
+
+        <div class="demo-response r-strategist">
+          <div class="response-header">
+            <span class="response-model">Model B -- The Strategist</span>
+            <span class="response-rank">Peer Rank: #1</span>
+          </div>
+          <p class="response-text">Three parallel developments will emerge: accelerated investment in the Northern Sea Route as Arctic ice retreats, Saudi Arabia's renewed push for the NEOM land bridge, and a quiet surge in port infrastructure across East Africa. The chokepoint calculus is being rewritten.</p>
+        </div>
+
+        <div class="demo-response r-optimist">
+          <div class="response-header">
+            <span class="response-model">Model C -- The Optimist</span>
+            <span class="response-rank">Peer Rank: #3</span>
+          </div>
+          <p class="response-text">Every major supply chain disruption has historically catalyzed diversification. The Suez blockage is accelerating nearshoring timelines by 3-5 years and creating investment opportunities in regional trade corridors that were previously considered uneconomical.</p>
+        </div>
+      </div>
+
+      <div class="demo-consensus">
+        <p>The Suez disruption represents an inflection point in global trade route strategy. While structural dependencies will persist in the medium term, three trends are accelerating: Arctic route development, Middle Eastern corridor alternatives, and nearshoring investment. The consensus indicates the primary impact is not physical but strategic -- reshaping how nations and corporations model chokepoint risk in their long-term planning.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ MODES ═══════════ -->
+<section class="modes-section">
+  <div class="modes-header">
+    <h2>Five Modes of Inquiry</h2>
+  </div>
+  <div class="modes-grid">
+    <div class="mode-pill active">Synthesize</div>
+    <div class="mode-pill">Research</div>
+    <div class="mode-pill">Debate</div>
+    <div class="mode-pill">Strategy</div>
+    <div class="mode-pill">Research Light</div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA ═══════════ -->
+<section class="cta-section">
+  <h2>Stop Trusting<br><em>One Model.</em></h2>
+  <p>Consensus isn't compromise. It's what survives when four independent minds interrogate the same question and each other.</p>
+  <a href="https://council.achillesanalytics.ca" class="cta-link">Launch Council Platform <span>&rarr;</span></a>
+  <div class="final-tagline">4 Models &nbsp;&middot;&nbsp; 3 Stages &nbsp;&middot;&nbsp; 1 Consensus</div>
+</section>
+
+</body>
+</html>

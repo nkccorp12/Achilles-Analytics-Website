@@ -139,7 +139,7 @@ function AICouncil() {
           </div>
           <p className="council__panel-text">
             Fine-tune on proprietary data, but don&rsquo;t train from scratch. Own the last
-            mile -- the embedding layer that makes your product defensible -- while renting
+            mile (the embedding layer that makes your product defensible) while renting
             the foundation.
           </p>
           <div className="council__bars">
