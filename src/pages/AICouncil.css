@@ -28,16 +28,23 @@
   --font-body: 'DM Sans', sans-serif;
 }
 
-/* ── Grid background ───────────────────────────────────────── */
+/* ── Grid background — spans full section, breaks out of max-width ── */
 .council__grid-bg {
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
   background-image:
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: 60px 60px;
+    linear-gradient(rgba(255,255,255,0.006) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.006) 1px, transparent 1px);
+  background-size: 80px 80px;
   pointer-events: none;
   z-index: 0;
+  opacity: 0.6;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
 }
 
 /* ── Section ───────────────────────────────────────────────── */
@@ -203,8 +210,46 @@
   display: flex;
   align-items: center;
   gap: 0;
-  transform: rotateX(8deg) rotateY(-5deg);
+  position: relative;
+  transform: none;
   transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  --mx: -9999px;
+  --my: -9999px;
+  --mxn: 0;
+  --myn: 0;
+}
+
+/* (Cursor spotlight removed — it was creating a hard edge against the section background.) */
+
+/* Cursor parallax tilt — subtle shift around flat baseline */
+.council__pipeline-track.is-tracking {
+  transform:
+    rotateX(calc(var(--myn) * -3deg))
+    rotateY(calc(var(--mxn) * 4deg));
+}
+
+/* Per-hex micro-tilt + glow lift */
+.council__pipeline-track .council__hex {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), filter 0.35s ease;
+}
+
+.council__pipeline-track.is-tracking .council__hex {
+  transform: translate3d(
+    calc(var(--mxn) * 4px),
+    calc(var(--myn) * 3px),
+    0
+  );
+}
+
+.council__pipeline-track.is-tracking .council__hex:hover {
+  transform: translate3d(0, -2px, 12px) scale(1.04);
+  filter: drop-shadow(0 0 18px rgba(188, 255, 47, 0.45));
+}
+
+/* Speed up pipe particles when cursor active */
+.council__pipeline-track.is-tracking .council__pipe-particle {
+  animation-duration: 1.2s !important;
 }
 
 /* Hexagonal node */
@@ -370,9 +415,26 @@
   font-size: 0.55rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-muted);
-  background: rgba(255,255,255,0.04);
-  padding: 0.2rem 0.5rem;
+  color: var(--accent);
+  background: rgba(188, 255, 47, 0.08);
+  border: 1px solid rgba(188, 255, 47, 0.25);
+  padding: 0.45rem 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 4px rgba(188, 255, 47, 0.35));
+}
+
+.council__panel-model svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+  color: var(--accent);
+}
+
+.council__panel-model svg * {
+  fill: var(--accent) !important;
+  color: var(--accent) !important;
 }
 
 .council__panel-text {

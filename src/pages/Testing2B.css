@@ -1,0 +1,550 @@
+/* ==========================================================================
+   TESTING 2B — RADIAL CONSTELLATION
+   All styles scoped under .t2b
+   ========================================================================== */
+
+.t2b {
+  /* Local fallbacks; .neu sets the canonical tokens */
+  --t2b-accent: var(--accent, #BCFF2F);
+  --t2b-black: var(--black, #000);
+  --t2b-text: var(--text-primary, #f0f0f0);
+  --t2b-dim: rgba(240, 240, 240, 0.55);
+  --t2b-faint: rgba(240, 240, 240, 0.32);
+  --t2b-grid: rgba(188, 255, 47, 0.10);
+  --t2b-grid-strong: rgba(188, 255, 47, 0.22);
+
+  background: var(--t2b-black);
+  color: var(--t2b-text);
+  min-height: 100vh;
+  font-family: var(--font-mono, 'DM Sans', sans-serif);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Subtle grid background to feel like a tactical surface */
+.t2b::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(188, 255, 47, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(188, 255, 47, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============ HERO ============ */
+
+.t2b__hero {
+  position: relative;
+  z-index: 2;
+  padding: 140px clamp(1.5rem, 5vw, 4rem) 32px;
+  max-width: 980px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.t2b__label {
+  font-family: var(--font-label, 'IBM Plex Mono', monospace);
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--t2b-accent);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.t2b__heading {
+  font-family: var(--font-serif, 'IBM Plex Serif', serif);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 5.5vw, 4.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 20px;
+}
+
+.t2b__heading-accent {
+  color: var(--t2b-accent);
+  font-style: italic;
+}
+
+.t2b__sub {
+  color: var(--t2b-dim);
+  font-size: 15px;
+  line-height: 1.65;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* ============ STAGE ============ */
+
+.t2b__stage-wrap {
+  position: relative;
+  z-index: 2;
+  padding: 24px clamp(1rem, 4vw, 3rem) 48px;
+}
+
+.t2b__stage {
+  position: relative;
+  width: min(900px, 92vw);
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  border: 1px solid var(--t2b-grid-strong);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(188, 255, 47, 0.06) 0%, rgba(0,0,0,0) 60%),
+    var(--t2b-black);
+  box-shadow:
+    inset 0 0 0 1px rgba(188, 255, 47, 0.06),
+    0 0 80px rgba(188, 255, 47, 0.05);
+}
+
+/* Frame corner brackets on the stage */
+.t2b__stage::before,
+.t2b__stage::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-color: var(--t2b-accent);
+  border-style: solid;
+  border-width: 0;
+}
+.t2b__stage::before {
+  top: -1px; left: -1px;
+  border-top-width: 2px;
+  border-left-width: 2px;
+}
+.t2b__stage::after {
+  bottom: -1px; right: -1px;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+}
+
+.t2b__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ---- Radar rings ---- */
+.t2b__ring {
+  fill: none;
+  stroke: var(--t2b-grid);
+  stroke-width: 1;
+}
+.t2b__ring--2 {
+  stroke: var(--t2b-grid-strong);
+  stroke-dasharray: 4 6;
+}
+.t2b__axis {
+  stroke: var(--t2b-grid);
+  stroke-width: 1;
+  stroke-dasharray: 2 6;
+}
+.t2b__ticks line {
+  stroke: var(--t2b-grid-strong);
+  stroke-width: 1;
+}
+
+/* ---- Sweep ---- */
+.t2b__sweep {
+  animation: t2b-sweep 8s linear infinite;
+  transform-box: fill-box;
+  transform-origin: 500px 500px;
+}
+@keyframes t2b-sweep {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ---- Beams ---- */
+.t2b__beam {
+  stroke: var(--t2b-accent);
+  stroke-width: 1;
+  opacity: 0.35;
+  filter: drop-shadow(0 0 4px rgba(188, 255, 47, 0.35));
+  transition: opacity 0.3s ease, stroke-width 0.3s ease;
+}
+.t2b__beam-group.is-hot .t2b__beam {
+  opacity: 1;
+  stroke-width: 1.6;
+  filter: drop-shadow(0 0 10px rgba(188, 255, 47, 0.85));
+}
+
+.t2b__beam-cap {
+  fill: var(--t2b-accent);
+  opacity: 0.7;
+}
+.t2b__beam-group.is-hot .t2b__beam-cap {
+  opacity: 1;
+}
+
+/* Pulses traveling along beams toward the core.
+   Each beam group has its own pulse using offsetPath when supported,
+   plus a fallback opacity flicker. */
+.t2b__beam-pulse {
+  fill: var(--t2b-accent);
+  filter: drop-shadow(0 0 6px var(--t2b-accent));
+  offset-rotate: 0deg;
+  animation: t2b-pulse-travel 3.2s linear infinite, t2b-pulse-flicker 3.2s linear infinite;
+}
+@keyframes t2b-pulse-travel {
+  from { offset-distance: 0%; }
+  to   { offset-distance: 100%; }
+}
+@keyframes t2b-pulse-flicker {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ---- Core ---- */
+.t2b__core-disk {
+  fill: var(--t2b-black);
+  stroke: var(--t2b-accent);
+  stroke-width: 1.5;
+}
+.t2b__core-inner {
+  fill: rgba(188, 255, 47, 0.04);
+  stroke: rgba(188, 255, 47, 0.45);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  animation: t2b-core-spin 24s linear infinite;
+  transform-origin: 500px 500px;
+  transform-box: fill-box;
+}
+@keyframes t2b-core-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.t2b__core-halo {
+  fill: none;
+  stroke: var(--t2b-accent);
+  stroke-width: 1;
+  opacity: 0.25;
+  animation: t2b-core-pulse 2.4s ease-in-out infinite;
+}
+.t2b__core-halo--2 {
+  animation-delay: 1.2s;
+  opacity: 0.15;
+}
+@keyframes t2b-core-pulse {
+  0%, 100% { opacity: 0.05; transform: scale(1); }
+  50%      { opacity: 0.35; transform: scale(1.04); }
+}
+.t2b__core-cross {
+  stroke: var(--t2b-accent);
+  stroke-width: 1;
+  opacity: 0.5;
+}
+
+/* Core HTML label overlay */
+.t2b__core-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 5;
+}
+.t2b__core-letter {
+  font-family: var(--font-serif, 'IBM Plex Serif', serif);
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  line-height: 1;
+  color: var(--t2b-accent);
+  text-shadow: 0 0 18px rgba(188, 255, 47, 0.45);
+}
+.t2b__core-meta {
+  margin-top: 6px;
+  font-family: var(--font-label, 'IBM Plex Mono', monospace);
+  font-size: 9px;
+  letter-spacing: 4px;
+  color: var(--t2b-text);
+  text-transform: uppercase;
+}
+.t2b__core-status {
+  margin-top: 4px;
+  font-family: var(--font-label, 'IBM Plex Mono', monospace);
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: var(--t2b-faint);
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+}
+.t2b__core-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--t2b-accent);
+  box-shadow: 0 0 8px var(--t2b-accent);
+  animation: t2b-blink 1.4s ease-in-out infinite;
+}
+@keyframes t2b-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.3; }
+}
+
+/* ---- Module nodes (HTML, positioned over SVG) ---- */
+.t2b__node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  z-index: 6;
+  width: 130px;
+  text-align: center;
+  font-family: var(--font-label, 'IBM Plex Mono', monospace);
+  color: var(--t2b-text);
+  transition: transform 0.3s ease;
+}
+
+.t2b__node-frame {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 78px;
+  height: 78px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(188, 255, 47, 0.35);
+  color: var(--t2b-text);
+  transition: border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.t2b__node:hover .t2b__node-frame,
+.t2b__node:focus-visible .t2b__node-frame {
+  border-color: var(--t2b-accent);
+  color: var(--t2b-accent);
+  box-shadow:
+    0 0 0 1px var(--t2b-accent),
+    0 0 24px rgba(188, 255, 47, 0.55);
+  transform: scale(1.06);
+}
+
+.t2b__node-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bracket corners on each node tile */
+.t2b__node-corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--t2b-accent);
+  border-style: solid;
+  border-width: 0;
+}
+.t2b__node-corner--tl { top: -1px; left: -1px;  border-top-width: 2px; border-left-width: 2px; }
+.t2b__node-corner--tr { top: -1px; right: -1px; border-top-width: 2px; border-right-width: 2px; }
+.t2b__node-corner--bl { bottom: -1px; left: -1px;  border-bottom-width: 2px; border-left-width: 2px; }
+.t2b__node-corner--br { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; }
+
+.t2b__node-name {
+  font-family: var(--font-serif, 'IBM Plex Serif', serif);
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  color: var(--t2b-text);
+  white-space: nowrap;
+}
+.t2b__node:hover .t2b__node-name,
+.t2b__node:focus-visible .t2b__node-name {
+  color: var(--t2b-accent);
+}
+
+.t2b__node-tag {
+  font-family: var(--font-label, 'IBM Plex Mono', monospace);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--t2b-faint);
+  text-transform: uppercase;
+}
+
+/* Group differentiation: subtle inner accent */
+.t2b__node--perception .t2b__node-frame {
+  background:
+    linear-gradient(180deg, rgba(188, 255, 47, 0.08), rgba(0,0,0,0.85));
+}
+.t2b__node--processing .t2b__node-frame {
+  background:
+    linear-gradient(90deg, rgba(188, 255, 47, 0.06), rgba(0,0,0,0.85));
+}
+.t2b__node--decision .t2b__node-frame {
+  background:
+    linear-gradient(0deg, rgba(188, 255, 47, 0.08), rgba(0,0,0,0.85));
+}
+
+/* ---- Group bands (text labels around the stage) ---- */
+.t2b__band {
+  position: absolute;
+  font-family: var(--font-label, 'IBM Plex Mono', monospace);
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--t2b-faint);
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 4;
+}
+.t2b__band--top {
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.t2b__band--bot {
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.t2b__band--mid-l {
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: left center;
+}
+.t2b__band--mid-r {
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: right center;
+}
+
+/* ---- Corner readouts ---- */
+.t2b__readout {
+  position: absolute;
+  font-family: var(--font-label, 'IBM Plex Mono', monospace);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--t2b-text);
+  text-transform: uppercase;
+  z-index: 7;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(188, 255, 47, 0.18);
+  padding: 8px 10px;
+  min-width: 150px;
+  max-width: 220px;
+  pointer-events: none;
+}
+.t2b__readout-line {
+  margin-top: 4px;
+  color: var(--t2b-dim);
+  font-size: 8px;
+  letter-spacing: 1.5px;
+}
+.t2b__readout--tl { top: 16px; left: 16px; }
+.t2b__readout--tr { top: 16px; right: 16px; text-align: right; }
+.t2b__readout--bl { bottom: 16px; left: 16px; }
+.t2b__readout--br { bottom: 16px; right: 16px; text-align: right; max-width: 240px; }
+
+/* ============ LEGEND ============ */
+
+.t2b__legend {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  padding: 16px 24px 64px;
+  font-family: var(--font-label, 'IBM Plex Mono', monospace);
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--t2b-dim);
+  text-transform: uppercase;
+}
+.t2b__legend-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.t2b__legend-pip {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--t2b-accent);
+  position: relative;
+}
+.t2b__legend-pip--perception { background: rgba(188, 255, 47, 0.7); }
+.t2b__legend-pip--processing { background: rgba(188, 255, 47, 0.4); }
+.t2b__legend-pip--decision   { background: rgba(188, 255, 47, 0.15); }
+
+/* ============ FOOTER ============ */
+
+.t2b__footer {
+  position: relative;
+  z-index: 2;
+  padding: 32px clamp(1.5rem, 5vw, 4rem) 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(188, 255, 47, 0.12);
+  max-width: 1320px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.t2b__back {
+  font-family: var(--font-label, 'IBM Plex Mono', monospace);
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--t2b-text);
+  text-decoration: none;
+  text-transform: uppercase;
+  border: 1px solid var(--t2b-accent);
+  padding: 12px 20px;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.t2b__back:hover {
+  background: var(--t2b-accent);
+  color: var(--t2b-black);
+}
+.t2b__footer-meta {
+  font-family: var(--font-label, 'IBM Plex Mono', monospace);
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--t2b-faint);
+  text-transform: uppercase;
+}
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width: 720px) {
+  .t2b__hero { padding-top: 110px; }
+  .t2b__node { width: 100px; }
+  .t2b__node-frame { width: 56px; height: 56px; }
+  .t2b__node-name { font-size: 11px; }
+  .t2b__node-tag  { font-size: 8px; }
+  .t2b__readout   { font-size: 8px; min-width: 110px; padding: 6px 8px; }
+  .t2b__band      { font-size: 8px; letter-spacing: 2px; }
+  .t2b__legend    { gap: 16px; font-size: 9px; }
+}
+
+@media (max-width: 480px) {
+  .t2b__node-name { display: none; }
+  .t2b__node-tag  { display: none; }
+  .t2b__readout--tr,
+  .t2b__readout--br { max-width: 130px; }
+}
+
+/* Reduced motion: kill the moving sweeps & pulses */
+@media (prefers-reduced-motion: reduce) {
+  .t2b__sweep,
+  .t2b__core-inner,
+  .t2b__core-halo,
+  .t2b__core-dot,
+  .t2b__beam-pulse {
+    animation: none !important;
+  }
+  .t2b__beam-pulse { opacity: 0; }
+}

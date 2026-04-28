@@ -6,6 +6,19 @@
 .ab {
   min-height: 100vh;
   padding-top: 72px; /* clear fixed header */
+  overflow-x: clip;
+  max-width: 100vw;
+}
+
+/* Belt-and-suspenders: prevent any descendant from triggering horizontal scroll */
+.ab,
+.ab * {
+  max-width: 100%;
+}
+
+.ab-section {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Always-visible header */
@@ -313,8 +326,36 @@
 
 @media (max-width: 700px) {
   .ab-section {
-    grid-template-columns: 48px 1fr;
-    gap: 16px;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding-left: clamp(12px, 5vw, 24px);
+    padding-right: clamp(12px, 5vw, 24px);
+  }
+  /* Number rail goes inline on mobile, not its own column */
+  .ab-section__rail {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding-top: 0;
+  }
+  .ab-section__rail-line { display: none; }
+
+  /* Thesis: stack number above text, give boxes more breathing room */
+  .ab-thesis__item {
+    grid-template-columns: 1fr;
+    padding: 24px 18px;
+    gap: 12px;
+  }
+  .ab-thesis__num {
+    margin-bottom: 4px;
+  }
+  /* Negative section rows likewise */
+  .ab-neg__row {
+    padding: 20px 18px;
+  }
+  /* Status grid → single column */
+  .ab-status {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -464,6 +505,51 @@
   color: var(--text-primary);
   margin: 0;
   font-weight: 400;
+}
+
+.ab-build__lead--accent {
+  margin-top: 8px;
+  padding: 18px 22px;
+  border-left: 2px solid var(--accent);
+  background: rgba(188, 255, 47, 0.04);
+}
+
+.ab-build__lead--accent strong {
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.ab-build__lead--accent em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.ab-build__tagline {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--panel-border);
+  font-family: var(--font-label);
+  font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.ab-build__tagline-mark {
+  color: var(--accent);
+  margin-right: 8px;
+  font-weight: 600;
+}
+
+.ab-build__tagline em {
+  display: inline-block;
+  font-style: italic;
+  color: var(--accent);
+  letter-spacing: 1px;
+  text-transform: none;
+  margin-left: 4px;
 }
 
 .ab-build__list {

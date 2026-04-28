@@ -1,0 +1,315 @@
+/* =====================================================================
+   HERO TEST — GLITCH-IN + MATRIX DATAFALL
+   Scoped under .htglitch
+   ===================================================================== */
+
+.htglitch {
+  position: relative;
+  min-height: 100vh;
+  background: #000;
+  color: var(--text-primary, #f0f0f0);
+  font-family: var(--font-mono, 'DM Sans', sans-serif);
+  overflow: hidden;
+  padding-top: 88px;
+}
+
+/* ---------------- HERO SHELL ---------------- */
+.htglitch__hero {
+  position: relative;
+  min-height: calc(100vh - 88px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.htglitch__hero--visible {
+  opacity: 1;
+}
+
+.htglitch__inner {
+  position: relative;
+  z-index: 4;
+  max-width: 980px;
+  padding: 0 clamp(1.25rem, 5vw, 3rem);
+  text-align: left;
+}
+
+/* ---------------- MATRIX DATAFALL CANVAS ---------------- */
+.htglitch__rain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.6;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  transition: opacity 0.35s ease-out;
+  /* Soft mask so the rain reads as ambient, not a wall of green */
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 55%, rgba(0, 0, 0, 0.35) 100%);
+  mask-image: radial-gradient(ellipse at center, #000 55%, rgba(0, 0, 0, 0.35) 100%);
+}
+.htglitch__rain--fading {
+  opacity: 0;
+}
+
+/* ---------------- SCAN-LINE + HORIZONTAL SKIP OVERLAYS ---------------- */
+.htglitch__scan {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.03) 0,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+  animation: htglitch-scan-drift 1.2s steps(8) 1;
+}
+
+.htglitch__skip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 28%,
+    rgba(188, 255, 47, 0.06) 28.5%,
+    transparent 29%,
+    transparent 62%,
+    rgba(255, 0, 80, 0.05) 62.5%,
+    transparent 63%,
+    transparent 100%
+  );
+  animation: htglitch-skip 1.2s steps(6) 1;
+}
+
+@keyframes htglitch-scan-drift {
+  0%   { transform: translateY(0); opacity: 0.85; }
+  100% { transform: translateY(40px); opacity: 0; }
+}
+
+@keyframes htglitch-skip {
+  0%   { transform: translateX(0);    opacity: 1; }
+  18%  { transform: translateX(-6px); opacity: 1; }
+  22%  { transform: translateX(4px);  opacity: 1; }
+  46%  { transform: translateX(-2px); opacity: 1; }
+  62%  { transform: translateX(8px);  opacity: 0.7; }
+  78%  { transform: translateX(-3px); opacity: 0.4; }
+  100% { transform: translateX(0);    opacity: 0; }
+}
+
+/* ---------------- EYEBROW ---------------- */
+.htglitch__eyebrow {
+  font-family: var(--font-label, 'IBM Plex Mono', monospace);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  color: var(--accent, #BCFF2F);
+  margin-bottom: 28px;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.htglitch__eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--accent, #BCFF2F);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent, #BCFF2F);
+  animation: htglitch-pulse 1.6s ease-in-out infinite;
+}
+@keyframes htglitch-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+/* ---------------- HEADLINE + RGB CHROMATIC SPLIT ---------------- */
+.htglitch__headline {
+  position: relative;
+  font-family: var(--font-serif, 'IBM Plex Serif', Georgia, serif);
+  font-weight: 400;
+  font-size: clamp(2rem, 5.4vw, 4.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--text-primary, #f0f0f0);
+  margin: 0 0 28px;
+  isolation: isolate;
+}
+
+.htglitch__headline em {
+  font-style: italic;
+  color: var(--accent, #BCFF2F);
+}
+
+.htglitch__real,
+.htglitch__ghost {
+  display: block;
+  position: relative;
+}
+
+/* The two RGB ghosts sit on top of the real text, additively blended. */
+.htglitch__ghost {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+  mix-blend-mode: screen;
+  opacity: 0;
+  transform: translate3d(0, 0, 0);
+  will-change: transform, opacity;
+}
+.htglitch__ghost em {
+  /* Ghosts keep the colour of the channel, even on <em> */
+  color: inherit;
+}
+
+.htglitch__ghost--r {
+  color: #ff2f4a;
+  text-shadow: 0 0 1px #ff2f4a;
+}
+.htglitch__ghost--b {
+  color: #2fb4ff;
+  text-shadow: 0 0 1px #2fb4ff;
+}
+
+/* When glitch is active: ghosts visible + animated offsets. */
+.htglitch__headline--glitch .htglitch__ghost--r {
+  opacity: 0.9;
+  animation: htglitch-r 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 1 forwards;
+}
+.htglitch__headline--glitch .htglitch__ghost--b {
+  opacity: 0.9;
+  animation: htglitch-b 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 1 forwards;
+}
+.htglitch__headline--glitch .htglitch__real {
+  animation: htglitch-real 1.2s steps(14) 1;
+}
+
+/* Red ghost: jitters left, then collapses to 0. */
+@keyframes htglitch-r {
+  0%   { transform: translate(-3px,  1px); opacity: 0.95; }
+  18%  { transform: translate(-6px, -2px); opacity: 1; }
+  32%  { transform: translate(-2px,  2px); opacity: 0.9; }
+  54%  { transform: translate(-4px,  0);   opacity: 0.85; }
+  78%  { transform: translate(-1px,  0);   opacity: 0.5; }
+  100% { transform: translate(0, 0);       opacity: 0; }
+}
+/* Blue ghost: mirror jitter right. */
+@keyframes htglitch-b {
+  0%   { transform: translate( 3px, -1px); opacity: 0.95; }
+  18%  { transform: translate( 6px,  2px); opacity: 1; }
+  32%  { transform: translate( 2px, -2px); opacity: 0.9; }
+  54%  { transform: translate( 4px,  0);   opacity: 0.85; }
+  78%  { transform: translate( 1px,  0);   opacity: 0.5; }
+  100% { transform: translate(0, 0);       opacity: 0; }
+}
+/* Real text: brief horizontal "skip" jumps, settles clean. */
+@keyframes htglitch-real {
+  0%   { transform: translateX(0);    filter: none; }
+  10%  { transform: translateX(-4px); filter: brightness(1.4); }
+  14%  { transform: translateX(2px); }
+  22%  { transform: translateX(0); }
+  44%  { transform: translateX(3px); }
+  48%  { transform: translateX(0); }
+  72%  { transform: translateX(-1px); }
+  100% { transform: translateX(0);    filter: none; }
+}
+
+/* Settled state — explicit 0 offsets so a re-render holds clean. */
+.htglitch__headline:not(.htglitch__headline--glitch) .htglitch__ghost {
+  transform: translate(0, 0);
+  opacity: 0;
+}
+
+/* ---------------- SUBHEAD + CTAs ---------------- */
+.htglitch__subhead {
+  font-family: var(--font-label, 'IBM Plex Mono', monospace);
+  font-size: clamp(0.95rem, 1.15vw, 1.05rem);
+  line-height: 1.65;
+  color: var(--text-secondary, rgba(240, 240, 240, 0.65));
+  max-width: 64ch;
+  margin: 0 0 40px;
+}
+
+.htglitch__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.htglitch__cta {
+  font-family: var(--font-label, 'IBM Plex Mono', monospace);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 14px 26px;
+  border: 1px solid var(--accent, #BCFF2F);
+  text-decoration: none;
+  transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  cursor: pointer;
+}
+.htglitch__cta--primary {
+  background: var(--accent, #BCFF2F);
+  color: #000;
+}
+.htglitch__cta--primary:hover {
+  background: transparent;
+  color: var(--accent, #BCFF2F);
+  box-shadow: 0 0 18px rgba(188, 255, 47, 0.35);
+}
+.htglitch__cta--secondary {
+  background: transparent;
+  color: var(--accent, #BCFF2F);
+}
+.htglitch__cta--secondary:hover {
+  background: rgba(188, 255, 47, 0.08);
+  box-shadow: 0 0 18px rgba(188, 255, 47, 0.2);
+}
+
+/* ---------------- REDUCED MOTION ---------------- */
+@media (prefers-reduced-motion: reduce) {
+  .htglitch__rain,
+  .htglitch__scan,
+  .htglitch__skip {
+    display: none !important;
+  }
+  .htglitch__hero {
+    opacity: 1;
+  }
+  .htglitch__headline--glitch .htglitch__ghost,
+  .htglitch__ghost {
+    display: none;
+  }
+  .htglitch__headline--glitch .htglitch__real {
+    animation: none;
+  }
+  .htglitch__eyebrow::before {
+    animation: none;
+  }
+}
+
+/* ---------------- MOBILE ---------------- */
+@media (max-width: 640px) {
+  .htglitch__inner {
+    padding: 0 1.25rem;
+  }
+  .htglitch__ctas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .htglitch__cta {
+    text-align: center;
+  }
+}

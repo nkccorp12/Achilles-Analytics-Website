@@ -146,7 +146,7 @@ export default function UseCases() {
         </h2>
         <p className="vg-usecase__description">
           From warehouse floors to open waters, Achilles adapts to any
-          operational domain where structured foresight creates decisive
+          operational domain where structured intelligence creates decisive
           advantage.
         </p>
       </div>
@@ -170,10 +170,13 @@ export default function UseCases() {
             Warehouse &amp; Distribution Logistics
           </h3>
           <p className="vg-usecase__showcase-text">
-            Real-time visibility into multi-site warehouse operations. Impact
-            analysis detects cascading delays before they propagate through the
-            supply chain. Vulnerability scanning surfaces single-points-of-failure
-            in routing topology.
+            Open-source signals around your distribution network: port
+            congestion, customs incidents, labour actions, regional alerts.
+            All mapped against your supplier and route topology. Impact
+            analysis flags cascading delays before they propagate through
+            the supply chain. Vulnerability scoring surfaces
+            single-points-of-failure without ever touching your warehouse
+            systems.
           </p>
           <div className="vg-usecase__metrics">
             <div className="vg-usecase__metric">

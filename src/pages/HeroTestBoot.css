@@ -1,0 +1,281 @@
+/* ==========================================================================
+   HERO TEST — BOOT SEQUENCE
+   Terminal-style intro that fades into the hero.
+   All rules scoped under .htboot to avoid leakage.
+   ========================================================================== */
+
+.htboot {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background: #000;
+  color: var(--text-primary, #f0f0f0);
+  font-family: var(--font-mono, 'DM Sans', sans-serif);
+  overflow: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   BOOT TERMINAL OVERLAY
+   -------------------------------------------------------------------------- */
+
+.htboot__terminal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: #000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(80px, 14vh, 160px) clamp(20px, 6vw, 80px);
+  opacity: 1;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  pointer-events: none;
+}
+
+.htboot__terminal--leaving {
+  opacity: 0;
+  transform: scale(1.01);
+}
+
+.htboot__scanlines {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(188, 255, 47, 0.04) 0px,
+    rgba(188, 255, 47, 0.04) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.5;
+}
+
+.htboot__log {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-family: var(--font-label, 'IBM Plex Mono', 'Courier New', monospace);
+  font-size: clamp(13px, 1.6vw, 17px);
+  line-height: 1.85;
+  color: var(--accent, #BCFF2F);
+  text-shadow: 0 0 6px rgba(188, 255, 47, 0.45);
+  letter-spacing: 0.02em;
+  white-space: pre-wrap;
+  max-width: 880px;
+  width: 100%;
+}
+
+.htboot__line {
+  display: block;
+}
+
+.htboot__line--active {
+  display: inline;
+}
+
+.htboot__cursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--accent, #BCFF2F);
+  font-size: 0.95em;
+  animation: htboot-blink 0.9s steps(1, end) infinite;
+  text-shadow: 0 0 8px rgba(188, 255, 47, 0.7);
+}
+
+@keyframes htboot-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* --------------------------------------------------------------------------
+   GREEN FLASH WASH
+   -------------------------------------------------------------------------- */
+
+.htboot__flash {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: var(--accent, #BCFF2F);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 90ms ease-out;
+}
+
+.htboot__flash--on {
+  opacity: 0.3;
+}
+
+/* --------------------------------------------------------------------------
+   HERO
+   -------------------------------------------------------------------------- */
+
+.htboot__hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(100px, 12vh, 160px) clamp(20px, 6vw, 80px) clamp(60px, 8vh, 100px);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+
+.htboot__hero--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.htboot__hero-inner {
+  width: 100%;
+  max-width: 1080px;
+  text-align: left;
+}
+
+.htboot__eyebrow {
+  font-family: var(--font-label, 'IBM Plex Mono', monospace);
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent, #BCFF2F);
+  margin: 0 0 28px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.htboot__eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent, #BCFF2F);
+  box-shadow: 0 0 8px var(--accent, #BCFF2F);
+  animation: htboot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes htboot-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.85); }
+}
+
+.htboot__headline {
+  font-family: var(--font-serif, 'IBM Plex Serif', Georgia, serif);
+  font-weight: 400;
+  font-size: clamp(38px, 6.2vw, 88px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--text-primary, #f0f0f0);
+  margin: 0 0 32px 0;
+  max-width: 18ch;
+}
+
+.htboot__headline em {
+  font-style: italic;
+  color: var(--accent, #BCFF2F);
+  font-weight: 400;
+}
+
+.htboot__subhead {
+  font-family: var(--font-mono, 'DM Sans', sans-serif);
+  font-size: clamp(15px, 1.35vw, 18px);
+  line-height: 1.65;
+  color: var(--text-secondary, rgba(240, 240, 240, 0.65));
+  margin: 0 0 44px 0;
+  max-width: 56ch;
+}
+
+.htboot__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
+.htboot__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-label, 'IBM Plex Mono', monospace);
+  font-size: 12px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 14px 28px;
+  text-decoration: none;
+  border: 1px solid var(--accent, #BCFF2F);
+  transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease,
+    transform 0.25s ease;
+  cursor: pointer;
+}
+
+.htboot__cta--primary {
+  background: var(--accent, #BCFF2F);
+  color: #000;
+}
+
+.htboot__cta--primary:hover {
+  background: transparent;
+  color: var(--accent, #BCFF2F);
+  box-shadow: 0 0 14px rgba(188, 255, 47, 0.35);
+  transform: translateY(-1px);
+}
+
+.htboot__cta--secondary {
+  background: transparent;
+  color: var(--text-primary, #f0f0f0);
+  border-color: rgba(240, 240, 240, 0.35);
+}
+
+.htboot__cta--secondary:hover {
+  border-color: var(--accent, #BCFF2F);
+  color: var(--accent, #BCFF2F);
+  transform: translateY(-1px);
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 600px) {
+  .htboot__terminal {
+    padding-top: 100px;
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  .htboot__log {
+    font-size: 12.5px;
+    line-height: 1.75;
+  }
+  .htboot__ctas {
+    width: 100%;
+  }
+  .htboot__cta {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   REDUCED MOTION — skip the show, jump to hero
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .htboot__terminal,
+  .htboot__flash {
+    display: none !important;
+  }
+  .htboot__hero {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .htboot__cursor,
+  .htboot__eyebrow::before {
+    animation: none !important;
+  }
+}

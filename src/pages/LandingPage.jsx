@@ -306,21 +306,6 @@ export default function LandingPage() {
               Reach Out
             </a>
           </div>
-
-          {/* Council Teaser Card */}
-          <a
-            href="#ai-council"
-            className="neu-council-teaser"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById('ai-council')?.scrollIntoView({ behavior: 'smooth' });
-            }}
-          >
-            <span className="neu-council-teaser__badge">NEW: STANDALONE PRODUCT</span>
-            <span className="neu-council-teaser__title">AI Council</span>
-            <span className="neu-council-teaser__desc">Escape the echo chamber. 4 LLMs debate, rank, and synthesize.</span>
-            <span className="neu-council-teaser__cta">Try it &rarr;</span>
-          </a>
         </div>
 
         <div className="neu-hero__globe" aria-hidden="true">

@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import './LandingPage.css';
+import './NewPage.css';
 import './AboutPage.css';
 import WhitelistButton from '../components/WhitelistButton';
+import AICouncilFloatingPill from '../components/AICouncilFloatingPill';
 
 const HiringPill = lazy(() => import('../components/HiringPill'));
 
@@ -45,30 +47,25 @@ export default function AboutPage() {
       {/* ═══ FIXED HEADER ═══ */}
       <header className="neu-header neu-header--visible ab-header">
         <div className="neu-header__inner">
-          <a href="/" className="neu-header__wordmark ab-wordmark-link">
-            <span>A</span>CHILLES <span className="neu-header__wordmark-sub">Analytics</span>
+          <a href="/" className="neu-header__wordmark" style={{ textDecoration: 'none' }}>
+            <span>ACHILLES</span> <span className="neu-header__wordmark-sub">ANALYTICS</span>
           </a>
-          <button
-            className={`neu-header__hamburger${menuOpen ? ' neu-header__hamburger--active' : ''}`}
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle navigation menu"
-            aria-expanded={menuOpen}
-            aria-controls="primary-nav"
-          >
-            <span className="neu-header__hamburger-line" />
-            <span className="neu-header__hamburger-line" />
-            <span className="neu-header__hamburger-line" />
-          </button>
-          <nav
-            id="primary-nav"
-            className={`neu-header__nav${menuOpen ? ' neu-header__nav--open' : ''}`}
-            {...(isMobileNav && !menuOpen ? { 'aria-hidden': true, inert: '' } : {})}
-          >
-            <a href="/#use-cases" className="neu-header__link" onClick={() => setMenuOpen(false)}>Case Study</a>
-            <a href="/#intel-stack" className="neu-header__link" onClick={() => setMenuOpen(false)}>The Stack</a>
-            <a href="/#ai-council" className="neu-header__link" onClick={() => setMenuOpen(false)}>AI Council</a>
-            <a href="/about" className="neu-header__link ab-nav-active" onClick={() => setMenuOpen(false)}>About</a>
-            <WhitelistButton className="neu-header__cta neu-header__cta--visible" baseLabel="Join Whitelist" hoverLabel="Join Whitelist" />
+          <nav className="neu-header__nav">
+            <a href="/#use-cases" className="neu-header__link">Case Study</a>
+            <a href="/#intel-stack" className="neu-header__link">The Stack</a>
+            <a href="/#ai-council" className="neu-header__link">AI Council</a>
+            <a href="/about" className="neu-header__link ab-nav-active">About</a>
+            <a
+              href="https://www.linkedin.com/company/achilles-analytics-ltd/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Achilles Analytics on LinkedIn"
+              className="neu-header__link np-header__social"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.063 2.063 0 112.063 2.065zm1.778 13.019H3.555V9h3.56v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+            </a>
           </nav>
         </div>
       </header>
@@ -79,10 +76,10 @@ export default function AboutPage() {
         <div className="ab-hero__inner">
           <div className="ab-label" data-reveal>// ORIGIN</div>
           <h1 className="ab-hero__headline" data-reveal>
-            Started as a question.<br /><em>Became a method.</em>
+            Started as a question.<br /><em>Became conviction.</em>
           </h1>
           <p className="ab-hero__lead" data-reveal>
-            It is a research project on the shape of modern uncertainty, built
+            It is a research project on the shape of modern intelligence, built
             by practitioners who got tired of waiting for the tools that should
             already exist.<Cursor />
           </p>
@@ -106,12 +103,12 @@ export default function AboutPage() {
             <li className="ab-thesis__item" data-reveal>
               <span className="ab-thesis__num">01</span>
               <div className="ab-thesis__body">
-                <h3 className="ab-thesis__title">Data is not the problem. <em>Causality is.</em></h3>
+                <h3 className="ab-thesis__title">Data is not the problem. <em>Topology is.</em></h3>
                 <p>
-                  Every organisation already drowns in analytics. Almost none of
-                  it explains what a signal means, or what happens next. We work
-                  on the part that's missing: the operational picture that sits
-                  between evidence and decision.
+                  Every organisation drowns in analytics. Almost none of it
+                  explains how the pieces connect, or what happens next. We
+                  model the structure of relations between actors, signals,
+                  and consequences.
                 </p>
               </div>
             </li>
@@ -119,7 +116,7 @@ export default function AboutPage() {
             <li className="ab-thesis__item" data-reveal>
               <span className="ab-thesis__num">02</span>
               <div className="ab-thesis__body">
-                <h3 className="ab-thesis__title">Foresight is a craft, not an algorithm.</h3>
+                <h3 className="ab-thesis__title">Decision making is a craft, <em>not the return of an algorithm.</em></h3>
                 <p>
                   No model replaces judgement. A good instrument makes that
                   judgement legible, auditable, and faster. Tools should earn
@@ -145,11 +142,11 @@ export default function AboutPage() {
             <li className="ab-thesis__item" data-reveal>
               <span className="ab-thesis__num">04</span>
               <div className="ab-thesis__body">
-                <h3 className="ab-thesis__title">Operational decisions deserve operational tools.</h3>
+                <h3 className="ab-thesis__title">The team is the <em>domain brain.</em> Claude Code is the print.</h3>
                 <p>
-                  Not dashboards. Not decks. Not reports written by committee.
-                  Working instruments, designed for the moment the decision is
-                  actually made.
+                  Domain knowledge beats code knowledge. AI writes the code;
+                  we own the domain. Every module is shaped by the people who
+                  lived the problem. The model is a tool. The judgement is ours.
                 </p>
               </div>
             </li>
@@ -224,15 +221,19 @@ export default function AboutPage() {
               </p>
               <p className="ab-build__lead">
                 We publish what we learn. In the field log, in the docs, and
-                occasionally in the code itself. If a module does not earn a
-                place on a working desk, it does not stay in the stack.
+                occasionally in the code itself. Modules that don't pull
+                their weight don't stay in the stack.
+              </p>
+              <p className="ab-build__tagline" data-reveal>
+                <span className="ab-build__tagline-mark">//</span>
+                The team is the domain brain.
+                <em> Agentic code is the print.</em>
               </p>
             </div>
 
             <ul className="ab-build__list" data-reveal>
-              <li><span className="ab-build__k">CREW</span><span className="ab-build__v">Analysts · engineers · domain practitioners</span></li>
               <li><span className="ab-build__k">STACK</span><span className="ab-build__v">Open tools where possible. Documented. Auditable.</span></li>
-              <li><span className="ab-build__k">ACCESS</span><span className="ab-build__v">Invite-based. Ten people who get it beats a thousand who don't.</span></li>
+              <li><span className="ab-build__k">ACCESS</span><span className="ab-build__v">Invite-based. A selective squad who gets it beats a thousand who don't.</span></li>
               <li><span className="ab-build__k">CADENCE</span><span className="ab-build__v">Ship when the tool earns its weight. Not on a quarter.</span></li>
               <li><span className="ab-build__k">FUNDING</span><span className="ab-build__v">Self-directed. No growth targets imposed from outside.</span></li>
               <li><span className="ab-build__k">PUBLIC</span><span className="ab-build__v">Field log, documentation, and source where it makes sense.</span></li>
@@ -262,9 +263,9 @@ export default function AboutPage() {
               <p>The platform is live and running against real-world streams. It is a beta. Some things break, some flows are unfinished, and we log what doesn't work instead of hiding it.</p>
             </div>
             <div className="ab-status__card" data-reveal>
-              <span className="ab-status__k">ACTIVE MODULES</span>
-              <span className="ab-status__v">06 online</span>
-              <p>Crisis Map · Digital Twin · AI Council · OSINT Atlas · BIAS Control · Intel Report.</p>
+              <span className="ab-status__k">CAPABILITIES</span>
+              <span className="ab-status__v">04 active</span>
+              <p>Vulnerability Detection · Crisis Monitoring · Political Stance Evaluation · Agentic Risk Management.</p>
             </div>
             <div className="ab-status__card" data-reveal>
               <span className="ab-status__k">OPERATIONS</span>
@@ -309,8 +310,11 @@ export default function AboutPage() {
         <p className="neu-legal__loc">Canada</p>
       </footer>
 
-      {/* ═══ HIRING PILL ═══ */}
-      <Suspense fallback={null}><HiringPill /></Suspense>
+      {/* ═══ FLOATING PILL STACK (HiringPill + AI Council, gap-stacked) ═══ */}
+      <div className="np-pill-stack">
+        <Suspense fallback={null}><HiringPill /></Suspense>
+        <AICouncilFloatingPill />
+      </div>
     </div>
   );
 }

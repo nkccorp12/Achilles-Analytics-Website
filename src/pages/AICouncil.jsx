@@ -1,4 +1,8 @@
+import { useRef } from 'react';
+import { Grok, Anthropic, Gemini } from '@lobehub/icons';
 import './AICouncil.css';
+
+const ICON_GREEN = '#BCFF2F';
 
 /* ==========================================================================
    AI COUNCIL — Style 5 "Isometric Data Viz"
@@ -6,6 +10,37 @@ import './AICouncil.css';
    ========================================================================== */
 
 function AICouncil() {
+  const trackRef = useRef(null);
+  const rafRef = useRef(0);
+
+  const onTrackMove = (e) => {
+    if (e.pointerType === 'touch') return;
+    if (rafRef.current) return;
+    const cx = e.clientX, cy = e.clientY, el = trackRef.current;
+    if (!el) return;
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = 0;
+      const r = el.getBoundingClientRect();
+      const x = cx - r.left;
+      const y = cy - r.top;
+      el.style.setProperty('--mx', `${x}px`);
+      el.style.setProperty('--my', `${y}px`);
+      el.style.setProperty('--mxn', String(((x / r.width) * 2 - 1).toFixed(3)));
+      el.style.setProperty('--myn', String(((y / r.height) * 2 - 1).toFixed(3)));
+      el.classList.add('is-tracking');
+    });
+  };
+
+  const onTrackLeave = () => {
+    const el = trackRef.current;
+    if (!el) return;
+    el.classList.remove('is-tracking');
+    el.style.setProperty('--mxn', '0');
+    el.style.setProperty('--myn', '0');
+    el.style.setProperty('--mx', '-9999px');
+    el.style.setProperty('--my', '-9999px');
+  };
+
   return (
     <section className="council" id="ai-council">
       {/* Grid background */}
@@ -29,8 +64,8 @@ function AICouncil() {
         </div>
         <div className="council__counters">
           <div className="council__counter">
-            <div className="council__counter-num">4</div>
-            <div className="council__counter-label">Models</div>
+            <div className="council__counter-num">355+</div>
+            <div className="council__counter-label">Models via OpenRouter</div>
           </div>
           <div className="council__counter">
             <div className="council__counter-num">3</div>
@@ -45,7 +80,12 @@ function AICouncil() {
 
       {/* Isometric pipeline */}
       <div className="council__pipeline reveal d2">
-        <div className="council__pipeline-track">
+        <div
+          ref={trackRef}
+          className="council__pipeline-track"
+          onPointerMove={onTrackMove}
+          onPointerLeave={onTrackLeave}
+        >
           <div className="council__hex">
             <div className="council__hex-border" />
             <div className="council__hex-shape" />
@@ -99,7 +139,7 @@ function AICouncil() {
           <div className="council__panel-accent" />
           <div className="council__panel-header">
             <span className="council__panel-name">The Cynic</span>
-            <span className="council__panel-model">Model A</span>
+            <span className="council__panel-model" aria-label="Grok"><Grok size={22} color={ICON_GREEN} /></span>
           </div>
           <p className="council__panel-text">
             You&rsquo;ll burn 18 months and $2M training a model that GPT-6 will obsolete
@@ -135,7 +175,7 @@ function AICouncil() {
           <div className="council__panel-accent" />
           <div className="council__panel-header">
             <span className="council__panel-name">The Strategist</span>
-            <span className="council__panel-model">Model B</span>
+            <span className="council__panel-model" aria-label="Anthropic"><Anthropic size={22} color={ICON_GREEN} /></span>
           </div>
           <p className="council__panel-text">
             Fine-tune on proprietary data, but don&rsquo;t train from scratch. Own the last
@@ -172,7 +212,7 @@ function AICouncil() {
           <div className="council__panel-accent" />
           <div className="council__panel-header">
             <span className="council__panel-name">The Optimist</span>
-            <span className="council__panel-model">Model C</span>
+            <span className="council__panel-model" aria-label="Gemini"><Gemini size={22} color={ICON_GREEN} /></span>
           </div>
           <p className="council__panel-text">
             Infrastructure investment creates compounding moats. Start small with
@@ -205,117 +245,8 @@ function AICouncil() {
         </div>
       </div>
 
-      {/* Live conversation preview */}
-      <div className="council__demo reveal d4">
-        <div className="council__demo-header">
-          <span className="council__demo-title">Live Council Session</span>
-          <span className="council__demo-mode">Strategy Mode</span>
-        </div>
-
-        <div className="council__demo-question">
-          &ldquo;Should a Series-A startup invest in building proprietary LLM infrastructure?&rdquo;
-        </div>
-
-        <div className="council__demo-messages">
-          <div className="council__msg">
-            <div className="council__msg-dot council__msg-dot--cynic" />
-            <div className="council__msg-body">
-              <div className="council__msg-sender council__msg-sender--cynic">The Cynic</div>
-              <div className="council__msg-text">
-                Absolutely not at this stage. You&rsquo;re competing against $100B training
-                budgets with Series-A money. The opportunity cost is your entire runway.
-              </div>
-              <div className="council__msg-rank">
-                Peer rank
-                <div className="council__msg-rank-bar">
-                  <div
-                    className="council__msg-rank-fill"
-                    style={{ width: '68%', background: 'var(--cynic)' }}
-                  />
-                </div>
-                #2
-              </div>
-            </div>
-          </div>
-
-          <div className="council__msg">
-            <div className="council__msg-dot council__msg-dot--strategist" />
-            <div className="council__msg-body">
-              <div className="council__msg-sender council__msg-sender--strategist">The Strategist</div>
-              <div className="council__msg-text">
-                Hybrid approach. API-first with a fine-tuning pipeline on your proprietary data.
-                Build the moat at the application layer, not the model layer.
-              </div>
-              <div className="council__msg-rank">
-                Peer rank
-                <div className="council__msg-rank-bar">
-                  <div
-                    className="council__msg-rank-fill"
-                    style={{ width: '92%', background: 'var(--strategist)' }}
-                  />
-                </div>
-                #1
-              </div>
-            </div>
-          </div>
-
-          <div className="council__msg">
-            <div className="council__msg-dot council__msg-dot--optimist" />
-            <div className="council__msg-body">
-              <div className="council__msg-sender council__msg-sender--optimist">The Optimist</div>
-              <div className="council__msg-text">
-                Small, domain-specific models are cheaper than you think. Start with distillation
-                on your niche. The learning compounds.
-              </div>
-              <div className="council__msg-rank">
-                Peer rank
-                <div className="council__msg-rank-bar">
-                  <div
-                    className="council__msg-rank-fill"
-                    style={{ width: '55%', background: 'var(--optimist)' }}
-                  />
-                </div>
-                #3
-              </div>
-            </div>
-          </div>
-
-          <div className="council__msg">
-            <div className="council__msg-dot council__msg-dot--synth" />
-            <div className="council__msg-body">
-              <div className="council__msg-sender council__msg-sender--synth">Synthesizer</div>
-              <div className="council__typing">
-                <span className="council__typing-dot" />
-                <span className="council__typing-dot" />
-                <span className="council__typing-dot" />
-              </div>
-              <div
-                className="council__msg-text"
-                style={{ marginTop: '0.4rem', color: 'var(--text)', fontWeight: 500 }}
-              >
-                Fine-tune on proprietary data using foundation model APIs. Invest in the data
-                pipeline and embedding layer, not base model training. Revisit infrastructure
-                ownership after Series B.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Mode chips */}
-      <div className="council__modes reveal d5">
-        <div className="council__mode-chip">Synthesize</div>
-        <div className="council__mode-chip">Research</div>
-        <div className="council__mode-chip">Debate</div>
-        <div className="council__mode-chip council__mode-chip--active">Strategy</div>
-        <div className="council__mode-chip">Research Light</div>
-      </div>
-
-      {/* CTA */}
-      <div className="council__cta reveal d6">
-        <p className="council__cta-tagline">
-          <span>4</span> Models. <span>3</span> Stages. <span>1</span> Consensus.
-        </p>
+      {/* CTA — Launch button only */}
+      <div className="council__cta reveal d4">
         <a href="https://council.achillesanalytics.ca" target="_blank" rel="noopener noreferrer" className="council__cta-button">
           Launch Council Platform
           <span className="council__cta-arrow">&#8599;</span>

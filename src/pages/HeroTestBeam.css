@@ -1,0 +1,244 @@
+/* ======================================================================
+   HERO TEST — STRIKE / BEAM CUT
+   All styles scoped under .htbeam
+   ====================================================================== */
+
+.htbeam {
+  position: relative;
+  min-height: 100vh;
+  background: #000;
+  color: var(--text-primary);
+  overflow: hidden;
+  font-family: var(--font-mono);
+}
+
+/* ---------------- HERO (revealed content) ---------------- */
+.htbeam__hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 96px clamp(1rem, 5vw, 3rem) 64px;
+}
+
+.htbeam__hero-inner {
+  width: 100%;
+  max-width: 1100px;
+}
+
+.htbeam__eyebrow {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 4px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin: 0 0 32px;
+}
+
+.htbeam__headline {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0 0 32px;
+  max-width: 18ch;
+}
+
+.htbeam__headline em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.htbeam__sub {
+  font-family: var(--font-mono);
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.55;
+  color: var(--text-secondary);
+  max-width: 56ch;
+  margin: 0 0 48px;
+}
+
+.htbeam__ctas {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.htbeam__cta {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 22px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+  display: inline-block;
+}
+
+.htbeam__cta--primary {
+  background: var(--accent);
+  color: #000;
+  border: 1px solid var(--accent);
+}
+
+.htbeam__cta--primary:hover {
+  transform: translateY(-1px);
+}
+
+.htbeam__cta--secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid rgba(240, 240, 240, 0.3);
+}
+
+.htbeam__cta--secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ---------------- CUT PANELS (cover hero, slide apart) ---------------- */
+.htbeam__panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: #000;
+  z-index: 50;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.htbeam__panel--top    { top: 0;    transform: translateY(0); }
+.htbeam__panel--bottom { bottom: 0; transform: translateY(0); }
+
+/* During split phase (after beam cut) — slide apart */
+.htbeam--split .htbeam__panel--top,
+.htbeam--done  .htbeam__panel--top {
+  transform: translateY(-100%);
+  transition: transform 220ms cubic-bezier(0.7, 0, 0.3, 1);
+}
+.htbeam--split .htbeam__panel--bottom,
+.htbeam--done  .htbeam__panel--bottom {
+  transform: translateY(100%);
+  transition: transform 220ms cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+/* Once done, panels removed from layer entirely so hero is interactive */
+.htbeam--done .htbeam__panel { display: none; }
+
+/* ---------------- BEAM ---------------- */
+.htbeam__beam-track {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 60;
+  pointer-events: none;
+  transform: translateY(-1px);
+}
+
+.htbeam__beam {
+  width: 100%;
+  height: 100%;
+  background: var(--accent);
+  box-shadow:
+    0 0 8px var(--accent),
+    0 0 16px var(--accent),
+    0 0 32px rgba(188, 255, 47, 0.6);
+  transform: scaleX(0);
+  transform-origin: left center;
+  opacity: 0;
+}
+
+.htbeam--beam .htbeam__beam {
+  animation: htbeam-sweep 300ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes htbeam-sweep {
+  0%   { transform: scaleX(0); opacity: 0; }
+  10%  { opacity: 1; }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+
+/* After beam landed: keep visible on cut line until split kicks in */
+.htbeam--impact .htbeam__beam,
+.htbeam--split  .htbeam__beam {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+/* Fade beam during split */
+.htbeam--split .htbeam__beam {
+  transition: opacity 220ms ease-out;
+  opacity: 0;
+}
+
+.htbeam--done .htbeam__beam-track { display: none; }
+
+/* ---------------- CUT LINE RESIDUE (subtle bleed) ---------------- */
+.htbeam__cutline {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  z-index: 55;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(188, 255, 47, 0.3) 20%,
+    rgba(188, 255, 47, 0.5) 50%,
+    rgba(188, 255, 47, 0.3) 80%,
+    transparent 100%
+  );
+  opacity: 0;
+  transform: translateY(-0.5px);
+  pointer-events: none;
+}
+
+.htbeam--impact .htbeam__cutline,
+.htbeam--split  .htbeam__cutline {
+  opacity: 1;
+}
+
+.htbeam--split .htbeam__cutline {
+  transition: opacity 200ms ease-out;
+  opacity: 0;
+}
+
+.htbeam--done .htbeam__cutline { display: none; }
+
+/* ---------------- SCREEN SHAKE (at impact, ~60ms) ---------------- */
+.htbeam--impact {
+  animation: htbeam-shake 60ms steps(3, end) 1;
+}
+
+@keyframes htbeam-shake {
+  0%   { transform: translateY(0); }
+  33%  { transform: translateY(-2px); }
+  66%  { transform: translateY(2px); }
+  100% { transform: translateY(0); }
+}
+
+/* ---------------- REDUCED MOTION ---------------- */
+.htbeam--reduced .htbeam__panel,
+.htbeam--reduced .htbeam__beam-track,
+.htbeam--reduced .htbeam__cutline {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .htbeam__panel,
+  .htbeam__beam-track,
+  .htbeam__cutline { display: none !important; }
+  .htbeam,
+  .htbeam__beam { animation: none !important; }
+}

@@ -1,0 +1,383 @@
+/* ======================================================================
+   HERO TEST — RADAR LOCK-ON
+   Scoped under .htradar
+   ====================================================================== */
+
+.htradar {
+  background: #000;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.htradar *,
+.htradar *::before,
+.htradar *::after {
+  box-sizing: border-box;
+}
+
+/* ---------- Hero shell ---------- */
+.htradar__hero {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  padding: 140px 6vw 80px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.htradar__hero-inner {
+  position: relative;
+  z-index: 4;
+  max-width: 980px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ---------- Eyebrow / headline / subhead / CTAs ---------- */
+.htradar__eyebrow {
+  font-family: var(--font-label);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 28px;
+  opacity: 0.9;
+}
+
+.htradar__headline {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(40px, 6.4vw, 84px);
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin: 0 0 28px;
+}
+
+.htradar__headline em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.htradar-target {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.htradar__subhead {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  max-width: 620px;
+  margin: 0 0 36px;
+}
+
+.htradar__ctas {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.htradar__cta {
+  font-family: var(--font-label);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 14px 22px;
+  border: 1px solid var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.htradar__cta--primary {
+  background: var(--accent);
+  color: #000;
+}
+.htradar__cta--primary:hover {
+  background: transparent;
+  color: var(--accent);
+}
+
+.htradar__cta--secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: rgba(240, 240, 240, 0.35);
+}
+.htradar__cta--secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ---------- Radar sweep ---------- */
+.htradar__sweep {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 180vmax;
+  height: 180vmax;
+  transform: translate(-50%, -50%) rotate(0deg);
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(188, 255, 47, 0) 10deg,
+    rgba(188, 255, 47, 0.18) 30deg,
+    rgba(188, 255, 47, 0.32) 60deg,
+    rgba(188, 255, 47, 0) 90deg,
+    transparent 360deg
+  );
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.95;
+  mix-blend-mode: screen;
+  animation: htradar-sweep 1.8s cubic-bezier(0.45, 0.05, 0.2, 1) 1 forwards;
+}
+
+@keyframes htradar-sweep {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+    opacity: 0.95;
+  }
+  85% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* After intro, sweep is gone — hide it */
+.htradar--phase-idle .htradar__sweep {
+  display: none;
+}
+
+/* ---------- Scanlines (constant, low opacity after intro) ---------- */
+.htradar__scanline {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(188, 255, 47, 0.025) 0px,
+    rgba(188, 255, 47, 0.025) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+
+.htradar--phase-locked .htradar__scanline,
+.htradar--phase-idle .htradar__scanline {
+  opacity: 1;
+}
+
+/* ---------- Range rings (concentric, faint) ---------- */
+.htradar__rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.htradar__ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(188, 255, 47, 0.06);
+  transform: translate(-50%, -50%);
+}
+.htradar__ring--1 { width: 40vmax; height: 40vmax; }
+.htradar__ring--2 { width: 70vmax; height: 70vmax; }
+.htradar__ring--3 { width: 110vmax; height: 110vmax; }
+
+/* ---------- Crosshair on target ---------- */
+.htradar__crosshair {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  /* Snap-in animation */
+  animation: htradar-snap 220ms cubic-bezier(0.2, 0.9, 0.3, 1.2) 1 both;
+}
+
+@keyframes htradar-snap {
+  0% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(0.94);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.htradar__bracket {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: var(--accent);
+  border-style: solid;
+  border-width: 0;
+}
+
+.htradar__bracket--tl {
+  top: -6px; left: -6px;
+  border-top-width: 2px;
+  border-left-width: 2px;
+}
+.htradar__bracket--tr {
+  top: -6px; right: -6px;
+  border-top-width: 2px;
+  border-right-width: 2px;
+}
+.htradar__bracket--bl {
+  bottom: -6px; left: -6px;
+  border-bottom-width: 2px;
+  border-left-width: 2px;
+}
+.htradar__bracket--br {
+  bottom: -6px; right: -6px;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+}
+
+/* When locked: brackets glow + tighten slightly */
+.htradar__crosshair--locked .htradar__bracket {
+  box-shadow: 0 0 8px rgba(188, 255, 47, 0.55);
+  animation: htradar-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes htradar-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+/* ---------- LOCKED badge ---------- */
+.htradar__locked {
+  position: absolute;
+  z-index: 6;
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  font-weight: 700;
+  color: #fff;
+  background: #FF4444;
+  padding: 4px 8px;
+  pointer-events: none;
+  transform: translateY(-100%);
+  animation: htradar-locked-in 320ms cubic-bezier(0.2, 0.9, 0.3, 1.1) 1 both;
+}
+
+.htradar__locked::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  bottom: -4px;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #FF4444;
+}
+
+@keyframes htradar-locked-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%) translateX(-6px) scale(0.8);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-100%) translateX(0) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-100%) translateX(0) scale(1);
+  }
+}
+
+/* ---------- Telemetry counter ---------- */
+.htradar__telemetry {
+  position: absolute;
+  bottom: 28px;
+  left: 6vw;
+  z-index: 4;
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.75;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.htradar__telemetry::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--accent);
+  animation: htradar-blink 1.4s ease-in-out infinite;
+}
+
+@keyframes htradar-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .htradar__sweep,
+  .htradar__crosshair,
+  .htradar__locked,
+  .htradar__telemetry::before,
+  .htradar__crosshair--locked .htradar__bracket {
+    animation: none !important;
+  }
+  .htradar__sweep {
+    display: none;
+  }
+  .htradar__scanline {
+    opacity: 1;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 720px) {
+  .htradar__hero {
+    padding: 120px 5vw 70px;
+  }
+  .htradar__telemetry {
+    left: 5vw;
+    bottom: 18px;
+    font-size: 9px;
+  }
+  .htradar__cta {
+    font-size: 11px;
+    padding: 12px 18px;
+  }
+}
