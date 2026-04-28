@@ -278,6 +278,11 @@
   margin: 0;
   color: var(--text-primary, #f5f5f5);
 }
+.cp-origin__pull em {
+  color: var(--accent, #BCFF2F);
+  font-style: italic;
+  font-weight: 500;
+}
 .cp-origin__pull-mark {
   position: absolute;
   top: -2px;

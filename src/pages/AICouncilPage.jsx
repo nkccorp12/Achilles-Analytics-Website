@@ -211,8 +211,8 @@ export default function AICouncilPage() {
             <aside className="cp-origin__pull" data-reveal>
               <span className="cp-origin__pull-mark">"</span>
               <p>
-                Conviction without an independent check is just confidence
-                repeating itself.
+                <em>Conviction</em> without an independent check is just
+                confidence repeating itself.
               </p>
               <span className="cp-origin__pull-attr">// from the field log</span>
             </aside>
