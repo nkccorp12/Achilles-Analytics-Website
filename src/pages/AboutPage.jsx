@@ -33,6 +33,7 @@ export default function AboutPage() {
   const rootRef = useReveal();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobileNav, setIsMobileNav] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 900px)');
@@ -53,7 +54,7 @@ export default function AboutPage() {
           <nav className="neu-header__nav">
             <a href="/#use-cases" className="neu-header__link">Case Study</a>
             <a href="/#intel-stack" className="neu-header__link">The Stack</a>
-            <a href="/#ai-council" className="neu-header__link">AI Council</a>
+            <a href="/council" className="neu-header__link">AI Council</a>
             <a href="/about" className="neu-header__link ab-nav-active">About</a>
             <a
               href="https://www.linkedin.com/company/achilles-analytics-ltd/"
@@ -66,6 +67,13 @@ export default function AboutPage() {
                 <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.063 2.063 0 112.063 2.065zm1.778 13.019H3.555V9h3.56v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
               </svg>
             </a>
+            <button
+              type="button"
+              className={`np-notif-dot${notifOpen ? ' np-notif-dot--active' : ''}`}
+              onClick={() => setNotifOpen((v) => !v)}
+              aria-label={notifOpen ? 'Close notifications' : 'Open notifications'}
+              aria-pressed={notifOpen}
+            />
           </nav>
         </div>
       </header>
@@ -310,11 +318,12 @@ export default function AboutPage() {
         <p className="neu-legal__loc">Canada</p>
       </footer>
 
-      {/* ═══ FLOATING PILL STACK (HiringPill + AI Council, gap-stacked) ═══ */}
-      <div className="np-pill-stack">
+      {/* ═══ FLOATING PILL STACK (desktop: always visible · mobile: toggled by notif dot) ═══ */}
+      <div className={`np-pill-stack${notifOpen ? ' np-pill-stack--open' : ''}`}>
         <Suspense fallback={null}><HiringPill /></Suspense>
         <AICouncilFloatingPill />
       </div>
     </div>
   );
 }
+

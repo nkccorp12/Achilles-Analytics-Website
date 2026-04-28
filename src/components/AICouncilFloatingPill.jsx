@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { OpenAI, Gemini, Anthropic, Mistral, Grok, Meta, Qwen, DeepSeek, Cohere } from '@lobehub/icons';
 
-/* ─── AI Council Floating Pill (scroll-triggered, lives inside .np-pill-stack) ─── */
+/* ─── AI Council Floating Pill (scroll-triggered desktop; parent .np-pill-stack--open forces visible on mobile) ─── */
 export default function AICouncilFloatingPill() {
   const [visible, setVisible] = useState(false);
 

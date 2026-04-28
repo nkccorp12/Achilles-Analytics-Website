@@ -225,6 +225,57 @@
   }
 }
 
+/* ─── Header Notification Dot — MOBILE ONLY (toggle for floating pills) ─── */
+.np-notif-dot {
+  display: none; /* hidden on desktop, shown on mobile */
+}
+
+@media (max-width: 720px) {
+  .np-notif-dot {
+    display: inline-block;
+    position: relative;
+    width: 11px;
+    height: 11px;
+    margin-left: 14px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: #ff3b3b;
+    cursor: pointer;
+    flex-shrink: 0;
+    animation: np-notif-pulse 1.4s ease-in-out infinite;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  .np-notif-dot:hover { transform: scale(1.15); }
+  .np-notif-dot:focus-visible {
+    outline: 2px solid var(--accent, #BCFF2F);
+    outline-offset: 3px;
+  }
+  .np-notif-dot--active {
+    background: var(--accent, #BCFF2F);
+    animation: none;
+    box-shadow: 0 0 12px rgba(188, 255, 47, 0.6);
+  }
+
+  /* On mobile: hide the pill stack by default; show only when --open */
+  .np-pill-stack {
+    display: none;
+  }
+  .np-pill-stack--open {
+    display: flex;
+    animation: np-pill-stack-in 0.4s cubic-bezier(.2,.7,.2,1) both;
+  }
+}
+
+@keyframes np-notif-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 59, 59, 0.7); }
+  50%      { box-shadow: 0 0 0 9px rgba(255, 59, 59, 0); }
+}
+@keyframes np-pill-stack-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* ─── Topbar of floating pill: badge + ticker behind it ─── */
 .np-aicouncil--floating .np-aicouncil__topbar {
   position: relative;
