@@ -299,28 +299,26 @@
 /* Background reveal on hover (desktop only) */
 .neu-hero__bg {
   position: absolute;
-  top: 10%;
-  left: -15%;
-  width: 80%;
-  height: 80%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.1;
+  opacity: 0.28;
   mix-blend-mode: lighten;
 }
 
 /* Reveal layer — brighter circle follows mouse */
 .neu-hero__bg-reveal {
   position: absolute;
-  top: 10%;
-  left: -15%;
-  width: 80%;
-  height: 80%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.3;
+  opacity: 0.4;
   mix-blend-mode: lighten;
   --mx: -9999px;
   --my: -9999px;

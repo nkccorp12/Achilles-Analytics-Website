@@ -4,7 +4,6 @@ import AICouncilFloatingPill from '../components/AICouncilFloatingPill';
 import './LandingPage.css';
 import './NewPage.css';
 
-const RotatingEarth = lazy(() => import('../components/RotatingEarth'));
 const CoreEngine = lazy(() => import('./CoreEngine'));
 const PipelineStack = lazy(() => import('../components/PipelineStack'));
 const HiringPill = lazy(() => import('../components/HiringPill'));
@@ -278,8 +277,28 @@ export default function NewPage() {
           }
         }}
       >
-        <img src="/hero-bg.webp" alt="" className="neu-hero__bg" aria-hidden="true" />
-        <img src="/hero-bg.webp" alt="" className="neu-hero__bg-reveal" aria-hidden="true" />
+        <video
+          className="neu-hero__bg"
+          src="/hero-bg.mp4"
+          poster="/hero-bg.webp"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+        />
+        <video
+          className="neu-hero__bg-reveal"
+          src="/hero-bg.mp4"
+          poster="/hero-bg.webp"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+        />
 
         <div className="neu-hero__content">
           <h1 className="neu-hero__headline">
@@ -299,21 +318,6 @@ export default function NewPage() {
               Reach Out
             </button>
           </div>
-        </div>
-
-        <div className="neu-hero__globe" aria-hidden="true">
-          <Suspense fallback={null}>
-            <RotatingEarth
-              size={600}
-              alerts={[
-                { lng: -98.5, lat: 39.8 },
-                { lng: 36.2, lat: 49.0 },
-                { lng: 44.4, lat: 33.3 },
-                { lng: 35.2, lat: 31.9 },
-                { lng: 100.5, lat: 13.7 },
-              ]}
-            />
-          </Suspense>
         </div>
 
       </section>
