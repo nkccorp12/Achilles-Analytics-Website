@@ -236,7 +236,7 @@
     position: absolute;
     top: 50%;
     right: 18px;
-    transform: translateY(-50%);
+    transform: translateY(-50%) scale(0.4);
     width: 12px;
     height: 12px;
     padding: 0;
@@ -245,10 +245,17 @@
     background: #ff3b3b;
     cursor: pointer;
     z-index: 1100; /* above nav drawer (1000) so it's tappable */
-    animation: np-notif-pulse 1.4s ease-in-out infinite;
-    transition: background 0.3s ease, transform 0.2s ease;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
   }
-  .np-notif-dot:hover { transform: translateY(-50%) scale(1.15); }
+  .np-notif-dot--show {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+    pointer-events: auto;
+    animation: np-notif-pulse 1.4s ease-in-out infinite 0.5s;
+  }
+  .np-notif-dot--show:hover { transform: translateY(-50%) scale(1.15); }
   .np-notif-dot:focus-visible {
     outline: 2px solid var(--accent, #BCFF2F);
     outline-offset: 3px;

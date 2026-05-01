@@ -189,6 +189,18 @@ export default function NewPage() {
   const [contactOpen, setContactOpen] = useState(false);
   const [useCasesOpen, setUseCasesOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
+  const [notifDotVisible, setNotifDotVisible] = useState(false);
+
+  // Mobile: notif dot only appears once user scrolls past hero (into 2nd section)
+  useEffect(() => {
+    if (!heroRef.current) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setNotifDotVisible(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    obs.observe(heroRef.current);
+    return () => obs.disconnect();
+  }, []);
 
   // Mobile: close notif pills on outside tap
   useEffect(() => {
@@ -248,7 +260,7 @@ export default function NewPage() {
           {/* Mobile-only notification dot — outside nav drawer so it's always visible */}
           <button
             type="button"
-            className={`np-notif-dot${notifOpen ? ' np-notif-dot--active' : ''}`}
+            className={`np-notif-dot${notifOpen ? ' np-notif-dot--active' : ''}${notifDotVisible ? ' np-notif-dot--show' : ''}`}
             onClick={() => setNotifOpen((v) => !v)}
             aria-label={notifOpen ? 'Close notifications' : 'Open notifications'}
             aria-pressed={notifOpen}
@@ -280,7 +292,6 @@ export default function NewPage() {
         <video
           className="neu-hero__bg"
           src="/hero-bg.mp4"
-          poster="/hero-bg.webp"
           autoPlay
           muted
           loop
@@ -291,7 +302,6 @@ export default function NewPage() {
         <video
           className="neu-hero__bg-reveal"
           src="/hero-bg.mp4"
-          poster="/hero-bg.webp"
           autoPlay
           muted
           loop
