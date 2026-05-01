@@ -232,21 +232,23 @@
 
 @media (max-width: 720px) {
   .np-notif-dot {
-    display: inline-block;
-    position: relative;
-    width: 11px;
-    height: 11px;
-    margin-left: 14px;
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 18px;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
     padding: 0;
     border: none;
     border-radius: 50%;
     background: #ff3b3b;
     cursor: pointer;
-    flex-shrink: 0;
+    z-index: 1100; /* above nav drawer (1000) so it's tappable */
     animation: np-notif-pulse 1.4s ease-in-out infinite;
     transition: background 0.3s ease, transform 0.2s ease;
   }
-  .np-notif-dot:hover { transform: scale(1.15); }
+  .np-notif-dot:hover { transform: translateY(-50%) scale(1.15); }
   .np-notif-dot:focus-visible {
     outline: 2px solid var(--accent, #BCFF2F);
     outline-offset: 3px;

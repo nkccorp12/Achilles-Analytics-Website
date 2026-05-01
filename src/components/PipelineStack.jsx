@@ -174,7 +174,7 @@ export default function PipelineStack() {
             A system built in the image of human intelligence: eyes that
             perceive, a brain that reasons, a voice that decides. In the
             ancient myths, Achilles saw the battlefield whole, every
-            movement observed, every consequence mapped. Our platform bears
+            movement observed, every consequence mapped. Our project bears
             his name for that reason. From raw signal to finished brief,
             in minutes.
           </p>
