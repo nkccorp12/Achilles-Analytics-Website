@@ -71,7 +71,6 @@ export default function AboutPage() {
           <nav className="neu-header__nav">
             <a href="/#use-cases" className="neu-header__link">Case Study</a>
             <a href="/#intel-stack" className="neu-header__link">The Stack</a>
-            <a href="/council" className="neu-header__link">AI Council</a>
             <a href="/about" className="neu-header__link ab-nav-active">About</a>
             <a
               href="https://www.linkedin.com/company/achilles-analytics-ltd/"
