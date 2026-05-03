@@ -290,7 +290,7 @@ export default function NewPage() {
       >
         <video
           className="neu-hero__bg"
-          src="/hero-bg.mp4?v=3"
+          src="/hero-bg.mp4?v=4"
           autoPlay
           muted
           loop
@@ -300,7 +300,7 @@ export default function NewPage() {
         />
         <video
           className="neu-hero__bg-reveal"
-          src="/hero-bg.mp4?v=3"
+          src="/hero-bg.mp4?v=4"
           autoPlay
           muted
           loop
